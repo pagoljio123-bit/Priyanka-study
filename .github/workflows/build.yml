@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout Source Code
@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '11'
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -28,7 +28,7 @@ jobs:
         run: npm install -g cordova
 
       - name: Add Android Platform
-        run: cordova platform add android
+        run: cordova platform add android@12.0.0
 
       - name: Build APK
         run: cordova build android
@@ -38,4 +38,3 @@ jobs:
         with:
           name: Priyanka-Study-APK
           path: platforms/android/app/build/outputs/apk/debug/app-debug.apk
-          
