@@ -2,53 +2,36 @@ name: Build Android APK
 
 on:
   push:
-    branches: [ main ]
-  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
 
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        node-version: 18
+      - name: Install Cordova
+        run: npm install -g cordova
 
-    - name: Setup Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: temurin
-        java-version: 17
+      - name: Install dependencies
+        run: npm install
 
-    - name: Install Cordova
-      run: npm install -g cordova
+      - name: Add Android platform
+        run: cordova platform add android
 
-    - name: Install dependencies
-      run: npm install
+      - name: Build Android APK
+        run: cordova build android
 
-    - name: Add Android platform
-      run: cordova platform add android@12
-
-    # Gradle version fix
-    - name: Force Gradle 7.6
-      run: |
-        cd platforms/android
-        wget https://services.gradle.org/distributions/gradle-7.6-bin.zip
-        unzip gradle-7.6-bin.zip
-        export PATH=$PWD/gradle-7.6/bin:$PATH
-        gradle -v
-
-    - name: Build APK
-      run: cordova build android --debug
-
-    - name: Upload APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: priyanka-study-apk
-        path: platforms/android/app/build/outputs/apk/debug/app-debug.apk
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apk
+          path: platforms/android/app/build/outputs/apk/debug/*.apk
