@@ -31,7 +31,13 @@ jobs:
         run: npm install
 
       - name: Add Android platform
-        run: cordova platform add android
+        run: cordova platform add android@12
+
+      # Gradle fix
+      - name: Fix Gradle Version
+        run: |
+          cd platforms/android
+          sed -i 's/gradle-.*/gradle-7.6-bin.zip/g' gradle/wrapper/gradle-wrapper.properties
 
       - name: Build APK
         run: cordova build android
