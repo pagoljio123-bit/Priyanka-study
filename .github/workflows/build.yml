@@ -11,34 +11,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Source Code
-        uses: actions/checkout@v3
+      - name: Checkout source
+        uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 18
 
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: 17
+          distribution: 'temurin'
+          java-version: '17'
 
       - name: Install Cordova
         run: npm install -g cordova
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm install
 
-      - name: Remove Old Android Platform
-        run: cordova platform remove android || true
-
-      - name: Add Latest Android Platform
-        run: cordova platform add android@12
+      - name: Add Android platform
+        run: cordova platform add android@11
 
       - name: Build APK
-        run: cordova build android
+        run: cordova build android --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
