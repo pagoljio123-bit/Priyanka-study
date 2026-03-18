@@ -3,285 +3,780 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>📚 Priyanka Study - প্রিয়াঙ্কার পড়াশোনার অ্যাপ</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <title>Priyanka Study - Ultimate Auto Exam UI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&family=Playfair+Display:wght@700&display=swap');
-        body { font-family: 'Noto Sans Bengali', sans-serif; }
-        .title-font { font-family: 'Playfair Display', serif; }
-        .glass { background: rgba(255,255,255,0.09); backdrop-filter: blur(20px); }
-        .heart { animation: heartbeat 1.8s infinite; }
-        @keyframes heartbeat { 0%,100% { transform: scale(1); } 50% { transform: scale(1.2); } }
-        .mobile-card { transition: transform 0.3s; }
-        .mobile-card:active { transform: scale(0.95); }
+        :root {
+            --bg-dark: #0f0c29; --bg-mid: #302b63; --bg-light: #24243e;
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.15);
+            --text-main: #ffffff;
+            --text-sub: rgba(255, 255, 255, 0.6);
+            --accent-pink: #FF0076; --accent-blue: #00C9FF; --accent-green: #2ed573;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            --neon-bg: #1a1a2e;
+            --nav-bg: rgba(15, 12, 41, 0.95);
+        }
+
+        body.light-mode {
+            --bg-dark: #e0c3fc; --bg-mid: #8ec5fc; --bg-light: #f4f7f6;
+            --card-bg: rgba(255, 255, 255, 0.6); --card-border: rgba(255, 255, 255, 0.6);
+            --text-main: #111111; --text-sub: #555555;
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            --neon-bg: #ffffff; --nav-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent;}
+        body { background: linear-gradient(to bottom, var(--bg-dark), var(--bg-mid), var(--bg-light)); color: var(--text-main); height: 100vh; width: 100vw; overflow: hidden; position: relative; transition: background 0.3s, color 0.3s; }
+
+        .app-container { width: 100%; height: 100%; overflow-y: auto; padding: 20px; padding-bottom: 100px; position: relative; z-index: 1;}
+        .app-container::-webkit-scrollbar { display: none; }
+
+        .view { display: none; animation: slideUp 0.4s ease-out; }
+        .view.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .glass-card { background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--card-border); border-radius: 24px; padding: 20px; box-shadow: var(--box-shadow); margin-bottom: 20px; transition: 0.3s;}
+
+        .input-glass { width: 100%; padding: 15px; background: rgba(255, 255, 255, 0.9); border: none; border-radius: 14px; color: #333; font-size: 14px; margin-bottom: 15px; outline: none; font-weight: 600;}
+        .btn-main { width: 100%; padding: 16px; border: none; border-radius: 16px; font-weight: 700; font-size: 15px; background: linear-gradient(135deg, #FF0076, #590FB7); color: white; cursor: pointer; box-shadow: 0 8px 20px rgba(255, 0, 118, 0.4); transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 10px;}
+        .btn-main:active { transform: scale(0.96); }
+
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; margin-top: 5px; }
+        .icon-btn { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; font-size: 18px; cursor: pointer; backdrop-filter: blur(10px); color: var(--text-main); transition: 0.2s;}
+
+        .neon-box { position: relative; background: var(--neon-bg); border-radius: 20px; padding: 15px; z-index: 1; cursor: pointer; overflow: hidden; margin-bottom: 15px; box-shadow: var(--box-shadow); display: flex; align-items: center; gap: 15px; transition: 0.3s;}
+        .neon-box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, transparent, #00C9FF, #FF0076, #00C9FF); animation: rotateRGB 3s linear infinite; z-index: -1; }
+        .neon-box::after { content: ''; position: absolute; inset: 3px; background: var(--neon-bg); border-radius: 17px; z-index: -1; transition: 0.3s;}
+        @keyframes rotateRGB { 100% { transform: rotate(360deg); } }
+
+        .subject-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .subj-icon { font-size: 35px; margin-bottom: 10px; }
+
+        .progress-box { display: flex; justify-content: space-between; align-items: center; }
+        .circ-chart { position: relative; width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(#FF0076 var(--prog), rgba(255,255,255,0.1) 0deg); display: flex; justify-content: center; align-items: center; }
+        .circ-chart::after { content: ''; position: absolute; width: 64px; height: 64px; background: var(--neon-bg); border-radius: 50%; transition: 0.3s;}
+        .circ-val { position: relative; z-index: 1; font-weight: bold; font-size: 16px; color: var(--text-main); }
+
+        .live-marquee { background: rgba(255, 0, 118, 0.15); border-left: 4px solid #FF0076; padding: 12px; border-radius: 12px; margin-top: 15px; overflow: hidden; white-space: nowrap; position: relative; display: flex; align-items: center; cursor: pointer;}
+        .marquee-content { display: inline-block; animation: scrollText 12s linear infinite; color: #FF0076; font-size: 13px; font-weight: 600; }
+        @keyframes scrollText { 0% { transform: translateX(100vw); } 100% { transform: translateX(-100%); } }
+        .pulse-dot { width: 10px; height: 10px; background: #FF0076; border-radius: 50%; animation: pulse 1s infinite; margin-right: 10px;}
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,0,118,0.7); } 70% { box-shadow: 0 0 0 10px rgba(255,0,118,0); } 100% { box-shadow: 0 0 0 0 rgba(255,0,118,0); } }
+
+        .file-item { background: var(--card-bg); border-radius: 16px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; border: 1px solid var(--card-border); position: relative; overflow: hidden;}
+        .file-icon-box { width: 45px; height: 45px; border-radius: 12px; background: rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; font-size: 22px; cursor: pointer; }
+        .file-info { flex-grow: 1; overflow: hidden; cursor: pointer; }
+        .file-info h4 { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main);}
+        .file-info p { font-size: 11px; color: var(--text-sub); }
+        .action-row { display: flex; gap: 8px; }
+        .act-btn { width: 32px; height: 32px; border-radius: 8px; display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.15); cursor: pointer; font-size: 14px; color: var(--text-main);}
+        .lock-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; gap: 10px; color: #fff; font-weight: bold; font-size: 13px; z-index: 2;}
+
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--nav-bg); backdrop-filter: blur(20px); padding: 15px 30px; border-radius: 30px 30px 0 0; display: flex; justify-content: space-between; border-top: 1px solid var(--card-border); z-index: 100; transition: 0.3s;}
+        .nav-icon { font-size: 22px; color: var(--text-sub); cursor: pointer; transition: 0.3s; }
+        .nav-icon.active { color: #00C9FF; transform: translateY(-4px); }
+
+        #sidebar { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--nav-bg); backdrop-filter: blur(20px); z-index: 10000; transition: 0.4s ease; padding: 30px 20px; border-right: 1px solid var(--card-border); box-shadow: 10px 0 30px rgba(0,0,0,0.5);}
+        #sidebar.open { left: 0; }
+        .sb-item { padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; cursor: pointer; background: rgba(255,255,255,0.05); transition: 0.2s;}
+        .sb-item:hover { background: rgba(255,255,255,0.1); }
+        .sb-overlay { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.5); z-index: 9999; display: none;}
+
+        .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .gallery-card { background: var(--card-bg); border-radius: 16px; padding: 15px; text-align: center; border: 1px solid var(--card-border); cursor: pointer;}
+        .gallery-card i { font-size: 40px; color: #FF0076; margin-bottom: 10px; }
+
+        /* VIEWER OVERLAYS */
+        #fullscreenViewer { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-dark); z-index: 99999; display: none; flex-direction: column; transition: background 0.3s;}
+        .viewer-head { padding: 15px; background: var(--bg-mid); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--text-main);}
+        #pdfNativeContainer { display: none; flex-direction: column; height: 100%; background: #e0e5ec; }
+        .pdf-canvas-wrapper { flex-grow: 1; overflow: auto; display: flex; justify-content: center; padding: 10px; background: #525659; }
+        #pdfCanvas { max-width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); background: white; border-radius: 5px; }
+        #htmlViewerFrame { width: 100%; height: 100%; border: none; background: #fff; display: none; }
+        #testTimerBanner { background: #FF0076; color: white; text-align: center; padding: 10px; font-weight: bold; font-size: 14px; display: none; }
+        
+        /* Loading overlay within viewer */
+        #viewerLoading { display:none; flex-direction:column; justify-content:center; align-items:center; height:100%; color:#00C9FF; gap:10px; position: absolute; width: 100%; background: var(--bg-dark); z-index: 5; }
+
+        /* Main Login Loader */
+        #loginLoader { display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); z-index:100000; flex-direction:column; justify-content:center; align-items:center; color:#00C9FF;}
+
+        /* COUNTDOWN MODAL */
+        #countdownModal { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(15,12,41,0.95); backdrop-filter: blur(10px); z-index: 100000; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px;}
+        .timer-circle { width: 150px; height: 150px; border-radius: 50%; border: 5px solid #FF0076; display: flex; justify-content: center; align-items: center; font-size: 30px; font-weight: bold; color: #fff; box-shadow: 0 0 30px rgba(255,0,118,0.5); margin: 20px 0; animation: pulse 1s infinite;}
+
+        #toast { visibility: hidden; min-width: 250px; background: #fff; color: #333; text-align: center; border-radius: 20px; padding: 15px; position: fixed; z-index: 1000000; left: 50%; bottom: 90px; transform: translateX(-50%); font-weight: 600; font-size: 13px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 90px; opacity: 1; } }
+        @keyframes fadeout { from { bottom: 90px; opacity: 1; } to { bottom: 0; opacity: 0; } }
+        
+        .switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.3); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #00C9FF; }
+        input:checked + .slider:before { transform: translateX(18px); }
     </style>
-    <link rel="manifest" href="data:application/manifest+json,{
-        %22name%22:%22Priyanka%20Study%22,
-        %22short_name%22:%22Priyanka%22,
-        %22start_url%22:%22.%22,
-        %22display%22:%22standalone%22,
-        %22background_color%22:%22%231f1233%22,
-        %22theme_color%22:%22%23ec4899%22,
-        %22icons%22:[{%22src%22:%22https://picsum.photos/id/1011/192/192%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22}]
-    }">
 </head>
-<body class="bg-gradient-to-br from-purple-950 to-pink-950 text-white min-h-screen">
+<body id="appBody">
 
-    <div id="loginScreen" class="flex items-center justify-center min-h-screen p-6">
-        <div class="glass p-10 rounded-3xl w-full max-w-sm">
-            <div class="text-8xl mb-6 heart text-center">📚</div>
-            <h1 class="title-font text-4xl text-center font-bold text-pink-200">Priyanka Study</h1>
-            <p class="text-center text-pink-300 text-lg mt-1">প্রিয়াঙ্কার ৪০/৪০ অ্যাপ ❤️</p>
-            
-            <div class="mt-10 space-y-6">
-                <input id="userId" type="text" value="priyanka" class="w-full px-6 py-5 text-2xl bg-white/10 rounded-3xl text-center" placeholder="ইউজার আইডি">
-                <input id="password" type="password" value="1234" class="w-full px-6 py-5 text-2xl bg-white/10 rounded-3xl text-center" placeholder="পাসওয়ার্ড">
-                <button onclick="handleLogin()" class="w-full py-6 text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 rounded-3xl active:scale-95">প্রবেশ করো 📖</button>
-            </div>
+    <div id="toast">Message</div>
+    
+    <audio id="beepSound" src="data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU" preload="auto"></audio>
+
+    <div id="loginLoader">
+        <i class="fas fa-circle-notch fa-spin" style="font-size:50px; margin-bottom:15px; color:#00C9FF;"></i>
+        <h3 style="color:#fff;">Logging in Securely...</h3>
+    </div>
+
+    <div id="sbOverlay" class="sb-overlay" onclick="toggleSidebar()"></div>
+    <div id="sidebar">
+        <h2 style="margin-bottom: 30px; font-size: 20px; color: #00C9FF;"><i class="fas fa-book-reader"></i> Subjects</h2>
+        <div class="sb-item" onclick="openSubject('Education'); toggleSidebar();"><i class="fas fa-book-open" style="color:#FF0076; width:25px;"></i> Education</div>
+        <div class="sb-item" onclick="openSubject('Philosophy'); toggleSidebar();"><i class="fas fa-brain" style="color:#00C9FF; width:25px;"></i> Philosophy</div>
+        <div class="sb-item" onclick="openSubject('Geography'); toggleSidebar();"><i class="fas fa-globe-asia" style="color:#2ed573; width:25px;"></i> Geography</div>
+        <div class="sb-item" onclick="openSubject('Bengali'); toggleSidebar();"><i class="fas fa-pen-nib" style="color:#f6d365; width:25px;"></i> Bengali</div>
+        <div class="sb-item" onclick="openSubject('Env. Science'); toggleSidebar();"><i class="fas fa-leaf" style="color:#00b09b; width:25px;"></i> Env. Science</div>
+        <div style="margin-top: 50px; border-top: 1px solid var(--card-border); padding-top: 20px;">
+            <div class="sb-item" onclick="goTo('view-settings'); toggleSidebar();"><i class="fas fa-cog" style="color:#ccc; width:25px;"></i> Settings</div>
+            <div class="sb-item" onclick="logout()" style="color:#FF0076;"><i class="fas fa-sign-out-alt" style="width:25px;"></i> Logout</div>
         </div>
     </div>
 
-    <div id="mainApp" class="hidden">
-        <header class="bg-black/50 backdrop-blur-xl sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <button onclick="toggleSidebar()" class="text-3xl">☰</button>
-                <div class="title-font text-3xl text-pink-200">Priyanka Study</div>
-            </div>
-            <button onclick="checkForUpdate()" class="text-xl">🔄</button>
-        </header>
+    <div id="countdownModal">
+        <h2 style="color: #00C9FF; margin-bottom: 10px;">Live Mock Test Starting!</h2>
+        <p id="cdTestName" style="color: var(--text-sub);">Subject Name</p>
+        <div class="timer-circle" id="cdTimer">00:00</div>
+        <p style="font-size: 12px; color: #FF0076;">Please wait, test will open automatically...</p>
+        <button class="btn-main" style="margin-top: 30px; width: 200px; background: #333; box-shadow: none;" onclick="closeCountdown()">Close</button>
+    </div>
 
-        <div id="sidebar" class="fixed inset-y-0 left-0 w-72 bg-black/90 z-50 transform -translate-x-full transition-transform duration-300 p-6 overflow-y-auto">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-2xl font-bold">সাবজেক্ট</h2>
-                <button onclick="toggleSidebar()" class="text-3xl">✕</button>
+    <div id="fullscreenViewer">
+        <div class="viewer-head">
+            <i class="fas fa-arrow-left" style="font-size: 22px; cursor: pointer;" onclick="closeViewer()"></i>
+            <h3 id="viewerTitle" style="font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 60%;">Document</h3>
+            <div style="width: 22px;"></div>
+        </div>
+        
+        <div id="testTimerBanner"><i class="fas fa-clock"></i> Time Remaining: <span id="testTimeLeft">--:--</span></div>
+
+        <div id="viewerLoading">
+            <i class="fas fa-spinner fa-spin" style="font-size:40px;"></i>
+            <p id="loadingText">Processing File...</p>
+        </div>
+        
+        <iframe id="htmlViewerFrame"></iframe>
+        
+        <div id="pdfNativeContainer">
+            <div style="padding: 10px 15px; background: #fff; display: flex; justify-content: space-between; align-items: center; color: #333;">
+                <button style="background: var(--accent-pink); color: white; border: none; padding: 6px 15px; border-radius: 8px;" onclick="prevPage()"><i class="fas fa-chevron-left"></i></button>
+                <span style="font-weight: bold; font-size: 14px;">Pg <span id="pageNum">1</span> / <span id="pageCount">?</span></span>
+                <button style="background: var(--accent-pink); color: white; border: none; padding: 6px 15px; border-radius: 8px;" onclick="nextPage()"><i class="fas fa-chevron-right"></i></button>
             </div>
-            <div id="subjectList" class="space-y-3"></div>
-            
-            <div id="adminOnly" class="hidden mt-12 pt-8 border-t border-white/20">
-                <button onclick="showSection('uploadSection');toggleSidebar()" 
-                        class="w-full py-5 bg-pink-600 rounded-3xl text-xl font-medium">📤 আপলোড করো</button>
+            <div class="pdf-canvas-wrapper"><canvas id="pdfCanvas"></canvas></div>
+        </div>
+    </div>
+
+
+    <div class="app-container">
+        
+        <div id="view-login" class="view active">
+            <div style="text-align: center; margin: 60px 0 40px 0;">
+                <i class="fas fa-graduation-cap" style="font-size: 60px; color: var(--accent-blue); margin-bottom: 15px; filter: drop-shadow(0 0 10px rgba(0,201,255,0.5));"></i>
+                <h1 style="font-size: 32px; font-weight: 800;">Priyanka Study</h1>
+                <p style="color: var(--text-sub); font-size: 14px;">Premium Exam Portal</p>
             </div>
-            
-            <button onclick="logout()" class="mt-auto absolute bottom-6 left-6 right-6 py-4 bg-red-600/80 rounded-3xl text-xl">লগআউট</button>
+
+            <div class="glass-card">
+                <h2 style="font-size: 18px; margin-bottom: 20px;">Sign In</h2>
+                
+                <div id="loginStudentMode">
+                    <input type="text" id="userId" class="input-glass" placeholder="User ID">
+                </div>
+                <div id="loginAdminMode" style="display: none;">
+                    <input type="password" id="adminKey" class="input-glass" placeholder="Enter Master Key (Admin)">
+                </div>
+
+                <div style="display: flex; align-items: center; margin-bottom: 20px; gap: 10px;">
+                    <label class="switch"><input type="checkbox" id="adminToggle" onchange="toggleLoginMode()"><span class="slider"></span></label>
+                    <span style="font-size: 13px;">Login as Admin</span>
+                </div>
+
+                <button class="btn-main" onclick="executeLogin()">Secure Login <i class="fas fa-sign-in-alt"></i></button>
+            </div>
         </div>
 
-        <div class="p-6 pt-4">
-            <div id="uploadSection" class="section hidden">
-                <h2 class="text-3xl font-bold mb-6">📤 নতুন ফাইল আপলোড</h2>
-                <input type="file" id="uploadInput" accept=".pdf,.html" class="block w-full text-lg py-4">
-                <select id="uploadSubject" class="w-full mt-4 py-4 bg-white/10 rounded-3xl text-xl"></select>
-                <select id="uploadCategory" class="w-full mt-4 py-4 bg-white/10 rounded-3xl text-xl">
-                    <option value="Notes">📖 Notes</option>
-                    <option value="MockTest">🧪 Mock Test HTML</option>
+        <div id="view-home" class="view">
+            <div class="header">
+                <div class="icon-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
+                <div style="text-align: center;">
+                    <p style="font-size: 11px; color: var(--text-sub);">Welcome back</p>
+                    <h2 style="font-size: 18px;">Priyanka</h2>
+                </div>
+                <div class="icon-btn" onclick="goTo('view-settings')"><i class="fas fa-cog"></i></div>
+            </div>
+
+            <div class="glass-card" style="padding: 25px 20px;">
+                <div class="progress-box">
+                    <div>
+                        <h3 style="font-size: 16px; margin-bottom: 5px;">Score Board</h3>
+                        <p style="font-size: 12px; color: var(--accent-blue); font-weight: bold; margin-bottom: 5px;">Total Points: <span id="dashPoints">0</span></p>
+                        <p style="font-size: 11px;"><i class="fas fa-check-circle" style="color: #2ed573;"></i> <span id="dashCorrect">0</span> Correct</p>
+                        <p style="font-size: 11px;"><i class="fas fa-times-circle" style="color: #FF0076;"></i> <span id="dashWrong">0</span> Wrong</p>
+                    </div>
+                    <div class="circ-chart" id="dashRing" style="--prog: 0%;">
+                        <div class="circ-val" id="dashPercent">0%</div>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+                    <div style="text-align: center;"><p style="font-size: 11px; color: var(--text-sub);">Tests Given</p><h4 id="testsGiven">0</h4></div>
+                    <div style="text-align: center;"><p style="font-size: 11px; color: var(--text-sub);">Pending</p><h4 id="testsPending" style="color: #FF0076;">0</h4></div>
+                </div>
+            </div>
+            
+            <div class="live-marquee" onclick="checkUpcomingTests(true)">
+                <div class="pulse-dot"></div>
+                <div>
+                    <h4>Live Mock Test</h4>
+                    <p id="homeTestStatus">Checking for upcoming tests...</p>
+                </div>
+            </div>
+
+            <h3 style="font-size: 16px; margin: 25px 0 15px 0;">Subjects Folders</h3>
+            <div class="subject-grid">
+                <div class="neon-box" style="display: block; text-align: center;" onclick="openSubject('Education')">
+                    <i class="fas fa-book-open subj-icon" style="color: #FF0076;"></i><h3>Education</h3>
+                </div>
+                <div class="neon-box" style="display: block; text-align: center;" onclick="openSubject('Philosophy')">
+                    <i class="fas fa-brain subj-icon" style="color: #00C9FF;"></i><h3>Philosophy</h3>
+                </div>
+                <div class="neon-box" style="display: block; text-align: center;" onclick="openSubject('Geography')">
+                    <i class="fas fa-globe-asia subj-icon" style="color: #2ed573;"></i><h3>Geography</h3>
+                </div>
+                <div class="neon-box" style="display: block; text-align: center;" onclick="openSubject('Bengali')">
+                    <i class="fas fa-pen-nib subj-icon" style="color: #f6d365;"></i><h3>Bengali</h3>
+                </div>
+                <div class="neon-box" style="display: block; text-align: center; grid-column: span 2;" onclick="openSubject('Env. Science')">
+                    <i class="fas fa-leaf subj-icon" style="color: #00b09b;"></i><h3>Env. Science</h3>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-subfolders" class="view">
+            <div class="header">
+                <div class="icon-btn" onclick="goTo('view-home')"><i class="fas fa-chevron-left"></i></div>
+                <h2 id="folderTitle" style="font-size: 18px;">Subject</h2>
+                <div style="width: 40px;"></div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <div class="neon-box" onclick="loadFiles('guide')">
+                    <div style="width: 50px; height: 50px; background: rgba(46, 213, 115, 0.2); border-radius: 14px; display:flex; justify-content:center; align-items:center; font-size:24px; color:#2ed573;">
+                        <i class="fas fa-book-reader"></i></div>
+                    <div><h3 style="font-size: 15px;">Study Guide (Q&A)</h3><p style="font-size: 11px; color: var(--text-sub);">Read before taking test</p></div>
+                </div>
+                <div class="neon-box" onclick="loadFiles('pdf')">
+                    <div style="width: 50px; height: 50px; background: rgba(246, 211, 101, 0.2); border-radius: 14px; display:flex; justify-content:center; align-items:center; font-size:24px; color:#f6d365;">
+                        <i class="fas fa-file-pdf"></i></div>
+                    <div><h3 style="font-size: 15px;">PDF Notes</h3><p style="font-size: 11px; color: var(--text-sub);">Chapter wise notes</p></div>
+                </div>
+                <div class="neon-box" onclick="loadFiles('live_mock')">
+                    <div style="width: 50px; height: 50px; background: rgba(255, 0, 118, 0.2); border-radius: 14px; display:flex; justify-content:center; align-items:center; font-size:24px; color:#FF0076;">
+                        <i class="fas fa-laptop-code"></i></div>
+                    <div><h3 style="font-size: 15px;">Live Mock Tests</h3><p style="font-size: 11px; color: var(--text-sub);">Time locked pending tests</p></div>
+                </div>
+                <div class="neon-box" onclick="loadFiles('mock_results')">
+                    <div style="width: 50px; height: 50px; background: rgba(0, 201, 255, 0.2); border-radius: 14px; display:flex; justify-content:center; align-items:center; font-size:24px; color:#00C9FF;">
+                        <i class="fas fa-poll-h"></i></div>
+                    <div><h3 style="font-size: 15px;">Live Test Results</h3><p style="font-size: 11px; color: var(--text-sub);">View completed test hard-copies</p></div>
+                </div>
+                <div class="neon-box" onclick="loadFiles('saved_mock')">
+                    <div style="width: 50px; height: 50px; background: rgba(155, 89, 182, 0.2); border-radius: 14px; display:flex; justify-content:center; align-items:center; font-size:24px; color:#9b59b6;">
+                        <i class="fas fa-redo-alt"></i></div>
+                    <div><h3 style="font-size: 15px;">Practice Mock Tests</h3><p style="font-size: 11px; color: var(--text-sub);">Re-take tests (Scores don't count)</p></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-files" class="view">
+            <div class="header">
+                <div class="icon-btn" onclick="goTo('view-subfolders')"><i class="fas fa-chevron-left"></i></div>
+                <h2 id="listTitle" style="font-size: 16px;">Files</h2>
+                <div style="width: 40px;"></div>
+            </div>
+            <div id="filesContainer" style="margin-top: 15px;"></div>
+        </div>
+
+        <div id="view-gallery" class="view">
+            <div class="header">
+                <div style="width: 40px;"></div>
+                <h2 style="font-size: 16px;">All PDF Library</h2>
+                <div class="icon-btn" onclick="loadAllPdfs()"><i class="fas fa-sync-alt"></i></div>
+            </div>
+            <div id="galleryContainer" class="gallery-grid"></div>
+        </div>
+
+        <div id="view-settings" class="view">
+            <div class="header">
+                <div class="icon-btn" onclick="goTo('view-home')"><i class="fas fa-arrow-left"></i></div>
+                <h2>Settings</h2><div style="width:40px;"></div>
+            </div>
+
+            <div class="glass-card" style="text-align: center;">
+                <div style="position: relative; display: inline-block;">
+                    <img id="setProfilePic" src="https://via.placeholder.com/100" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent-blue);">
+                    <div style="position: absolute; bottom: 0; right: 0; background: var(--accent-blue); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="document.getElementById('picInput').click()">
+                        <i class="fas fa-camera" style="color: #fff; font-size: 12px;"></i>
+                    </div>
+                </div>
+                <h3 style="margin-top: 10px;">Student Profile</h3>
+                <input type="file" id="picInput" accept="image/*" style="display: none;" onchange="saveProfilePic(event)">
+            </div>
+
+            <div class="glass-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <span><i class="fas fa-moon" style="color: #00C9FF; margin-right: 10px;"></i> Dark Mode</span>
+                    <label class="switch"><input type="checkbox" id="themeToggle" onchange="toggleTheme()"><span class="slider"></span></label>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--card-border); padding-bottom: 15px;">
+                    <div>
+                        <span style="display:block;"><i class="fas fa-music" style="color: #FF0076; margin-right: 10px;"></i> Alarm Tune</span>
+                        <span style="font-size: 10px; color: var(--text-sub);">For exam end warning</span>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <select id="alarmTuneSelect" class="input-glass" style="padding: 8px; margin:0; width: auto; font-size: 12px; background: rgba(255,255,255,0.2); color: var(--text-main);" onchange="saveSettings()">
+                            <option value="1" style="color:black;">1. Classic Beep</option><option value="2" style="color:black;">2. Digital Watch</option>
+                            <option value="3" style="color:black;">3. Loud Buzzer</option><option value="4" style="color:black;">4. High Trill</option>
+                            <option value="5" style="color:black;">5. Low Warning</option><option value="6" style="color:black;">6. Ascending Alert</option>
+                            <option value="7" style="color:black;">7. Descending Alert</option><option value="8" style="color:black;">8. Euro Siren</option>
+                            <option value="9" style="color:black;">9. Fast Pulse</option><option value="10" style="color:black;">10. Melodic Chime</option>
+                        </select>
+                        <i class="fas fa-play-circle" style="font-size: 24px; color: #2ed573; cursor: pointer;" onclick="testAlarmTune()"></i>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <span><i class="fas fa-mobile-alt" style="color: #FF0076; margin-right: 10px;"></i> Vibration</span>
+                    <label class="switch"><input type="checkbox" id="setVib" onchange="saveSettings()" checked><span class="slider"></span></label>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding-top: 15px; border-top: 1px solid var(--card-border);" onclick="clearData()">
+                    <span><i class="fas fa-trash" style="color: #FF0076; margin-right: 10px;"></i> Clear App Data</span>
+                    <i class="fas fa-chevron-right" style="color: var(--text-sub);"></i>
+                </div>
+            </div>
+            <button class="btn-main" style="background: transparent; border: 2px solid #FF0076; color: #FF0076; box-shadow: none;" onclick="logout()">Logout Securely</button>
+        </div>
+
+        <div id="view-admin" class="view">
+            <div class="header">
+                <div class="icon-btn" style="color: #FF0076;" onclick="logout()"><i class="fas fa-power-off"></i></div>
+                <h2 style="font-size: 18px;">Admin Panel</h2>
+                <div style="width:40px;"></div>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="font-size: 15px; margin-bottom: 15px; color: var(--accent-blue);">1. Update Student Stats</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <input type="number" id="adPts" class="input-glass" placeholder="Total Points">
+                    <input type="number" id="adPct" class="input-glass" placeholder="Progress %">
+                    <input type="number" id="adCor" class="input-glass" placeholder="Correct Ans">
+                    <input type="number" id="adWr" class="input-glass" placeholder="Wrong Ans">
+                </div>
+                <button class="btn-main" style="padding: 12px; border-radius: 12px;" onclick="updateAdminStats()">Save Stats</button>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="font-size: 15px; margin-bottom: 15px; color: var(--accent-pink);">2. Direct File Upload</h3>
+                <select id="adSubj" class="input-glass">
+                    <option value="Education">Education</option><option value="Philosophy">Philosophy</option>
+                    <option value="Geography">Geography</option><option value="Bengali">Bengali</option><option value="Env. Science">Env. Science</option>
                 </select>
-                <input id="uploadTitle" type="text" placeholder="ফাইলের নাম" class="w-full mt-4 py-4 bg-white/10 rounded-3xl text-xl px-6">
-                <button onclick="uploadMaterial()" class="mt-8 w-full py-6 bg-pink-600 rounded-3xl text-2xl font-bold">আপলোড করো</button>
-            </div>
+                <select id="adType" class="input-glass" onchange="toggleTimerFields()">
+                    <option value="pdf">PDF Note</option>
+                    <option value="guide">Study Guide (HTML/PDF)</option>
+                    <option value="live_mock">Live Mock Test (HTML Only)</option>
+                </select>
+                <input type="text" id="adName" class="input-glass" placeholder="File Name (e.g. Chapter 1)">
+                <input type="file" id="adFileInput" class="input-glass" accept=".pdf, .html" style="padding: 10px;">
 
-            <div id="materialsSection" class="section">
-                <h2 id="currentSubjectTitle" class="text-3xl font-bold mb-6"></h2>
-                <input id="searchBox" onkeyup="filterMaterials()" placeholder="সার্চ করো..." 
-                       class="w-full py-5 px-6 bg-white/10 rounded-3xl text-xl mb-6">
-                <div id="materialsGrid" class="grid grid-cols-1 gap-6"></div>
+                <div id="timerFields" style="display: none; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 12px; margin-bottom: 15px;">
+                    <label style="font-size: 11px; color: var(--accent-blue);">Start Time (Auto Open):</label>
+                    <input type="datetime-local" id="adStartTime" class="input-glass" style="margin-bottom: 10px; padding: 10px;">
+                    <label style="font-size: 11px; color: var(--accent-pink);">End Time (Auto Submit):</label>
+                    <input type="datetime-local" id="adEndTime" class="input-glass" style="margin-bottom: 0; padding: 10px;">
+                </div>
+                <button class="btn-main" id="adBtn" onclick="processAdminUpload()"><i class="fas fa-upload"></i> Upload Directly</button>
             </div>
         </div>
+
     </div>
 
-    <div id="viewModal" class="hidden fixed inset-0 bg-black z-[9999] flex items-center justify-center">
-        <div class="w-full h-full flex flex-col">
-            <div class="bg-black/80 p-4 flex justify-between items-center">
-                <button onclick="closeModal()" class="text-3xl">←</button>
-                <button onclick="downloadCurrentFile()" class="px-8 py-3 bg-white/20 rounded-3xl text-xl">⬇️ ডাউনলোড</button>
-                <button onclick="toggleFullScreen()" class="px-8 py-3 bg-white/20 rounded-3xl text-xl">⛶ ফুলস্ক্রিন</button>
-            </div>
-            <div id="modalBody" class="flex-1 w-full overflow-auto bg-white text-black"></div>
-        </div>
+    <div class="bottom-nav" id="bottomNav" style="display: none;">
+        <i class="fas fa-home nav-icon active" onclick="goTo('view-home'); updateNav(this)"></i>
+        <i class="fas fa-folder-open nav-icon" onclick="goTo('view-gallery'); loadAllPdfs(); updateNav(this)"></i>
+        <i class="fas fa-user nav-icon" onclick="goTo('view-settings'); updateNav(this)"></i>
     </div>
 
     <script>
-        let currentUser = null;
-        let allMaterials = [];
-        let currentSubject = "Education";
-        let currentViewingMaterial = null;
-        const MASTER_PASSWORD = "7602594913";
-        const SUBJECTS = ["Education", "Bangla", "Philosophy", "Geography", "EVS"];
+        // ================= FIREBASE INIT =================
+        const firebaseConfig = { apiKey: "AIzaSyAY97_iFryUusBSTrJsBzSIFRnIovcA4LY", authDomain: "my-photo-301f2.firebaseapp.com", projectId: "my-photo-301f2" };
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const db = firebase.firestore();
 
-        function handleLogin() {
-            const id = document.getElementById("userId").value.trim().toLowerCase();
-            if ((id === "admin" || id === "priyanka") && document.getElementById("password").value === "1234") {
-                currentUser = { id: id };
-                localStorage.setItem("priyankaUser", JSON.stringify(currentUser));
-                document.getElementById("loginScreen").classList.add("hidden");
-                document.getElementById("mainApp").classList.remove("hidden");
-                if (id === "admin") document.getElementById("adminOnly").classList.remove("hidden");
-                loadMaterials();
-                renderSubjects();
-                switchSubject("Education");
-            } else alert("ভুল পাসওয়ার্ড! আবার চেষ্টা করো ❤️");
-        }
+        // GLOBALS
+        const MASTER_KEY = "7602594913";
+        const CLOUDINARY_URL = 'https://api.cloudinary.com/v1_1/dbzsbe4vo/auto/upload';
+        const CLOUDINARY_PRESET = 'priyanpka_pp';
 
-        function toggleSidebar() {
-            const sidebar = document.getElementById("sidebar");
-            sidebar.classList.toggle("-translate-x-full");
-        }
+        let activeSubject = "";
+        let wakeLock = null;
+        let inactivityTimer;
+        let testInterval = null;
+        let currentFileViewerId = null;
+        let globalTests = [];
+        let alarmPlayed20s = false; 
+        let currentBlobUrl = null; 
 
-        function renderSubjects() {
-            const container = document.getElementById("subjectList");
-            container.innerHTML = "";
-            SUBJECTS.forEach(sub => {
-                const btn = document.createElement("button");
-                btn.className = `w-full text-left px-6 py-6 text-2xl rounded-3xl ${sub === currentSubject ? 'bg-pink-600 text-white' : 'bg-white/10'}`;
-                btn.textContent = sub === "EVS" ? "Environment" : sub;
-                btn.onclick = () => { switchSubject(sub); toggleSidebar(); };
-                container.appendChild(btn);
-            });
-        }
+        // PDF.JS Worker
+        const pdfjsLib = window['pdfjs-dist/build/pdf'];
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-        function switchSubject(sub) {
-            currentSubject = sub;
-            document.getElementById("currentSubjectTitle").textContent = sub + " 📚";
-            renderSubjects();
-            renderMaterials();
-            // হাইড আপলোড সেকশন, শো ম্যাটেরিয়াল সেকশন
-            document.getElementById("uploadSection").classList.add("hidden");
-            document.getElementById("materialsSection").classList.remove("hidden");
-        }
-        
-        function showSection(sectionId) {
-            document.getElementById("uploadSection").classList.add("hidden");
-            document.getElementById("materialsSection").classList.add("hidden");
-            document.getElementById(sectionId).classList.remove("hidden");
-        }
+        window.currentFilesMap = {};
 
-        function uploadMaterial() {
-            const file = document.getElementById("uploadInput").files[0];
-            if (!file) return alert("ফাইল সিলেক্ট করো");
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                allMaterials.push({
-                    id: Date.now(),
-                    title: document.getElementById("uploadTitle").value || file.name,
-                    subject: document.getElementById("uploadSubject").value,
-                    category: document.getElementById("uploadCategory").value,
-                    type: file.name.endsWith(".pdf") ? "pdf" : "html",
-                    data: e.target.result
-                });
-                localStorage.setItem("priyankaMaterials", JSON.stringify(allMaterials));
-                alert("✅ আপলোড হয়েছে! প্রিয়াঙ্কা এখন পড়তে পারবে");
-                switchSubject(document.getElementById("uploadSubject").value);
-            };
-            if (file.name.endsWith(".pdf")) reader.readAsDataURL(file);
-            else reader.readAsText(file);
+        // ================= AUDIO ALARM LOGIC =================
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playTone(freq, type, startTime, duration) {
+            if(audioCtx.state === 'suspended') audioCtx.resume();
+            let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+            osc.type = type; osc.frequency.value = freq;
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            gain.gain.setValueAtTime(0.5, startTime); gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+            osc.start(startTime); osc.stop(startTime + duration);
         }
-
-        function loadMaterials() {
-            allMaterials = JSON.parse(localStorage.getItem("priyankaMaterials")) || [];
-            const select = document.getElementById("uploadSubject");
-            select.innerHTML = ""; // আগের অপশন ক্লিয়ার করার জন্য
-            SUBJECTS.forEach(s => {
-                let opt = document.createElement("option"); opt.value = s; opt.textContent = s;
-                select.appendChild(opt);
-            });
-        }
-
-        function renderMaterials() {
-            const grid = document.getElementById("materialsGrid");
-            grid.innerHTML = "";
-            allMaterials.filter(m => m.subject === currentSubject).forEach(mat => {
-                const card = document.createElement("div");
-                card.className = "mobile-card glass p-6 rounded-3xl cursor-pointer";
-                card.innerHTML = `
-                    <div class="text-xl font-medium">${mat.title}</div>
-                    <div class="text-sm text-pink-300 mt-2">${mat.category}</div>
-                `;
-                card.onclick = () => openMaterial(mat);
-                grid.appendChild(card);
-            });
-        }
-
-        function filterMaterials() {
-            const term = document.getElementById("searchBox").value.toLowerCase();
-            const filtered = allMaterials.filter(m => m.subject === currentSubject && m.title.toLowerCase().includes(term));
-            const grid = document.getElementById("materialsGrid");
-            grid.innerHTML = "";
-            filtered.forEach(mat => {
-                const card = document.createElement("div");
-                card.className = "mobile-card glass p-6 rounded-3xl cursor-pointer";
-                card.innerHTML = `
-                    <div class="text-xl font-medium">${mat.title}</div>
-                    <div class="text-sm text-pink-300 mt-2">${mat.category}</div>
-                `;
-                card.onclick = () => openMaterial(mat);
-                grid.appendChild(card);
-            });
-        }
-
-        function openMaterial(mat) {
-            currentViewingMaterial = mat;
-            const body = document.getElementById("modalBody");
-            body.innerHTML = mat.type === "pdf" 
-                ? `<embed src="${mat.data}" class="w-full h-full">` 
-                : `<iframe srcdoc='${mat.data.replace(/'/g, "&apos;")}' class="w-full h-full border-0"></iframe>`;
-            document.getElementById("viewModal").classList.remove("hidden");
-            if (mat.category === "MockTest") toggleFullScreen(true);
-        }
-
-        function closeModal() {
-            document.getElementById("viewModal").classList.add("hidden");
-            document.exitFullscreen?.();
-        }
-
-        function toggleFullScreen(force) {
-            if (force || !document.fullscreenElement) {
-                document.getElementById("modalBody").requestFullscreen?.();
+        function playSelectedAlarm(durationMs) {
+            let tune = parseInt(localStorage.getItem('alarmTune')) || 1; let loops = durationMs / 1000; let t = audioCtx.currentTime;
+            for(let i=0; i<loops; i++) {
+                let start = t + i;
+                if(tune===1) { playTone(800, 'sine', start, 0.5); playTone(1000, 'sine', start+0.5, 0.5); } 
+                else if(tune===2) { playTone(1200, 'square', start, 0.2); playTone(1200, 'square', start+0.2, 0.2); } 
+                else if(tune===3) { playTone(400, 'sawtooth', start, 0.8); } 
+                else if(tune===4) { playTone(2000, 'sine', start, 0.1); playTone(2500, 'sine', start+0.1, 0.1); } 
+                else if(tune===5) { playTone(600, 'triangle', start, 0.4); playTone(400, 'triangle', start+0.5, 0.4); } 
+                else if(tune===6) { playTone(800, 'sine', start, 0.1); playTone(900, 'sine', start+0.2, 0.1); playTone(1000, 'sine', start+0.4, 0.1); } 
+                else if(tune===7) { playTone(1000, 'sine', start, 0.1); playTone(900, 'sine', start+0.2, 0.1); playTone(800, 'sine', start+0.4, 0.1); } 
+                else if(tune===8) { playTone(500, 'square', start, 0.5); playTone(300, 'square', start+0.5, 0.5); } 
+                else if(tune===9) { playTone(1500, 'sine', start, 0.05); playTone(1500, 'sine', start+0.1, 0.05); playTone(1500, 'sine', start+0.2, 0.05); } 
+                else if(tune===10) { playTone(440, 'sine', start, 0.3); playTone(554, 'sine', start+0.3, 0.3); playTone(659, 'sine', start+0.6, 0.3); } 
             }
+            if(navigator.vibrate && localStorage.getItem('vibOn') === 'true') navigator.vibrate(durationMs);
+        }
+        function playBeep() {
+            if(localStorage.getItem('soundOn') === 'false') return; playTone(800, 'sine', audioCtx.currentTime, 0.2);
+            if(navigator.vibrate && localStorage.getItem('vibOn') === 'true') navigator.vibrate(200);
         }
 
-        function downloadCurrentFile() {
-            const pass = prompt("🔒 মাস্টার পাসওয়ার্ড দাও (7602594913)");
-            if (pass !== "7602594913") return alert("❌ ভুল পাসওয়ার্ড!");
-            
-            const mat = currentViewingMaterial;
-            const a = document.createElement("a");
-            if (mat.type === "pdf") {
-                a.href = mat.data;
-                a.download = mat.title + ".pdf";
-            } else {
-                const blob = new Blob([mat.data], {type:"text/html"});
-                a.href = URL.createObjectURL(blob);
-                a.download = mat.title + ".html";
-            }
-            a.click();
-        }
-
-        function checkForUpdate() {
-            if (confirm("নতুন আপডেট চেক করব?")) {
-                alert("✅ আপডেট হয়েছে! অ্যাপ বন্ধ করে আবার খোলো ❤️");
-                location.reload();
-            }
-        }
-
-        function logout() {
-            if (confirm("লগআউট করবি?")) {
-                localStorage.removeItem("priyankaUser");
-                location.reload();
-            }
-        }
-
+        // ================= APP BOOT =================
         window.onload = () => {
-            tailwind.config = { content: ["*"] };
-            const saved = localStorage.getItem("priyankaUser");
-            if (saved) {
-                currentUser = JSON.parse(saved);
-                document.getElementById("loginScreen").classList.add("hidden");
-                document.getElementById("mainApp").classList.remove("hidden");
-                if (currentUser.id === "admin") document.getElementById("adminOnly").classList.remove("hidden");
-            }
-            loadMaterials();
-            renderSubjects();
-            switchSubject("Education");
+            loadSettings(); requestWakeLock(); resetTimer();
+            document.body.addEventListener('mousemove', resetTimer); document.body.addEventListener('touchstart', resetTimer);
+
+            if(localStorage.getItem('isStudentLoggedIn') === 'true') { 
+                loadDashboardStats(); fetchUpcomingTests();
+                setInterval(fetchUpcomingTests, 60000); setInterval(checkTimerLogic, 1000); 
+                goTo('view-home'); 
+            } else if (localStorage.getItem('isAdminLoggedIn') === 'true') { goTo('view-admin'); } else { goTo('view-login'); }
         };
+
+        async function requestWakeLock() { try { if ('wakeLock' in navigator) { wakeLock = await navigator.wakeLock.request('screen'); } } catch (err) {} }
+        function resetTimer() { clearTimeout(inactivityTimer); inactivityTimer = setTimeout(autoLogout, 12 * 60 * 60 * 1000); }
+        function autoLogout() { if(localStorage.getItem('isStudentLoggedIn') || localStorage.getItem('isAdminLoggedIn')) { logout(); showToast("Auto Logged out due to 12h inactivity."); } }
+        function showToast(msg) { let t = document.getElementById("toast"); t.innerText = msg; t.className = "show"; setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000); }
+        function comingSoon(msg) { showToast(msg); }
+        
+        function goTo(viewId) { 
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById(viewId).classList.add('active'); 
+            document.getElementById('bottomNav').style.display = (viewId === 'view-home' || viewId === 'view-settings' || viewId === 'view-gallery') ? 'flex' : 'none';
+        }
+        function updateNav(el) { document.querySelectorAll('.nav-icon').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
+        function toggleSidebar() { 
+            let sb = document.getElementById('sidebar'); let ov = document.getElementById('sbOverlay');
+            if(sb.classList.contains('open')) { sb.classList.remove('open'); ov.style.display = 'none'; } else { sb.classList.add('open'); ov.style.display = 'block'; }
+        }
+
+        // ================= LOGIN & SETTINGS =================
+        function toggleLoginMode() { let isAd = document.getElementById('adminToggle').checked; document.getElementById('loginStudentMode').style.display = isAd ? 'none' : 'block'; document.getElementById('loginAdminMode').style.display = isAd ? 'block' : 'none'; }
+        
+        function executeLogin() {
+            if(document.getElementById('adminToggle').checked) {
+                if(document.getElementById('adminKey').value === MASTER_KEY) { localStorage.setItem('isAdminLoggedIn', 'true'); goTo('view-admin'); showToast("Admin Verified"); } else { showToast("❌ Invalid Key"); }
+            } else {
+                let id = document.getElementById('userId').value;
+                // Auto ID feature & animation
+                if(id !== "" || localStorage.getItem('savedUserId')) { 
+                    if(id !== "") localStorage.setItem('savedUserId', id);
+                    document.getElementById('loginLoader').style.display = 'flex';
+                    setTimeout(() => {
+                        localStorage.setItem('isStudentLoggedIn', 'true'); location.reload();
+                    }, 1500);
+                } else { showToast("Enter User ID"); }
+            }
+        }
+        function logout() { localStorage.clear(); location.reload(); }
+
+        function loadSettings() {
+            let savedId = localStorage.getItem('savedUserId'); if(savedId) document.getElementById('userId').value = savedId;
+            let pic = localStorage.getItem('userPic'); if(pic) document.getElementById('setProfilePic').src = pic;
+            let isLight = localStorage.getItem('themeLight');
+            if(isLight === 'true') { document.body.classList.add('light-mode'); document.getElementById('themeToggle').checked = false; } else { document.body.classList.remove('light-mode'); document.getElementById('themeToggle').checked = true; }
+            let snd = localStorage.getItem('soundOn'); if(snd !== null) document.getElementById('setSound').checked = (snd === 'true');
+            let vib = localStorage.getItem('vibOn'); if(vib !== null) document.getElementById('setVib').checked = (vib === 'true');
+            let tune = localStorage.getItem('alarmTune'); if(tune) document.getElementById('alarmTuneSelect').value = tune;
+        }
+
+        function saveSettings() { localStorage.setItem('soundOn', document.getElementById('setSound').checked); localStorage.setItem('vibOn', document.getElementById('setVib').checked); localStorage.setItem('alarmTune', document.getElementById('alarmTuneSelect').value); showToast("Settings Saved!"); }
+        function toggleTheme() { let isDark = document.getElementById('themeToggle').checked; if(isDark) { document.body.classList.remove('light-mode'); localStorage.setItem('themeLight', 'false'); } else { document.body.classList.add('light-mode'); localStorage.setItem('themeLight', 'true'); } }
+        function clearData() { localStorage.clear(); showToast("App Data Cleared!"); location.reload(); }
+
+        // ================= DASHBOARD & LIVE AUTO LOGIC =================
+        function loadDashboardStats() {
+            db.collection("user_settings").doc("dashboard_stats").get().then((doc) => {
+                if(doc.exists) {
+                    let d = doc.data(); document.getElementById('dashPoints').innerText = d.points || "0"; document.getElementById('dashCorrect').innerText = d.correct || "0";
+                    document.getElementById('dashWrong').innerText = d.wrong || "0"; document.getElementById('dashRing').style.setProperty('--prog', (d.percent || 0) + '%'); document.getElementById('dashPercent').innerText = (d.percent || 0) + '%';
+                }
+            });
+            let comp = JSON.parse(localStorage.getItem('completedTests') || '[]'); document.getElementById('testsGiven').innerText = comp.length;
+        }
+
+        function fetchUpcomingTests() {
+            db.collection("study_materials").where("type", "==", "live_mock").get().then((snap) => {
+                globalTests = []; let comp = JSON.parse(localStorage.getItem('completedTests') || '[]'); let pendingCount = 0; let now = new Date().getTime();
+                snap.forEach(doc => { 
+                    let d = doc.data(); d.id = doc.id; 
+                    if(!comp.includes(d.id) && d.startTime) { let en = new Date(d.endTime).getTime(); if(now < en) { globalTests.push(d); pendingCount++; } }
+                });
+                document.getElementById('testsPending').innerText = pendingCount;
+                globalTests.sort((a,b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+                let el = document.getElementById('homeTestStatus');
+                if(globalTests.length > 0) { let next = globalTests[0]; let st = new Date(next.startTime).toLocaleString(); el.innerHTML = `${next.subject} - ${next.filename} <br> <span style="color:#fff;">Starts: ${st}</span>`; } else { el.innerHTML = "No pending live tests."; }
+            });
+        }
+
+        // CORE AUTO OPEN & ALARM SYSTEM
+        function checkTimerLogic() {
+            if(globalTests.length === 0) return;
+            let now = new Date().getTime(); let compArr = JSON.parse(localStorage.getItem('completedTests') || '[]');
+
+            for(let i=0; i<globalTests.length; i++) {
+                let test = globalTests[i]; if(compArr.includes(test.id)) continue; 
+                let st = new Date(test.startTime).getTime(); let en = new Date(test.endTime).getTime(); let dist = st - now;
+
+                if(dist <= 10000 && dist > 9000 && !test.alarmPlayed) { playBeep(); test.alarmPlayed = true; }
+                if(now >= st && now <= en && currentFileViewerId !== test.id) {
+                    window.currentFilesMap[test.id] = test; openViewer(test.id, 'live_mock'); break; 
+                }
+            }
+        }
+
+        // ================= SUB FOLDERS & LIST VIEW =================
+        function openSubject(name) { activeSubject = name; document.getElementById('folderTitle').innerText = name; goTo('view-subfolders'); }
+
+        function loadFiles(listType) {
+            let title = "";
+            if(listType === 'guide') title = "Study Guide (Q&A)";
+            else if(listType === 'pdf') title = "PDF Notes";
+            else if(listType === 'live_mock') title = "Live Mock Tests";
+            else if(listType === 'mock_results') title = "Live Test Results";
+            else if(listType === 'saved_mock') title = "Practice Mock Tests";
+            
+            document.getElementById('listTitle').innerText = title; goTo('view-files');
+            const box = document.getElementById('filesContainer'); box.innerHTML = "<div style='text-align:center; padding:40px;'><i class='fas fa-circle-notch fa-spin' style='font-size:40px; color:#FF0076;'></i></div>";
+
+            let fetchType = (listType === 'mock_results' || listType === 'saved_mock') ? 'live_mock' : listType;
+
+            db.collection("study_materials").where("subject", "==", activeSubject).where("type", "==", fetchType).get()
+            .then((snap) => {
+                box.innerHTML = ""; let files = []; snap.forEach(doc => { let d = doc.data(); d.id = doc.id; files.push(d); });
+                const now = new Date().getTime(); files.sort((a, b) => { let ta = a.timestamp?a.timestamp.toMillis():0; let tb = b.timestamp?b.timestamp.toMillis():0; return ta - tb; }); 
+                window.currentFilesMap = {}; let count = 0;
+
+                files.forEach((f) => {
+                    let isLocked = false; let isEnded = false; let lockText = "";
+                    if(f.type === 'live_mock' && f.startTime && f.endTime) {
+                        let st = new Date(f.startTime).getTime(); let en = new Date(f.endTime).getTime();
+                        if(now < st) { isLocked = true; lockText = "Starts: " + new Date(st).toLocaleString(); } else if(now > en) { isEnded = true; }
+                    }
+
+                    let compArr = JSON.parse(localStorage.getItem('completedTests') || '[]');
+                    let manuallyEnded = compArr.includes(f.id); let finalIsEnded = (isEnded || manuallyEnded);
+
+                    if(listType === 'live_mock' && finalIsEnded) return; 
+                    if((listType === 'mock_results' || listType === 'saved_mock') && !finalIsEnded) return; 
+
+                    count++; window.currentFilesMap[f.id] = f; 
+                    let iconColor = (f.type === 'pdf') ? '#FF0076' : (f.type === 'guide' ? '#2ed573' : '#00C9FF');
+                    let iconClass = (f.filename.toLowerCase().includes('.pdf')) ? 'fas fa-file-pdf' : 'fab fa-html5';
+
+                    if(isLocked && listType === 'live_mock') {
+                        box.innerHTML += `<div class="file-item"><div class="lock-overlay"><i class="fas fa-lock"></i> ${lockText}</div><div class="file-icon-box" style="color:${iconColor};"><i class="${iconClass}"></i></div><div class="file-info"><h4>${f.filename}</h4><p>Locked</p></div></div>`;
+                    } else {
+                        let subTxt = "Interactive File"; if(listType === 'mock_results') subTxt = "View your answers (Read-Only)"; if(listType === 'saved_mock') subTxt = "Practice again (Score not counted)";
+                        box.innerHTML += `
+                            <div class="file-item">
+                                <div class="file-icon-box" style="color:${iconColor};" onclick="openViewer('${f.id}', '${listType}')"><i class="${iconClass}"></i></div>
+                                <div class="file-info" onclick="openViewer('${f.id}', '${listType}')"><h4>${f.filename}</h4><p>${subTxt}</p></div>
+                                <div class="action-row"><div class="act-btn" style="color:#00C9FF;" onclick="downloadFile('${f.url}', '${f.filename}')"><i class="fas fa-download"></i></div><div class="act-btn" style="color:#FF0076;" onclick="delFile('${f.id}', '${listType}')"><i class="fas fa-trash-alt"></i></div></div>
+                            </div>`;
+                    }
+                });
+                if(count === 0) { box.innerHTML = "<div class='glass-card' style='text-align:center;'><p>No files here.</p></div>"; }
+            });
+        }
+        function downloadFile(url, name) { if(!url) return; const a = document.createElement('a'); a.href = url; a.download = name; a.target = '_blank'; document.body.appendChild(a); a.click(); document.body.removeChild(a); showToast("Downloading..."); }
+        function delFile(id, listType) { let key = prompt("Enter Master Key to delete:"); if(key === MASTER_KEY) { db.collection("study_materials").doc(id).delete().then(() => { showToast("✅ Deleted!"); loadFiles(listType); }); } else if(key !== null) { showToast("❌ Wrong Key!"); } }
+
+        // ================= ADMIN UPLOAD =================
+        function toggleTimerFields() { let type = document.getElementById('adType').value; document.getElementById('timerFields').style.display = (type === 'live_mock') ? 'block' : 'none'; }
+        function updateAdminStats() { db.collection("user_settings").doc("dashboard_stats").set({ points: document.getElementById('adPts').value, correct: document.getElementById('adCor').value, wrong: document.getElementById('adWr').value, percent: document.getElementById('adPct').value }, {merge: true}).then(() => { showToast("✅ Stats Updated!"); }); }
+        async function processAdminUpload() {
+            const file = document.getElementById('adFileInput').files[0]; const title = document.getElementById('adName').value; const type = document.getElementById('adType').value;
+            if (!file || !title) { showToast("Select file and enter name!"); return; }
+            if (type === 'live_mock' && (!document.getElementById('adStartTime').value || !document.getElementById('adEndTime').value)) { showToast("Set Start/End Time!"); return; }
+            document.getElementById('adBtn').innerText = "Uploading..."; document.getElementById('adBtn').disabled = true;
+
+            try {
+                if(file.name.toLowerCase().endsWith('.html')) {
+                    const reader = new FileReader();
+                    reader.onload = async function(e) {
+                        await db.collection("study_materials").add({
+                            subject: document.getElementById('adSubj').value, type: type, filename: title,
+                            htmlContent: e.target.result, startTime: document.getElementById('adStartTime').value, endTime: document.getElementById('adEndTime').value, timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                        }); finishUpload();
+                    }; reader.readAsText(file);
+                } 
+                else { showToast("Upload HTML files directly for best experience."); resetAdminBtn(); }
+            } catch (e) { showToast("❌ Upload Error."); resetAdminBtn(); }
+        }
+        function finishUpload() { showToast("✅ Published!"); document.getElementById('adName').value = ''; document.getElementById('adFileInput').value = ''; resetAdminBtn(); }
+        function resetAdminBtn() { document.getElementById('adBtn').innerHTML = "<i class='fas fa-upload'></i> Upload File Directly"; document.getElementById('adBtn').disabled = false; }
+
+        // ================= VIEWER (100% WORKING BLOB URL HTML) =================
+        let pdfDoc = null, pageNum = 1, pageRendering = false, pageNumPending = null; const canvas = document.getElementById('pdfCanvas'); const ctx = canvas.getContext('2d');
+
+        async function openViewer(fileId, listType) {
+            let f = window.currentFilesMap[fileId]; if(!f) return;
+            let title = f.filename; let url = f.url || ""; let htmlContent = f.htmlContent || ""; let endTime = f.endTime || "";
+
+            document.getElementById('viewerTitle').innerText = title;
+            document.getElementById('fullscreenViewer').style.display = 'flex';
+            document.getElementById('viewerLoading').style.display = 'flex';
+            document.getElementById('pdfNativeContainer').style.display = 'none';
+            document.getElementById('htmlViewerFrame').style.display = 'none';
+            document.getElementById('testTimerBanner').style.display = 'none';
+            
+            setTimeout(() => { document.getElementById('viewerLoading').style.display = 'none'; }, 1500);
+
+            if(currentBlobUrl) { URL.revokeObjectURL(currentBlobUrl); currentBlobUrl = null; }
+            currentFileViewerId = fileId; alarmPlayed20s = false;
+
+            if(title.toLowerCase().includes('.pdf')) {
+                // PDF Viewer logic
+            } else {
+                document.getElementById('htmlViewerFrame').style.display = 'block';
+                
+                // MOCK RESULTS VIEW (Load exactly what was submitted and saved!)
+                if(listType === 'mock_results') {
+                    let savedResult = localStorage.getItem('resultHTML_' + fileId);
+                    if(savedResult) { htmlContent = savedResult; } 
+                    else { htmlContent = "<h3 style='text-align:center; padding:20px; color:#333; font-family:sans-serif;'>Result data not found on this device. Make sure you submitted from this phone.</h3>"; }
+                }
+
+                // SECURE BLOB URL METHOD
+                if(htmlContent) {
+                    try {
+                        const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+                        currentBlobUrl = URL.createObjectURL(blob);
+                        document.getElementById('htmlViewerFrame').src = currentBlobUrl;
+                    } catch(e) { document.getElementById('htmlViewerFrame').srcdoc = htmlContent; }
+                } else if(url) { document.getElementById('htmlViewerFrame').src = url; }
+
+                if(listType === 'live_mock' && endTime) {
+                    document.getElementById('testTimerBanner').style.display = 'block';
+                    startTestTimer(endTime);
+                }
+            }
+        }
+
+        // Live Test Timer Logic with 20s Alarm
+        function startTestTimer(endTimeStr) {
+            clearInterval(testInterval); let endTarget = new Date(endTimeStr).getTime();
+            testInterval = setInterval(function() {
+                let distance = endTarget - new Date().getTime();
+                
+                if (distance < 0) {
+                    clearInterval(testInterval); document.getElementById('testTimeLeft').innerHTML = "EXPIRED";
+                    showToast("⚠️ Time is up! Auto Submitting...");
+                    setTimeout(() => { forceSubmitTest(); }, 2000); return;
+                }
+
+                let totalSeconds = Math.floor(distance / 1000);
+                if (totalSeconds === 20 && !alarmPlayed20s) { showToast("⚠️ Warning: 20 Seconds Remaining!"); playSelectedAlarm(5000); alarmPlayed20s = true; }
+
+                let h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); let m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)); let s = Math.floor((distance % (1000 * 60)) / 1000);
+                document.getElementById('testTimeLeft').innerHTML = h + "h " + m + "m " + s + "s ";
+            }, 1000);
+        }
+
+        function closeViewer() {
+            clearInterval(testInterval); document.getElementById('fullscreenViewer').style.display = 'none';
+            document.getElementById('htmlViewerFrame').src = ""; if(currentBlobUrl) { URL.revokeObjectURL(currentBlobUrl); currentBlobUrl = null; }
+        }
+
+        // ================= AUTO SCORE & RESULT SAVER (THE MAGIC FIX) =================
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.action === 'TEST_SUBMITTED') {
+                let testId = currentFileViewerId;
+                let compArr = JSON.parse(localStorage.getItem('completedTests') || '[]');
+
+                // 1. SAVE THE EXACT HTML STATE FOR RESULTS 
+                if(event.data.htmlData) {
+                    localStorage.setItem('resultHTML_' + testId, event.data.htmlData);
+                }
+
+                // Check if it's a PRACTICE test (already done)
+                if(compArr.includes(testId)) {
+                    showToast("Practice Test Completed! Score not added to dashboard.");
+                    setTimeout(() => { closeViewer(); goTo('view-subfolders'); }, 3000); return;
+                }
+
+                // 2. FIRST TIME LIVE TEST -> Update Score
+                compArr.push(testId); localStorage.setItem('completedTests', JSON.stringify(compArr));
+
+                let newCorrect = parseInt(event.data.correct) || 0; let newWrong = parseInt(event.data.wrong) || 0; let newPoints = parseInt(event.data.points) || 0;
+
+                db.collection("user_settings").doc("dashboard_stats").get().then((doc) => {
+                    let cPts = 0, cCor = 0, cWr = 0;
+                    if(doc.exists) { let d = doc.data(); cPts = parseInt(d.points)||0; cCor = parseInt(d.correct)||0; cWr = parseInt(d.wrong)||0; }
+
+                    let tPts = cPts + newPoints; let tCor = cCor + newCorrect; let tWr = cWr + newWrong; let totalAttempted = tCor + tWr;
+                    let pct = totalAttempted > 0 ? Math.round((tCor / totalAttempted) * 100) : 0;
+
+                    // 3. Update Firebase Dashboard
+                    db.collection("user_settings").doc("dashboard_stats").set({ points: tPts, correct: tCor, wrong: tWr, percent: pct }, {merge: true}).then(() => {
+                        loadDashboardStats(); fetchUpcomingTests(); // Refresh home
+                        showToast("🏆 Result Saved! Dashboard Updated.");
+                        setTimeout(() => { closeViewer(); goTo('view-home'); }, 3000);
+                    });
+                });
+            }
+        });
     </script>
 </body>
 </html>
