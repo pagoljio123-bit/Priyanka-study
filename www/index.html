@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Priyanka Study - Ultimate Auto Exam UI</title>
+    <title>Priyanka Study - Premium Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -99,12 +99,11 @@
         #pdfNativeContainer { display: none; flex-direction: column; height: 100%; background: #e0e5ec; }
         .pdf-canvas-wrapper { flex-grow: 1; overflow: auto; display: flex; justify-content: center; padding: 10px; background: #525659; }
         #pdfCanvas { max-width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); background: white; border-radius: 5px; }
-        
-        /* IFRAME UPDATED WITH SANDBOX PERMISSIONS */
         #htmlViewerFrame { width: 100%; height: 100%; border: none; background: #fff; display: none; }
-        
         #testTimerBanner { background: #FF0076; color: white; text-align: center; padding: 10px; font-weight: bold; font-size: 14px; display: none; }
-        #submitTestBtn { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: #2ed573; color: white; border: none; padding: 15px 30px; border-radius: 25px; font-weight: bold; font-size: 16px; box-shadow: 0 10px 20px rgba(46, 213, 115, 0.4); display: none; z-index: 10000; cursor: pointer; }
+        
+        #viewerLoading { display:none; flex-direction:column; justify-content:center; align-items:center; height:100%; color:#00C9FF; gap:10px; position: absolute; width: 100%; background: var(--bg-dark); z-index: 5; }
+        #loginLoader { display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); z-index:100000; flex-direction:column; justify-content:center; align-items:center; color:#00C9FF;}
 
         #countdownModal { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(15,12,41,0.95); backdrop-filter: blur(10px); z-index: 100000; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px;}
         .timer-circle { width: 150px; height: 150px; border-radius: 50%; border: 5px solid #FF0076; display: flex; justify-content: center; align-items: center; font-size: 30px; font-weight: bold; color: #fff; box-shadow: 0 0 30px rgba(255,0,118,0.5); margin: 20px 0; animation: pulse 1s infinite;}
@@ -126,6 +125,11 @@
 
     <div id="toast">Message</div>
     <audio id="beepSound" src="data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU" preload="auto"></audio>
+
+    <div id="loginLoader">
+        <i class="fas fa-circle-notch fa-spin" style="font-size:50px; margin-bottom:15px; color:#00C9FF;"></i>
+        <h3 style="color:#fff;">Logging in Securely...</h3>
+    </div>
 
     <div id="sbOverlay" class="sb-overlay" onclick="toggleSidebar()"></div>
     <div id="sidebar">
@@ -158,14 +162,14 @@
         
         <div id="testTimerBanner"><i class="fas fa-clock"></i> Time Remaining: <span id="testTimeLeft">--:--</span></div>
 
-        <div id="viewerLoading" style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; color:#00C9FF; gap:10px; position: absolute; width: 100%; background: var(--bg-dark); z-index: 5;">
+        <div id="viewerLoading">
             <i class="fas fa-spinner fa-spin" style="font-size:40px;"></i>
             <p id="loadingText">Processing File...</p>
         </div>
         
         <iframe id="htmlViewerFrame" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
         
-        <button id="submitTestBtn" onclick="forceSubmitTest()"><i class="fas fa-check-circle"></i> Force Submit & Save</button>
+        <button id="submitTestBtn" onclick="forceSubmitTest()" style="position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: #2ed573; color: white; border: none; padding: 15px 30px; border-radius: 25px; font-weight: bold; font-size: 16px; box-shadow: 0 10px 20px rgba(46, 213, 115, 0.4); display: none; z-index: 10000; cursor: pointer;"><i class="fas fa-check-circle"></i> Force Submit & Save</button>
 
         <div id="pdfNativeContainer">
             <div style="padding: 10px 15px; background: #fff; display: flex; justify-content: space-between; align-items: center; color: #333;">
@@ -192,18 +196,13 @@
                 
                 <div id="loginStudentMode">
                     <input type="text" id="userId" class="input-glass" placeholder="User ID">
-                    <input type="password" id="userPass" class="input-glass" placeholder="Password">
                 </div>
-                
                 <div id="loginAdminMode" style="display: none;">
                     <input type="password" id="adminKey" class="input-glass" placeholder="Enter Master Key (Admin)">
                 </div>
 
                 <div style="display: flex; align-items: center; margin-bottom: 20px; gap: 10px;">
-                    <label class="switch">
-                        <input type="checkbox" id="adminToggle" onchange="toggleLoginMode()">
-                        <span class="slider"></span>
-                    </label>
+                    <label class="switch"><input type="checkbox" id="adminToggle" onchange="toggleLoginMode()"><span class="slider"></span></label>
                     <span style="font-size: 13px; color: var(--text-sub);">Login as Admin</span>
                 </div>
 
@@ -368,7 +367,7 @@
 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                     <span><i class="fas fa-mobile-alt" style="color: #FF0076; margin-right: 10px;"></i> Vibration</span>
-                    <label class="switch"><input type="checkbox" id="setVib" onchange="saveSettings()"><span class="slider"></span></label>
+                    <label class="switch"><input type="checkbox" id="setVib" onchange="saveSettings()" checked><span class="slider"></span></label>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding-top: 15px; border-top: 1px solid var(--card-border);" onclick="clearData()">
                     <span><i class="fas fa-trash" style="color: #FF0076; margin-right: 10px;"></i> Clear App Data</span>
@@ -517,7 +516,6 @@
         function resetTimer() { clearTimeout(inactivityTimer); inactivityTimer = setTimeout(autoLogout, 12 * 60 * 60 * 1000); }
         function autoLogout() { if(localStorage.getItem('isStudentLoggedIn') || localStorage.getItem('isAdminLoggedIn')) { logout(); showToast("Auto Logged out due to 12h inactivity."); } }
         function showToast(msg) { let t = document.getElementById("toast"); t.innerText = msg; t.className = "show"; setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000); }
-        function comingSoon(msg) { showToast(msg); }
         
         function goTo(viewId) { 
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); 
@@ -541,26 +539,21 @@
             } else {
                 let uId = document.getElementById('userId').value;
                 if(uId !== "") { 
-                    localStorage.setItem('savedUserId', uId); // Save ID
-                    localStorage.setItem('isStudentLoggedIn', 'true'); 
-                    location.reload(); 
-                } 
-                else { showToast("Enter User ID"); }
+                    localStorage.setItem('savedUserId', uId);
+                    document.getElementById('loginLoader').style.display = 'flex';
+                    setTimeout(() => { localStorage.setItem('isStudentLoggedIn', 'true'); location.reload(); }, 1500);
+                } else { showToast("Enter User ID"); }
             }
         }
         
         function logout() { localStorage.clear(); location.reload(); }
 
         function loadSettings() {
-            let savedId = localStorage.getItem('savedUserId');
-            if(savedId) document.getElementById('userId').value = savedId; // Auto-fill ID
-            
+            let savedId = localStorage.getItem('savedUserId'); if(savedId) document.getElementById('userId').value = savedId;
             let pic = localStorage.getItem('userPic'); if(pic) document.getElementById('setProfilePic').src = pic;
-            
             let isLight = localStorage.getItem('themeLight');
             if(isLight === 'true') { document.body.classList.add('light-mode'); document.getElementById('themeToggle').checked = false; } 
             else { document.body.classList.remove('light-mode'); document.getElementById('themeToggle').checked = true; }
-            
             let snd = localStorage.getItem('soundOn'); if(snd !== null) document.getElementById('setSound').checked = (snd === 'true');
             let vib = localStorage.getItem('vibOn'); if(vib !== null) document.getElementById('setVib').checked = (vib === 'true');
             let tune = localStorage.getItem('alarmTune'); if(tune) document.getElementById('alarmTuneSelect').value = tune;
@@ -626,7 +619,6 @@
             });
         }
 
-        // CORE AUTO OPEN & ALARM SYSTEM
         function checkTimerLogic() {
             if(globalTests.length === 0) return;
             let now = new Date().getTime();
@@ -640,12 +632,10 @@
                 let en = new Date(test.endTime).getTime();
                 let dist = st - now;
 
-                // Alarm 10 seconds before start
                 if(dist <= 10000 && dist > 9000 && !test.alarmPlayed) {
                     playBeep(); test.alarmPlayed = true;
                 }
 
-                // FORCE AUTO OPEN! 
                 if(now >= st && now <= en && currentFileViewerId !== test.id) {
                     window.currentFilesMap[test.id] = test; 
                     openViewer(test.id, 'live_mock');
@@ -714,6 +704,7 @@
                     let manuallyEnded = compArr.includes(f.id);
                     let finalIsEnded = (isEnded || manuallyEnded);
 
+                    // 🔴 ফিল্টার: লাইভ টেস্টে দেওয়া পরীক্ষাগুলো দেখাবে না, এবং রেজাল্ট ফোল্ডারে শুধু দেওয়া পরীক্ষাগুলো দেখাবে
                     if(listType === 'live_mock' && finalIsEnded) return; 
                     if((listType === 'mock_results' || listType === 'saved_mock') && !finalIsEnded) return; 
 
@@ -805,7 +796,7 @@
         function finishUpload() { showToast("✅ Published!"); document.getElementById('adName').value = ''; document.getElementById('adFileInput').value = ''; resetAdminBtn(); }
         function resetAdminBtn() { document.getElementById('adBtn').innerHTML = "<i class='fas fa-upload'></i> Upload File Directly"; document.getElementById('adBtn').disabled = false; }
 
-        // ================= VIEWER (THE BASE64 MAGIC URL FIX) =================
+        // ================= VIEWER (BASE64 MAGIC FIX FOR HARD COPY) =================
         let pdfDoc = null, pageNum = 1, pageRendering = false, pageNumPending = null;
         const canvas = document.getElementById('pdfCanvas'); const ctx = canvas.getContext('2d');
 
@@ -841,20 +832,20 @@
             else {
                 document.getElementById('htmlViewerFrame').style.display = 'block';
                 
-                // MOCK RESULTS VIEW (Load exactly what was submitted and saved!)
+                // 🔴 ম্যাজিক: রেজাল্ট হার্ড-কপি দেখানো
                 if(listType === 'mock_results') {
                     let savedResult = localStorage.getItem('resultHTML_' + fileId);
                     if(savedResult) { htmlContent = savedResult; } 
                     else { htmlContent = "<h3 style='text-align:center; padding:20px; color:#333; font-family:sans-serif;'>Result data not found. Please make sure you completed the exam.</h3>"; }
                 }
 
-                // BASE64 FIX FOR WEBVIEW (Guaranteed to open inside app)
+                // Base64 রেন্ডার
                 if(htmlContent) {
                     try {
                         let encodedHtml = btoa(unescape(encodeURIComponent(htmlContent)));
                         document.getElementById('htmlViewerFrame').src = "data:text/html;base64," + encodedHtml;
                     } catch(e) {
-                        document.getElementById('htmlViewerFrame').srcdoc = htmlContent; // Fallback
+                        document.getElementById('htmlViewerFrame').srcdoc = htmlContent;
                     }
                 } else if(url) {
                     document.getElementById('htmlViewerFrame').src = url;
@@ -879,7 +870,7 @@
                     clearInterval(testInterval); document.getElementById('testTimeLeft').innerHTML = "EXPIRED";
                     showToast("⚠️ Time is up! Auto Submitting...");
                     
-                    // Force submit via PostMessage
+                    // আইফ্রেমের ভেতরে সাবমিট ফাংশন কল করা
                     try { document.getElementById('htmlViewerFrame').contentWindow.postMessage("SUBMIT_NOW", "*"); } 
                     catch(e) {} 
                     
@@ -890,7 +881,7 @@
                 let totalSeconds = Math.floor(distance / 1000);
                 if (totalSeconds === 20 && !alarmPlayed20s) {
                     showToast("⚠️ Warning: 20 Seconds Remaining!");
-                    playSelectedAlarm(5000); // 5 seconds alarm
+                    playSelectedAlarm(5000);
                     alarmPlayed20s = true;
                 }
 
@@ -928,29 +919,28 @@
             clearInterval(testInterval);
             document.getElementById('fullscreenViewer').style.display = 'none';
             document.getElementById('htmlViewerFrame').src = "";
-            ctx.clearRect(0,0,canvas.width,canvas.height); pdfDoc = null;
             currentFileViewerId = null;
         }
 
-        // ================= AUTO SCORE & RESULT SAVER (THE MAGIC FIX) =================
+        // ================= 🔴 AUTO SCORE & RESULT SAVER (THE MAGIC FIX) 🔴 =================
         window.addEventListener('message', function(event) {
             if (event.data && event.data.action === 'TEST_SUBMITTED') {
                 let testId = currentFileViewerId;
                 let compArr = JSON.parse(localStorage.getItem('completedTests') || '[]');
 
-                // 1. SAVE THE EXACT HTML STATE FOR RESULTS (The Hard Copy)
+                // 1. 🔴 মক টেস্টের হার্ড-কপি (লাল-সবুজ পেজটা) লোকাল স্টোরেজে সেভ করা হলো
                 if(event.data.htmlData) {
                     localStorage.setItem('resultHTML_' + testId, event.data.htmlData);
                 }
 
-                // Check if it's a PRACTICE test
+                // 2. প্র্যাকটিস টেস্ট হলে শুধু বন্ধ হবে, স্কোর যোগ হবে না
                 if(compArr.includes(testId)) {
                     showToast("Practice Test Completed!");
                     setTimeout(() => { closeViewer(); goTo('view-subfolders'); }, 3000);
                     return;
                 }
 
-                // 2. FIRST TIME LIVE TEST -> Update Score
+                // 3. প্রথমবার লাইভ টেস্ট দিলে স্কোর আপডেট হবে
                 compArr.push(testId);
                 localStorage.setItem('completedTests', JSON.stringify(compArr));
 
@@ -966,14 +956,15 @@
                     let totalAttempted = tCor + tWr;
                     let pct = totalAttempted > 0 ? Math.round((tCor / totalAttempted) * 100) : 0;
 
-                    // 3. Update Dashboard
+                    // 4. ড্যাশবোর্ডে পয়েন্ট সেভ করা
                     db.collection("user_settings").doc("dashboard_stats").set({
                         points: tPts, correct: tCor, wrong: tWr, percent: pct
                     }, {merge: true}).then(() => {
-                        loadDashboardStats(); fetchUpcomingTests(); // Auto Refresh Home
-                        showToast("🏆 Result Saved! Dashboard Updated.");
+                        loadDashboardStats(); fetchUpcomingTests();
+                        showToast("🏆 Result Saved! Check 'Live Test Results' folder.");
                         
-                        setTimeout(() => { closeViewer(); goTo('view-home'); }, 3000);
+                        // 5. সাবমিট হওয়ার পর ফাইলটা অটোমেটিক রিফ্রেশ হয়ে রেজাল্ট পেজে চলে যাবে
+                        setTimeout(() => { closeViewer(); loadFiles('mock_results'); }, 3000);
                     });
                 });
             }
