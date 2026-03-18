@@ -18,7 +18,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
-        java-version: '17' # 🔴 ফিক্সড: JVM 17 দেওয়া হলো
+        java-version: '17'
 
     - name: 🟢 Setup Node.js
       uses: actions/setup-node@v4
@@ -31,14 +31,15 @@ jobs:
     - name: 📦 Install Project Dependencies
       run: npm install
 
-    - name: 🤖 Add Android Platform (Latest)
-      run: cordova platform add android@13.0.0 # 🔴 ফিক্সড: Android SDK 34 সাপোর্টের জন্য লেটেস্ট প্ল্যাটফর্ম
+    - name: 🤖 Add Android Platform
+      run: cordova platform add android@13.0.0
 
-    - name: 🚀 Build Release APK
-      run: cordova build android --release
+    - name: 🚀 Build Debug APK (ইন্সটল করার জন্য সবচেয়ে ভালো)
+      run: cordova build android --debug
 
     - name: 📤 Upload Ready APK
       uses: actions/upload-artifact@v4
       with:
-        name: Priyanka-Study-App-Pro
-        path: platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
+        name: Priyanka-Study-App-APK
+        # 🔴 ম্যাজিক সার্চ: অ্যাপটা যে ফোল্ডারেই তৈরি হোক না কেন, এই লাইনটা সেটাকে খুঁজে বের করে নেবে!
+        path: platforms/android/**/*.apk
