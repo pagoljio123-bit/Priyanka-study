@@ -22,10 +22,6 @@
     
     <preference name="Orientation" value="portrait" /> 
     <preference name="Fullscreen" value="false" /> 
-    <preference name="BackgroundColor" value="ff0f0c29" /> 
-    <preference name="StatusBarBackgroundColor" value="#0f0c29" /> 
-    <preference name="StatusBarStyle" value="lightcontent" /> 
-    <preference name="NavigationBarBackgroundColor" value="#14141e" /> 
     <preference name="DisallowOverscroll" value="true" /> 
     <preference name="UIWebViewBounce" value="false" /> 
     <preference name="HideKeyboardFormAccessoryBar" value="false" /> 
@@ -41,7 +37,6 @@
     <preference name="InAppBrowserStorageEnabled" value="true" /> 
     <preference name="AppendUserAgent" value=" PriyankaStudyApp/1.0" /> 
     <preference name="AndroidXEnabled" value="true" /> 
-    <preference name="ErrorUrl" value="file:///android_asset/www/error.html" /> 
 
     <preference name="MediaPlaybackRequiresUserAction" value="false" /> 
     <preference name="AllowInlineMediaPlayback" value="true" /> 
@@ -66,8 +61,9 @@
         
         <preference name="android-minSdkVersion" value="24" /> 
         <preference name="android-targetSdkVersion" value="34" /> 
-        <preference name="android-compileSdkVersion" value="34" />
+        <preference name="android-compileSdkVersion" value="34" /> 
         
-        </platform>
+        <icon src="icon.png" /> 
+    </platform>
 
 </widget>
