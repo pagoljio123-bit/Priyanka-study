@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Priyanka Study - Premium Portal</title>
+    <title>Priyanka Study - Premium Master Portal</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -16,125 +16,655 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
     <style>
+        /* ================= 5 PREMIUM THEMES ================= */
         :root {
-            --bg-dark: #0f0c29; --bg-mid: #302b63; 
-            --card-bg: rgba(255, 255, 255, 0.08); --card-border: rgba(255, 255, 255, 0.15); 
-            --text-main: #ffffff; --text-sub: rgba(255, 255, 255, 0.6); 
-            --accent-pink: #FF0076; --accent-blue: #00C9FF; 
-            --box-shadow: 0 10px 30px rgba(0,0,0,0.3); --neon-bg: #1a1a2e; --nav-bg: rgba(15, 12, 41, 0.95);
+            --bg-dark: #0f0c29; 
+            --bg-mid: #302b63; 
+            --card-bg: rgba(255, 255, 255, 0.08); 
+            --card-border: rgba(255, 255, 255, 0.15); 
+            --text-main: #ffffff; 
+            --text-sub: rgba(255, 255, 255, 0.6); 
+            --accent-pink: #FF0076; 
+            --accent-blue: #00C9FF; 
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+            --neon-bg: #1a1a2e; 
+            --nav-bg: rgba(15, 12, 41, 0.95);
         }
 
         body.theme-light {
-            --bg-dark: #e0c3fc; --bg-mid: #8ec5fc; 
-            --card-bg: rgba(255, 255, 255, 0.6); --card-border: rgba(255, 255, 255, 0.6); 
-            --text-main: #111111; --text-sub: #555555; 
-            --neon-bg: #ffffff; --nav-bg: rgba(255, 255, 255, 0.95);
+            --bg-dark: #e0c3fc; 
+            --bg-mid: #8ec5fc; 
+            --card-bg: rgba(255, 255, 255, 0.6); 
+            --card-border: rgba(255, 255, 255, 0.6); 
+            --text-main: #111111; 
+            --text-sub: #555555; 
+            --neon-bg: #ffffff; 
+            --nav-bg: rgba(255, 255, 255, 0.95);
         }
 
-        body.theme-purple { --bg-dark: #2a0845; --bg-mid: #6441A5; --accent-pink: #ff6a00; --accent-blue: #ee0979; }
-        body.theme-teal { --bg-dark: #000000; --bg-mid: #0f9b0f; --accent-pink: #00C9FF; --accent-blue: #92FE9D; }
-        body.theme-green { --bg-dark: #134E5E; --bg-mid: #71B280; --accent-pink: #F9D423; --accent-blue: #FF4E50; }
+        body.theme-purple { 
+            --bg-dark: #2a0845; 
+            --bg-mid: #6441A5; 
+            --accent-pink: #ff6a00; 
+            --accent-blue: #ee0979; 
+        }
+        
+        body.theme-teal { 
+            --bg-dark: #000000; 
+            --bg-mid: #0f9b0f; 
+            --accent-pink: #00C9FF; 
+            --accent-blue: #92FE9D; 
+        }
+        
+        body.theme-green { 
+            --bg-dark: #134E5E; 
+            --bg-mid: #71B280; 
+            --accent-pink: #F9D423; 
+            --accent-blue: #FF4E50; 
+        }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent;}
-        body { background: linear-gradient(to bottom, var(--bg-dark), var(--bg-mid)); color: var(--text-main); height: 100vh; width: 100vw; overflow: hidden; position: relative; transition: background 0.5s, color 0.5s; }
+        /* ================= GLOBAL STYLES ================= */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Poppins', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+        }
         
-        .app-container { width: 100%; height: 100%; overflow-y: auto; padding: 20px; padding-bottom: 100px; position: relative; z-index: 1;}
-        .app-container::-webkit-scrollbar { display: none; }
-        .view { display: none; animation: slideUp 0.3s ease-out; } .view.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        body { 
+            background: linear-gradient(to bottom, var(--bg-dark), var(--bg-mid)); 
+            color: var(--text-main); 
+            height: 100vh; 
+            width: 100vw; 
+            overflow: hidden; 
+            position: relative; 
+            transition: background 0.5s, color 0.5s; 
+        }
         
-        /* === SPLASH SCREEN === */
-        #custom-splash { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); z-index: 99999999; display: none; flex-direction: column; justify-content: center; align-items: center; color: white; transition: opacity 0.3s ease-out; }
-        .splash-icon { font-size: 80px; color: #00C9FF; margin-bottom: 15px; animation: pulseSplash 1s infinite; filter: drop-shadow(0 0 15px rgba(0,201,255,0.6)); }
-        @keyframes pulseSplash { 0% { transform: scale(0.9); } 50% { transform: scale(1.1); } 100% { transform: scale(0.9); } }
-        .splash-title { font-size: 32px; font-weight: 800; letter-spacing: 2px; margin: 0; }
-        .splash-sub { font-size: 14px; color: #aaa; margin-top: 5px; font-weight: 600; }
-        .loading-line { width: 250px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-top: 30px; position: relative;}
-        .loading-progress { width: 0%; height: 100%; background: linear-gradient(90deg, #FF0076, #00C9FF); box-shadow: 0 0 10px #FF0076; transition: width 0.1s linear;}
-        .loading-percentage { margin-top: 10px; font-size: 16px; font-weight: bold; color: #00C9FF; }
+        .app-container { 
+            width: 100%; 
+            height: 100%; 
+            overflow-y: auto; 
+            padding: 20px; 
+            padding-bottom: 100px; 
+            position: relative; 
+            z-index: 1;
+        }
+        
+        .app-container::-webkit-scrollbar { 
+            display: none; 
+        }
+        
+        .view { 
+            display: none; 
+            animation: slideUp 0.3s ease-out; 
+        } 
+        
+        .view.active { 
+            display: block; 
+        }
+        
+        @keyframes slideUp { 
+            from { opacity: 0; transform: translateY(15px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        /* ================= SPLASH SCREEN & LOGIN LOADER ================= */
+        #custom-splash { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); 
+            z-index: 99999999; 
+            display: none; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            color: white; 
+            transition: opacity 0.3s ease-out; 
+        }
+        
+        .splash-icon { 
+            font-size: 80px; 
+            color: #00C9FF; 
+            margin-bottom: 15px; 
+            animation: pulseSplash 1s infinite; 
+            filter: drop-shadow(0 0 15px rgba(0,201,255,0.6)); 
+        }
+        
+        @keyframes pulseSplash { 
+            0% { transform: scale(0.9); } 
+            50% { transform: scale(1.1); } 
+            100% { transform: scale(0.9); } 
+        }
+        
+        .splash-title { 
+            font-size: 32px; 
+            font-weight: 800; 
+            letter-spacing: 2px; 
+            margin: 0; 
+        }
+        
+        .splash-sub { 
+            font-size: 14px; 
+            color: #aaa; 
+            margin-top: 5px; 
+            font-weight: 600; 
+        }
+        
+        .loading-line { 
+            width: 250px; 
+            height: 6px; 
+            background: rgba(255,255,255,0.1); 
+            border-radius: 10px; 
+            overflow: hidden; 
+            margin-top: 30px; 
+            position: relative;
+        }
+        
+        .loading-progress { 
+            width: 0%; 
+            height: 100%; 
+            background: linear-gradient(90deg, #FF0076, #00C9FF); 
+            box-shadow: 0 0 10px #FF0076; 
+            transition: width 0.1s linear;
+        }
+        
+        .loading-percentage { 
+            margin-top: 10px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            color: #00C9FF; 
+        }
 
-        /* === UI COMPONENTS === */
-        .glass-card { background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--card-border); border-radius: 20px; padding: 20px; box-shadow: var(--box-shadow); margin-bottom: 15px;}
-        .input-glass { width: 100%; padding: 15px; background: rgba(255, 255, 255, 0.9); border: none; border-radius: 12px; color: #333; font-size: 14px; margin-bottom: 15px; outline: none; font-weight: 600;}
-        .btn-main { width: 100%; padding: 15px; border: none; border-radius: 14px; font-weight: 700; font-size: 15px; background: linear-gradient(135deg, var(--accent-pink), var(--accent-blue)); color: white; cursor: pointer; box-shadow: 0 8px 20px rgba(255, 0, 118, 0.4); display: flex; justify-content: center; align-items: center; gap: 10px;}
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; margin-top: 5px; }
-        .icon-btn { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; font-size: 18px; cursor: pointer; backdrop-filter: blur(10px); color: var(--text-main);}
+        /* ================= UI COMPONENTS ================= */
+        .glass-card { 
+            background: var(--card-bg); 
+            backdrop-filter: blur(20px); 
+            border: 1px solid var(--card-border); 
+            border-radius: 20px; 
+            padding: 20px; 
+            box-shadow: var(--box-shadow); 
+            margin-bottom: 15px;
+        }
         
-        .neon-box { position: relative; background: var(--neon-bg); border-radius: 18px; padding: 15px; z-index: 1; cursor: pointer; overflow: hidden; margin-bottom: 12px; box-shadow: var(--box-shadow); display: flex; align-items: center; gap: 15px;}
-        .neon-box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, transparent, var(--accent-blue), var(--accent-pink), var(--accent-blue)); animation: rotateRGB 3s linear infinite; z-index: -1; }
-        .neon-box::after { content: ''; position: absolute; inset: 3px; background: var(--neon-bg); border-radius: 15px; z-index: -1;}
-        @keyframes rotateRGB { 100% { transform: rotate(360deg); } }
+        .input-glass { 
+            width: 100%; 
+            padding: 15px; 
+            background: rgba(255, 255, 255, 0.9); 
+            border: none; 
+            border-radius: 12px; 
+            color: #333; 
+            font-size: 14px; 
+            margin-bottom: 15px; 
+            outline: none; 
+            font-weight: 600;
+        }
         
-        .subject-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; } .subj-icon { font-size: 30px; margin-bottom: 8px; }
-        .progress-box { display: flex; justify-content: space-between; align-items: center; }
-        .circ-chart { position: relative; width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(var(--accent-pink) var(--prog), rgba(255,255,255,0.1) 0deg); display: flex; justify-content: center; align-items: center; }
-        .circ-chart::after { content: ''; position: absolute; width: 64px; height: 64px; background: var(--neon-bg); border-radius: 50%; }
-        .circ-val { position: relative; z-index: 1; font-weight: bold; font-size: 16px; color: var(--text-main); }
+        .btn-main { 
+            width: 100%; 
+            padding: 15px; 
+            border: none; 
+            border-radius: 14px; 
+            font-weight: 700; 
+            font-size: 15px; 
+            background: linear-gradient(135deg, var(--accent-pink), var(--accent-blue)); 
+            color: white; 
+            cursor: pointer; 
+            box-shadow: 0 8px 20px rgba(255, 0, 118, 0.4); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 10px;
+        }
         
-        .live-marquee { background: rgba(255, 0, 118, 0.15); border-left: 4px solid var(--accent-pink); padding: 12px; border-radius: 12px; margin-top: 15px; margin-bottom: 20px; overflow: hidden; white-space: nowrap; position: relative; display: flex; align-items: center; cursor: pointer;}
-        .pulse-dot { width: 10px; height: 10px; background: var(--accent-pink); border-radius: 50%; animation: pulse 1s infinite; margin-right: 10px;}
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,0,118,0.7); } 70% { box-shadow: 0 0 0 10px rgba(255,0,118,0); } 100% { box-shadow: 0 0 0 0 rgba(255,0,118,0); } }
+        .header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 20px; 
+            margin-top: 5px; 
+        }
+        
+        .icon-btn { 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 12px; 
+            background: rgba(255,255,255,0.1); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-size: 18px; 
+            cursor: pointer; 
+            backdrop-filter: blur(10px); 
+            color: var(--text-main);
+        }
+        
+        .neon-box { 
+            position: relative; 
+            background: var(--neon-bg); 
+            border-radius: 18px; 
+            padding: 15px; 
+            z-index: 1; 
+            cursor: pointer; 
+            overflow: hidden; 
+            margin-bottom: 12px; 
+            box-shadow: var(--box-shadow); 
+            display: flex; 
+            align-items: center; 
+            gap: 15px;
+        }
+        
+        .neon-box::before { 
+            content: ''; 
+            position: absolute; 
+            top: -50%; 
+            left: -50%; 
+            width: 200%; 
+            height: 200%; 
+            background: conic-gradient(transparent, transparent, transparent, var(--accent-blue), var(--accent-pink), var(--accent-blue)); 
+            animation: rotateRGB 3s linear infinite; 
+            z-index: -1; 
+        }
+        
+        .neon-box::after { 
+            content: ''; 
+            position: absolute; 
+            inset: 3px; 
+            background: var(--neon-bg); 
+            border-radius: 15px; 
+            z-index: -1;
+        }
+        
+        @keyframes rotateRGB { 
+            100% { transform: rotate(360deg); } 
+        }
+        
+        .subject-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 12px; 
+        } 
+        
+        .subj-icon { 
+            font-size: 30px; 
+            margin-bottom: 8px; 
+        }
+        
+        .progress-box { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        
+        .circ-chart { 
+            position: relative; 
+            width: 80px; 
+            height: 80px; 
+            border-radius: 50%; 
+            background: conic-gradient(var(--accent-pink) var(--prog), rgba(255,255,255,0.1) 0deg); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
+        
+        .circ-chart::after { 
+            content: ''; 
+            position: absolute; 
+            width: 64px; 
+            height: 64px; 
+            background: var(--neon-bg); 
+            border-radius: 50%; 
+        }
+        
+        .circ-val { 
+            position: relative; 
+            z-index: 1; 
+            font-weight: bold; 
+            font-size: 16px; 
+            color: var(--text-main); 
+        }
+        
+        .live-marquee { 
+            background: rgba(255, 0, 118, 0.15); 
+            border-left: 4px solid var(--accent-pink); 
+            padding: 12px; 
+            border-radius: 12px; 
+            margin-top: 15px; 
+            margin-bottom: 20px; 
+            overflow: hidden; 
+            white-space: nowrap; 
+            position: relative; 
+            display: flex; 
+            align-items: center; 
+            cursor: pointer;
+        }
+        
+        .pulse-dot { 
+            width: 10px; 
+            height: 10px; 
+            background: var(--accent-pink); 
+            border-radius: 50%; 
+            animation: pulse 1s infinite; 
+            margin-right: 10px;
+        }
+        
+        @keyframes pulse { 
+            0% { box-shadow: 0 0 0 0 rgba(255,0,118,0.7); } 
+            70% { box-shadow: 0 0 0 10px rgba(255,0,118,0); } 
+            100% { box-shadow: 0 0 0 0 rgba(255,0,118,0); } 
+        }
         
         /* === FILE LIST ITEMS === */
-        .file-item { background: var(--card-bg); border-radius: 16px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; border: 1px solid var(--card-border); position: relative;}
-        .file-icon-box { width: 45px; height: 45px; border-radius: 12px; background: rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; font-size: 22px; cursor: pointer; }
-        .file-info { flex-grow: 1; overflow: hidden; cursor: pointer; }
-        .file-info h4 { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main); margin-bottom: 2px;}
-        .file-info p { font-size: 11px; color: var(--text-sub); }
-        .act-btn { width: 32px; height: 32px; border-radius: 8px; display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.15); cursor: pointer; font-size: 14px; color: var(--text-main);}
-        .lock-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; gap: 10px; color: #fff; font-weight: bold; font-size: 13px; z-index: 2;}
+        .file-item { 
+            background: var(--card-bg); 
+            border-radius: 16px; 
+            padding: 15px; 
+            margin-bottom: 12px; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            border: 1px solid var(--card-border); 
+            position: relative;
+        }
+        
+        .file-icon-box { 
+            width: 45px; 
+            height: 45px; 
+            border-radius: 12px; 
+            background: rgba(255,255,255,0.1); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-size: 22px; 
+            cursor: pointer; 
+        }
+        
+        .file-info { 
+            flex-grow: 1; 
+            overflow: hidden; 
+            cursor: pointer; 
+        }
+        
+        .file-info h4 { 
+            font-size: 14px; 
+            font-weight: 600; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            color: var(--text-main); 
+            margin-bottom: 2px;
+        }
+        
+        .file-info p { 
+            font-size: 11px; 
+            color: var(--text-sub); 
+        }
+        
+        .act-btn { 
+            width: 32px; 
+            height: 32px; 
+            border-radius: 8px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            background: rgba(255,255,255,0.15); 
+            cursor: pointer; 
+            font-size: 14px; 
+            color: var(--text-main);
+        }
+        
+        .lock-overlay { 
+            position: absolute; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.8); 
+            backdrop-filter: blur(5px); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 10px; 
+            color: #fff; 
+            font-weight: bold; 
+            font-size: 13px; 
+            z-index: 2;
+        }
         
         /* === PHOTO GALLERY STYLE FOR PDFs & GUIDES === */
-        .photo-gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .photo-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: var(--box-shadow); transition: transform 0.2s;}
-        .photo-card:active { transform: scale(0.95); }
-        .photo-thumb { height: 120px; background: linear-gradient(135deg, var(--bg-mid), var(--bg-dark)); display: flex; justify-content: center; align-items: center; font-size: 50px; color: rgba(255,255,255,0.8); cursor: pointer; position: relative;}
-        .photo-thumb::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.2); }
-        .photo-details { padding: 12px; }
-        .photo-details h4 { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px; }
-        .photo-actions { display: flex; justify-content: space-between; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;}
-        .photo-btn { font-size: 18px; color: var(--text-sub); cursor: pointer; padding: 5px; }
-        .photo-btn:active { color: var(--accent-blue); }
+        .photo-gallery-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+        }
+        
+        .photo-card { 
+            background: var(--card-bg); 
+            border: 1px solid var(--card-border); 
+            border-radius: 16px; 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+            position: relative; 
+            box-shadow: var(--box-shadow); 
+            transition: transform 0.2s;
+        }
+        
+        .photo-card:active { 
+            transform: scale(0.95); 
+        }
+        
+        .photo-thumb { 
+            height: 120px; 
+            background: linear-gradient(135deg, var(--bg-mid), var(--bg-dark)); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-size: 50px; 
+            color: rgba(255,255,255,0.8); 
+            cursor: pointer; 
+            position: relative;
+        }
+        
+        .photo-thumb::after { 
+            content: ''; 
+            position: absolute; 
+            inset: 0; 
+            background: rgba(0,0,0,0.2); 
+        }
+        
+        .photo-details { 
+            padding: 12px; 
+        }
+        
+        .photo-details h4 { 
+            font-size: 13px; 
+            font-weight: 600; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+            margin-bottom: 5px; 
+        }
+        
+        .photo-actions { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-top: 10px; 
+            border-top: 1px solid rgba(255,255,255,0.1); 
+            padding-top: 10px;
+        }
+        
+        .photo-btn { 
+            font-size: 18px; 
+            color: var(--text-sub); 
+            cursor: pointer; 
+            padding: 5px; 
+        }
+        
+        .photo-btn:active { 
+            color: var(--accent-blue); 
+        }
 
         /* === NAVIGATION & SIDEBAR === */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--nav-bg); backdrop-filter: blur(20px); padding: 15px 30px; border-radius: 25px 25px 0 0; display: flex; justify-content: space-between; border-top: 1px solid var(--card-border); z-index: 100;}
-        .nav-icon { font-size: 22px; color: var(--text-sub); cursor: pointer; transition: 0.3s; }
-        .nav-icon.active { color: var(--accent-blue); transform: translateY(-4px); }
+        .bottom-nav { 
+            position: fixed; 
+            bottom: 0; left: 0; width: 100%; 
+            background: var(--nav-bg); 
+            backdrop-filter: blur(20px); 
+            padding: 15px 30px; 
+            border-radius: 25px 25px 0 0; 
+            display: flex; 
+            justify-content: space-between; 
+            border-top: 1px solid var(--card-border); 
+            z-index: 100;
+        }
         
-        #sidebar { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--nav-bg); backdrop-filter: blur(20px); z-index: 10000; transition: 0.3s ease; padding: 30px 20px; border-right: 1px solid var(--card-border); box-shadow: 10px 0 30px rgba(0,0,0,0.5);}
+        .nav-icon { 
+            font-size: 22px; 
+            color: var(--text-sub); 
+            cursor: pointer; 
+            transition: 0.3s; 
+        }
+        
+        .nav-icon.active { 
+            color: var(--accent-blue); 
+            transform: translateY(-4px); 
+        }
+        
+        #sidebar { 
+            position: fixed; 
+            top: 0; left: -280px; width: 260px; height: 100vh; 
+            background: var(--nav-bg); 
+            backdrop-filter: blur(20px); 
+            z-index: 10000; 
+            transition: 0.3s ease; 
+            padding: 30px 20px; 
+            border-right: 1px solid var(--card-border); 
+            box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+        }
+        
         #sidebar.open { left: 0; } 
-        .sb-item { padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; cursor: pointer; background: rgba(255,255,255,0.05); }
-        .sb-overlay { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.5); z-index: 9999; display: none;}
+        
+        .sb-item { 
+            padding: 15px; 
+            border-radius: 12px; 
+            margin-bottom: 10px; 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            cursor: pointer; 
+            background: rgba(255,255,255,0.05); 
+        }
+        
+        .sb-overlay { 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background: rgba(0,0,0,0.5); 
+            z-index: 9999; display: none;
+        }
         
         /* === CROPPER MODAL === */
-        #cropModal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 1000000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
-        .crop-container { width: 100%; max-width: 400px; height: 400px; background: #333; margin-bottom: 20px; border-radius: 12px; overflow: hidden; }
-        .crop-btn-row { display: flex; gap: 15px; width: 100%; max-width: 400px; }
+        #cropModal { 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background: rgba(0,0,0,0.9); 
+            z-index: 1000000; display: none; flex-direction: column; 
+            justify-content: center; align-items: center; padding: 20px; 
+        }
+        
+        .crop-container { 
+            width: 100%; max-width: 400px; height: 400px; 
+            background: #333; margin-bottom: 20px; 
+            border-radius: 12px; overflow: hidden; 
+        }
+        
+        .crop-btn-row { 
+            display: flex; gap: 15px; width: 100%; max-width: 400px; 
+        }
 
         /* === VIEWER OVERLAYS === */
-        #fullscreenViewer { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-dark); z-index: 99999; display: none; flex-direction: column;}
-        .viewer-head { padding: 15px; background: var(--bg-mid); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--text-main);}
-        #viewerRefreshBtn { display: none; font-size: 20px; color: var(--accent-blue); cursor: pointer; margin-right: 15px; }
+        #fullscreenViewer { 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background: var(--bg-dark); 
+            z-index: 99999; display: none; flex-direction: column;
+        }
+        
+        .viewer-head { 
+            padding: 15px; background: var(--bg-mid); 
+            display: flex; justify-content: space-between; align-items: center; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+        }
+        
+        #viewerRefreshBtn { 
+            display: none; font-size: 20px; color: var(--accent-blue); 
+            cursor: pointer; margin-right: 15px; 
+        }
+        
         #pdfNativeContainer { display: none; flex-direction: column; height: 100%; background: #e0e5ec; } 
         .pdf-canvas-wrapper { flex-grow: 1; overflow: auto; display: flex; justify-content: center; padding: 10px; background: #525659; } 
         #pdfCanvas { max-width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); background: white; border-radius: 5px; }
         #htmlViewerFrame { width: 100%; height: 100%; border: none; background: #fff; display: none; }
         #testTimerBanner { background: var(--accent-pink); color: white; text-align: center; padding: 10px; font-weight: bold; font-size: 14px; display: none; }
-        #viewerLoading { display:none; flex-direction:column; justify-content:center; align-items:center; height:100%; color:var(--accent-blue); gap:10px; position: absolute; width: 100%; background: var(--bg-dark); z-index: 5; }
+        
+        #viewerLoading { 
+            display:none; flex-direction:column; justify-content:center; 
+            align-items:center; height:100%; color:var(--accent-blue); gap:10px; 
+            position: absolute; width: 100%; background: var(--bg-dark); z-index: 5; 
+        }
         
         /* === 10-SECOND LOCKDOWN MODAL === */
-        #lockdownModal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 12, 41, 0.98); z-index: 1000000; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; backdrop-filter: blur(15px); }
-        .lock-circle { width: 180px; height: 180px; border-radius: 50%; border: 8px solid var(--accent-pink); display: flex; justify-content: center; align-items: center; font-size: 60px; font-weight: 800; color: #fff; box-shadow: 0 0 40px rgba(255,0,118,0.6); margin-bottom: 20px; animation: pulseLock 1s infinite; }
-        @keyframes pulseLock { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        #lockdownModal { 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background: rgba(15, 12, 41, 0.98); 
+            z-index: 1000000; display: none; flex-direction: column; 
+            justify-content: center; align-items: center; text-align: center; 
+            backdrop-filter: blur(15px); 
+        }
+        
+        .lock-circle { 
+            width: 180px; height: 180px; border-radius: 50%; 
+            border: 8px solid var(--accent-pink); display: flex; 
+            justify-content: center; align-items: center; font-size: 60px; 
+            font-weight: 800; color: #fff; box-shadow: 0 0 40px rgba(255,0,118,0.6); 
+            margin-bottom: 20px; animation: pulseLock 1s infinite; 
+        }
+        
+        @keyframes pulseLock { 
+            0% { transform: scale(1); } 
+            50% { transform: scale(1.05); } 
+            100% { transform: scale(1); } 
+        }
         
         /* === TOASTS & CONTROLS === */
-        #toast { visibility: hidden; min-width: 250px; background: #fff; color: #333; text-align: center; border-radius: 20px; padding: 15px; position: fixed; z-index: 10000000; left: 50%; bottom: 90px; transform: translateX(-50%); font-weight: bold; font-size: 13px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        #toast.show { visibility: visible; animation: fadein 0.3s, fadeout 0.3s 2.5s; }
-        @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 90px; opacity: 1; } } @keyframes fadeout { from { bottom: 90px; opacity: 1; } to { bottom: 0; opacity: 0; } }
-        .switch { position: relative; display: inline-block; width: 40px; height: 22px; } .switch input { opacity: 0; width: 0; height: 0; } .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.3); transition: .4s; border-radius: 34px; } .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; } input:checked + .slider { background-color: var(--accent-blue); } input:checked + .slider:before { transform: translateX(18px); }
+        #toast { 
+            visibility: hidden; min-width: 250px; background: #fff; color: #333; 
+            text-align: center; border-radius: 20px; padding: 15px; 
+            position: fixed; z-index: 10000000; left: 50%; bottom: 90px; 
+            transform: translateX(-50%); font-weight: bold; font-size: 13px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+        }
+        
+        #toast.show { 
+            visibility: visible; animation: fadein 0.3s, fadeout 0.3s 2.5s; 
+        }
+        
+        @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 90px; opacity: 1; } } 
+        @keyframes fadeout { from { bottom: 90px; opacity: 1; } to { bottom: 0; opacity: 0; } }
+        
+        .switch { position: relative; display: inline-block; width: 40px; height: 22px; } 
+        .switch input { opacity: 0; width: 0; height: 0; } 
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.3); transition: .4s; border-radius: 34px; } 
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; } 
+        input:checked + .slider { background-color: var(--accent-blue); } 
+        input:checked + .slider:before { transform: translateX(18px); }
 
         /* BRIGHTNESS OVERLAY */
-        #brightnessOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0); pointer-events: none; z-index: 999999999; transition: background 0.3s; }
+        #brightnessOverlay { 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background: rgba(0,0,0,0); pointer-events: none; z-index: 999999999; 
+            transition: background 0.3s; 
+        }
+        
         input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: var(--accent-blue); cursor: pointer; margin-top: -6px; }
         input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: rgba(255,255,255,0.2); border-radius: 5px; }
@@ -149,7 +679,9 @@
         <i class="fas fa-graduation-cap splash-icon"></i>
         <h1 class="splash-title">Priyanka Study</h1>
         <p class="splash-sub" id="splashStatusText">Authenticating User...</p>
-        <div class="loading-line"><div class="loading-progress" id="splashProgressBar"></div></div>
+        <div class="loading-line">
+            <div class="loading-progress" id="splashProgressBar"></div>
+        </div>
         <div class="loading-percentage" id="splashPercentage">0%</div>
     </div>
 
@@ -184,7 +716,7 @@
         <div class="sb-item" onclick="openSubject('Env. Science'); toggleSidebar();"><i class="fas fa-leaf" style="color:#00b09b; width:25px;"></i> Env. Science</div>
         <div style="margin-top: 50px; border-top: 1px solid var(--card-border); padding-top: 20px;">
             <div class="sb-item" onclick="goTo('view-settings'); toggleSidebar();"><i class="fas fa-cog" style="color:#ccc; width:25px;"></i> Settings</div>
-            <div class="sb-item" onclick="logout()" style="color:var(--accent-pink);"><i class="fas fa-sign-out-alt" style="width:25px;"></i> Logout</div>
+            <div class="sb-item" onclick="logoutConfirm()" style="color:var(--accent-pink);"><i class="fas fa-sign-out-alt" style="width:25px;"></i> Logout</div>
         </div>
     </div>
 
@@ -237,7 +769,8 @@
                     <label class="switch"><input type="checkbox" id="adminToggle" onchange="toggleLoginMode()"><span class="slider"></span></label>
                     <span style="font-size: 13px; color: var(--text-sub);">Login as Admin</span>
                 </div>
-                <p id="savedLoginText" style="display:none; font-size:12px; color:var(--accent-green); text-align:center; margin-bottom:10px;">Saved credentials found. Click Login.</p>
+                
+                <p id="savedLoginText" style="display:none; font-size:12px; color:#2ed573; text-align:center; margin-bottom:10px;">Saved credentials found. Click Login.</p>
                 
                 <button class="btn-main" onclick="executeLogin()">Secure Login <i class="fas fa-sign-in-alt"></i></button>
             </div>
@@ -249,6 +782,7 @@
                 <div style="text-align: center;"><p style="font-size: 11px; color: var(--text-sub);">Welcome back</p><h2 style="font-size: 18px;" id="dispUserName">Student</h2></div>
                 <div class="icon-btn" onclick="goTo('view-settings')"><i class="fas fa-cog"></i></div>
             </div>
+            
             <div class="glass-card" style="padding: 25px 20px;">
                 <div class="progress-box">
                     <div>
@@ -373,23 +907,25 @@
                     <div><span style="display:block;"><i class="fas fa-music" style="color: var(--accent-pink); margin-right: 10px;"></i> Alarm Tune</span><span style="font-size: 10px; color: var(--text-sub);">For exam warnings</span></div>
                     <div style="display: flex; gap: 10px; align-items: center;">
                         <select id="alarmTuneSelect" class="input-glass" style="padding: 8px; margin:0; width: auto; font-size: 12px; background: rgba(255,255,255,0.2); color: var(--text-main);" onchange="saveSettings()">
-                            <option value="1" style="color:black;">1. Classic Beep</option><option value="2" style="color:black;">2. Digital Watch</option>
-                            <option value="3" style="color:black;">3. Loud Buzzer</option><option value="4" style="color:black;">4. High Trill</option>
+                            <option value="1" style="color:black;">1. Classic Beep</option>
+                            <option value="2" style="color:black;">2. Digital Watch</option>
+                            <option value="3" style="color:black;">3. Loud Buzzer</option>
+                            <option value="4" style="color:black;">4. High Trill</option>
                         </select>
                         <i class="fas fa-play-circle" style="font-size: 24px; color: #2ed573; cursor: pointer;" onclick="testAlarmTune()"></i>
                     </div>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding-top: 15px;" onclick="clearData()">
+                <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding-top: 15px;" onclick="clearDataConfirm()">
                     <span><i class="fas fa-trash" style="color: var(--accent-pink); margin-right: 10px;"></i> Clear App Data</span><i class="fas fa-chevron-right" style="color: var(--text-sub);"></i>
                 </div>
             </div>
-            <button class="btn-main" style="background: transparent; border: 2px solid var(--accent-pink); color: var(--accent-pink); box-shadow: none;" onclick="logout()">Logout Securely</button>
+            <button class="btn-main" style="background: transparent; border: 2px solid var(--accent-pink); color: var(--accent-pink); box-shadow: none;" onclick="logoutConfirm()">Logout Securely</button>
         </div>
 
         <div id="view-admin" class="view">
             <div class="header">
-                <div class="icon-btn" style="color: var(--accent-pink);" onclick="logout()"><i class="fas fa-power-off"></i></div>
+                <div class="icon-btn" style="color: var(--accent-pink);" onclick="logoutConfirm()"><i class="fas fa-power-off"></i></div>
                 <h2 style="font-size: 18px;">Admin Panel</h2><div style="width:40px;"></div>
             </div>
             
@@ -442,31 +978,31 @@
         let currentTestMode = null; 
         let globalVolume = 1.0; 
         let imageCropper = null; 
-        let isExamRunning = false; // 🔴 LOCKDOWN FLAG
+        let isExamRunning = false; 
         window.currentFilesMap = {};
 
         const pdfjsLib = window['pdfjs-dist/build/pdf'];
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-        // === 🔴 2. DEVICE BACK BUTTON & APP EXIT SECURITY 🔴 ===
+        // === 2. DEVICE BACK BUTTON & APP EXIT SECURITY ===
         document.addEventListener("deviceready", onDeviceReady, false);
+        
         function onDeviceReady() {
             document.addEventListener("backbutton", function(e){
                 if(isExamRunning) {
                     e.preventDefault();
-                    showToast("⚠️ পরীক্ষা চলাকালীন ব্যাক করা বা এক্সিট করা নিষেধ!");
+                    showToast("⚠️ পরীক্ষা চলাকালীন ব্যাক করা নিষেধ!");
                 } else if(document.getElementById('view-home').classList.contains('active')) {
                     e.preventDefault();
                     if(confirm("আপনি কি অ্যাপ থেকে বের হতে চান?")) {
                         navigator.app.exitApp();
                     }
                 } else {
-                    goTo('view-home'); // Go home from other screens
+                    goTo('view-home'); 
                 }
             }, false);
         }
 
-        // Fullscreen API Helpers
         function enterFullscreen() {
             let elem = document.documentElement;
             if (elem.requestFullscreen) { elem.requestFullscreen(); }
@@ -485,7 +1021,6 @@
         window.onload = () => {
             loadSettings(); 
             
-            // Check if logged in
             if(localStorage.getItem('isStudentLoggedIn') === 'true') { 
                 let savedId = localStorage.getItem('savedUserId');
                 if(savedId) document.getElementById('dispUserName').innerText = savedId;
@@ -504,8 +1039,9 @@
                 goTo('view-admin'); 
             } else { 
                 document.getElementById('custom-splash').style.display = 'none';
-                // Show autofill hint if credentials exist
                 if(localStorage.getItem('savedUserId')) {
+                    document.getElementById('userId').value = localStorage.getItem('savedUserId');
+                    document.getElementById('userPass').value = localStorage.getItem('savedUserPass');
                     document.getElementById('savedLoginText').style.display = 'block';
                 }
                 goTo('view-login'); 
@@ -513,14 +1049,20 @@
         };
 
         // === 4. LOGIN EXECUTION ===
-        function toggleLoginMode() { let isAd = document.getElementById('adminToggle').checked; document.getElementById('loginStudentMode').style.display = isAd ? 'none' : 'block'; document.getElementById('loginAdminMode').style.display = isAd ? 'block' : 'none'; }
+        function toggleLoginMode() { 
+            let isAd = document.getElementById('adminToggle').checked; 
+            document.getElementById('loginStudentMode').style.display = isAd ? 'none' : 'block'; 
+            document.getElementById('loginAdminMode').style.display = isAd ? 'block' : 'none'; 
+        }
         
         function executeLogin() {
             if(document.getElementById('adminToggle').checked) {
                 if(document.getElementById('adminKey').value === MASTER_KEY) { 
                     localStorage.setItem('isAdminLoggedIn', 'true'); 
-                    location.reload();
-                } else { showToast("❌ Invalid Key"); }
+                    goTo('view-admin');
+                } else { 
+                    showToast("❌ Invalid Key"); 
+                }
             } else {
                 let uId = document.getElementById('userId').value;
                 let uPass = document.getElementById('userPass').value;
@@ -529,34 +1071,58 @@
                     document.getElementById('custom-splash').style.display = 'flex';
                     document.getElementById('custom-splash').style.opacity = '1';
                     
-                    let progress = 0; let textArr = ["Connecting to Server...", "Verifying ID...", "Fetching Data...", "Login Successful!"];
-                    let bar = document.getElementById('splashProgressBar'); let perc = document.getElementById('splashPercentage'); let txt = document.getElementById('splashStatusText');
+                    let progress = 0; 
+                    let textArr = ["Connecting to Server...", "Verifying ID...", "Fetching Data...", "Login Successful!"];
+                    let bar = document.getElementById('splashProgressBar'); 
+                    let perc = document.getElementById('splashPercentage'); 
+                    let txt = document.getElementById('splashStatusText');
                     
                     let loginInterval = setInterval(() => {
                         progress += 10;
-                        bar.style.width = progress + '%'; perc.innerText = progress + '%';
+                        bar.style.width = progress + '%'; 
+                        perc.innerText = progress + '%';
+                        
                         if(progress === 30) txt.innerText = textArr[1];
                         if(progress === 60) txt.innerText = textArr[2];
                         if(progress === 90) txt.innerText = textArr[3];
                         
                         if(progress >= 100) {
                             clearInterval(loginInterval);
-                            localStorage.setItem('savedUserId', uId); localStorage.setItem('savedUserPass', uPass); localStorage.setItem('isStudentLoggedIn', 'true'); 
+                            
+                            localStorage.setItem('savedUserId', uId); 
+                            localStorage.setItem('savedUserPass', uPass); 
+                            localStorage.setItem('isStudentLoggedIn', 'true'); 
                             
                             document.getElementById('dispUserName').innerText = uId;
-                            loadFirebaseProfilePic(); loadDashboardStats(); fetchUpcomingTests();
-                            setInterval(fetchUpcomingTests, 60000); setInterval(checkTimerLogic, 1000);
+                            loadFirebaseProfilePic(); 
+                            loadDashboardStats(); 
+                            fetchUpcomingTests();
+                            
+                            setInterval(fetchUpcomingTests, 60000); 
+                            setInterval(checkTimerLogic, 1000);
                             
                             setTimeout(() => {
                                 document.getElementById('custom-splash').style.opacity = '0';
-                                setTimeout(() => { document.getElementById('custom-splash').style.display = 'none'; goTo('view-home'); }, 300);
+                                setTimeout(() => { 
+                                    document.getElementById('custom-splash').style.display = 'none'; 
+                                    goTo('view-home'); 
+                                }, 300);
                             }, 500);
                         }
                     }, 100); 
-                } else { showToast("Enter ID and Password"); }
+                } else { 
+                    showToast("Enter ID and Password"); 
+                }
             }
         }
-        function logout() { localStorage.clear(); location.reload(); }
+        
+        function logoutConfirm() { 
+            if(confirm("Are you sure you want to logout?")) {
+                localStorage.removeItem('isStudentLoggedIn');
+                localStorage.removeItem('isAdminLoggedIn');
+                location.reload(); 
+            }
+        }
 
         // === 5. PROFILE PICTURE & CROPPER ===
         function openCropper(event) {
@@ -564,38 +1130,66 @@
             if(file) {
                 let reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById('cropImage').src = e.target.result; document.getElementById('cropModal').style.display = 'flex';
+                    document.getElementById('cropImage').src = e.target.result; 
+                    document.getElementById('cropModal').style.display = 'flex';
                     if(imageCropper) imageCropper.destroy();
-                    imageCropper = new Cropper(document.getElementById('cropImage'), { aspectRatio: 1, viewMode: 1, autoCropArea: 0.8 });
+                    imageCropper = new Cropper(document.getElementById('cropImage'), { 
+                        aspectRatio: 1, viewMode: 1, autoCropArea: 0.8 
+                    });
                 };
                 reader.readAsDataURL(file);
             }
         }
+        
         function applyCrop() {
             if(imageCropper) {
-                let canvas = imageCropper.getCroppedCanvas({ width: 250, height: 250 }); let base64DP = canvas.toDataURL();
-                document.getElementById('setProfilePic').src = base64DP; document.getElementById('cropModal').style.display = 'none';
+                let canvas = imageCropper.getCroppedCanvas({ width: 250, height: 250 }); 
+                let base64DP = canvas.toDataURL();
+                
+                document.getElementById('setProfilePic').src = base64DP; 
+                document.getElementById('cropModal').style.display = 'none';
+                
                 let uId = localStorage.getItem('savedUserId') || "guest";
-                db.collection("users").doc(uId).set({ profilePic: base64DP }, { merge: true }).then(() => { showToast("✅ Profile Pic Saved to Cloud!"); });
+                db.collection("users").doc(uId).set({ profilePic: base64DP }, { merge: true })
+                .then(() => { showToast("✅ Profile Pic Saved to Cloud!"); });
             }
         }
-        function closeCrop() { document.getElementById('cropModal').style.display = 'none'; }
+        
+        function closeCrop() { 
+            document.getElementById('cropModal').style.display = 'none'; 
+        }
+        
         function loadFirebaseProfilePic() {
             let uId = localStorage.getItem('savedUserId');
-            if(uId) { db.collection("users").doc(uId).get().then(doc => { if(doc.exists && doc.data().profilePic) { document.getElementById('setProfilePic').src = doc.data().profilePic; } }); }
+            if(uId) { 
+                db.collection("users").doc(uId).get().then(doc => { 
+                    if(doc.exists && doc.data().profilePic) { 
+                        document.getElementById('setProfilePic').src = doc.data().profilePic; 
+                    } 
+                }); 
+            }
         }
 
         // === 6. AUDIO ALARM SYSTEM ===
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playTone(freq, type, startTime, duration) {
             if(audioCtx.state === 'suspended') audioCtx.resume();
-            let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
-            osc.type = type; osc.frequency.value = freq; osc.connect(gain); gain.connect(audioCtx.destination);
-            gain.gain.setValueAtTime(0.5 * globalVolume, startTime); gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
-            osc.start(startTime); osc.stop(startTime + duration);
+            let osc = audioCtx.createOscillator(); 
+            let gain = audioCtx.createGain();
+            osc.type = type; 
+            osc.frequency.value = freq; 
+            osc.connect(gain); 
+            gain.connect(audioCtx.destination);
+            gain.gain.setValueAtTime(0.5 * globalVolume, startTime); 
+            gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+            osc.start(startTime); 
+            osc.stop(startTime + duration);
         }
+        
         function playSelectedAlarm(durationMs) {
-            let tune = parseInt(localStorage.getItem('alarmTune')) || 1; let loops = durationMs / 1000; let t = audioCtx.currentTime;
+            let tune = parseInt(localStorage.getItem('alarmTune')) || 1; 
+            let loops = durationMs / 1000; 
+            let t = audioCtx.currentTime;
             for(let i=0; i<loops; i++) {
                 let start = t + i;
                 if(tune===1) { playTone(800, 'sine', start, 0.5); playTone(1000, 'sine', start+0.5, 0.5); } 
@@ -605,32 +1199,99 @@
             }
             if(navigator.vibrate && globalVolume > 0) navigator.vibrate(durationMs);
         }
-        function playBeep() { if(globalVolume > 0) { playTone(800, 'sine', audioCtx.currentTime, 0.2); if(navigator.vibrate) navigator.vibrate(200); } }
-        function testAlarmTune() { saveSettings(); showToast("Playing preview..."); playSelectedAlarm(2000); }
+        
+        function playBeep() { 
+            if(globalVolume > 0) { 
+                playTone(800, 'sine', audioCtx.currentTime, 0.2); 
+                if(navigator.vibrate) navigator.vibrate(200); 
+            } 
+        }
+        
+        function testAlarmTune() { 
+            saveSettings(); 
+            showToast("Playing preview..."); 
+            playSelectedAlarm(2000); 
+        }
 
         // === 7. SETTINGS CONTROLS ===
         function loadSettings() {
-            let savedId = localStorage.getItem('savedUserId'); let savedPass = localStorage.getItem('savedUserPass');
-            if(savedId) document.getElementById('userId').value = savedId;
-            if(savedPass) document.getElementById('userPass').value = savedPass;
+            let th = localStorage.getItem('appTheme') || 'default'; 
+            document.getElementById('themeSelect').value = th; 
+            changeTheme();
             
-            let th = localStorage.getItem('appTheme') || 'default'; document.getElementById('themeSelect').value = th; changeTheme();
-            let br = localStorage.getItem('appBrightness') || '1'; document.getElementById('brightnessSlider').value = br; changeBrightness(br);
-            let vol = localStorage.getItem('appVolume') || '1'; document.getElementById('volumeSlider').value = vol; changeVolume(vol);
+            let br = localStorage.getItem('appBrightness') || '1'; 
+            document.getElementById('brightnessSlider').value = br; 
+            changeBrightness(br);
+            
+            let vol = localStorage.getItem('appVolume') || '1'; 
+            document.getElementById('volumeSlider').value = vol; 
+            changeVolume(vol);
         }
-        function saveSettings() { localStorage.setItem('alarmTune', document.getElementById('alarmTuneSelect').value); showToast("Settings Saved!"); }
-        function changeTheme() { let th = document.getElementById('themeSelect').value; localStorage.setItem('appTheme', th); document.body.className = ''; if(th !== 'default') { document.body.classList.add('theme-' + th); } }
-        function changeBrightness(val) { localStorage.setItem('appBrightness', val); let darkness = 1 - parseFloat(val); document.getElementById('brightnessOverlay').style.backgroundColor = `rgba(0,0,0,${darkness})`; }
-        function changeVolume(val) { localStorage.setItem('appVolume', val); globalVolume = parseFloat(val); }
-        function clearData() { localStorage.clear(); showToast("App Data Cleared!"); location.reload(); }
+        
+        function saveSettings() { 
+            localStorage.setItem('alarmTune', document.getElementById('alarmTuneSelect').value); 
+            showToast("Settings Saved!"); 
+        }
+        
+        function changeTheme() { 
+            let th = document.getElementById('themeSelect').value; 
+            localStorage.setItem('appTheme', th); 
+            document.body.className = ''; 
+            if(th !== 'default') { document.body.classList.add('theme-' + th); } 
+        }
+        
+        function changeBrightness(val) { 
+            localStorage.setItem('appBrightness', val); 
+            let darkness = 1 - parseFloat(val); 
+            document.getElementById('brightnessOverlay').style.backgroundColor = `rgba(0,0,0,${darkness})`; 
+        }
+        
+        function changeVolume(val) { 
+            localStorage.setItem('appVolume', val); 
+            globalVolume = parseFloat(val); 
+        }
+        
+        function clearDataConfirm() { 
+            if(confirm("Warning! This will clear all saved app data and log you out. Continue?")) {
+                localStorage.clear(); 
+                showToast("App Data Cleared!"); 
+                location.reload(); 
+            }
+        }
 
         // === 8. NAVIGATION ===
-        function showToast(msg) { let t = document.getElementById("toast"); t.innerText = msg; t.className = "show"; setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000); }
-        function goTo(viewId) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById(viewId).classList.add('active'); document.getElementById('bottomNav').style.display = (viewId === 'view-home' || viewId === 'view-settings' || viewId === 'view-subfolders' || viewId === 'view-gallery-subjects' || viewId === 'view-gallery-folders' || viewId === 'view-gallery-grid') ? 'flex' : 'none'; }
-        function updateNav(el) { document.querySelectorAll('.nav-icon').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
-        function toggleSidebar() { let sb = document.getElementById('sidebar'); let ov = document.getElementById('sbOverlay'); if(sb.classList.contains('open')) { sb.classList.remove('open'); ov.style.display = 'none'; } else { sb.classList.add('open'); ov.style.display = 'block'; } }
+        function showToast(msg) { 
+            let t = document.getElementById("toast"); 
+            t.innerText = msg; 
+            t.className = "show"; 
+            setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000); 
+        }
+        
+        function goTo(viewId) { 
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); 
+            document.getElementById(viewId).classList.add('active'); 
+            document.getElementById('bottomNav').style.display = 
+                (viewId === 'view-home' || viewId === 'view-settings' || viewId === 'view-subfolders' || 
+                 viewId === 'view-gallery-subjects' || viewId === 'view-gallery-folders' || viewId === 'view-gallery-grid') 
+                 ? 'flex' : 'none'; 
+        }
+        
+        function updateNav(el) { 
+            document.querySelectorAll('.nav-icon').forEach(i => i.classList.remove('active')); 
+            el.classList.add('active'); 
+        }
+        
+        function toggleSidebar() { 
+            let sb = document.getElementById('sidebar'); 
+            let ov = document.getElementById('sbOverlay'); 
+            if(sb.classList.contains('open')) { 
+                sb.classList.remove('open'); ov.style.display = 'none'; 
+            } else { 
+                sb.classList.add('open'); ov.style.display = 'block'; 
+            } 
+        }
 
-        // === 9. SCOREBOARD CALCULATION (+1 / -1) ===
+        // === 9. SCOREBOARD CALCULATION ===
         function loadDashboardStats() {
             db.collection("user_settings").doc("dashboard_stats").get().then((doc) => {
                 if(doc.exists) { 
@@ -640,7 +1301,7 @@
                     document.getElementById('dashWrong').innerText = d.wrong || "0"; 
                     document.getElementById('dashRing').style.setProperty('--prog', (d.percent || 0) + '%'); 
                     document.getElementById('dashPercent').innerText = (d.percent || 0) + '%'; 
-                    // Populate Admin inputs if active
+                    
                     if(document.getElementById('adPts')) {
                         document.getElementById('adPts').value = d.points || 0;
                         document.getElementById('adPct').value = d.percent || 0;
@@ -649,29 +1310,55 @@
                     }
                 }
             });
-            let comp = JSON.parse(localStorage.getItem('completedTests') || '[]'); document.getElementById('testsGiven').innerText = comp.length;
+            let comp = JSON.parse(localStorage.getItem('completedTests') || '[]'); 
+            document.getElementById('testsGiven').innerText = comp.length;
         }
 
-        // === 10. LIVE EXAM COUNTDOWN & 10s LOCKDOWN (FULLSCREEN & BLOCK BACK) ===
+        // === 10. LIVE EXAM COUNTDOWN & LOCKDOWN ===
         function fetchUpcomingTests() {
             db.collection("study_materials").where("type", "==", "live_mock").get().then((snap) => {
-                globalTests = []; let comp = JSON.parse(localStorage.getItem('completedTests') || '[]'); let pendingCount = 0; let now = new Date().getTime();
-                snap.forEach(doc => { let d = doc.data(); d.id = doc.id; if(!comp.includes(d.id) && d.startTime) { let en = new Date(d.endTime).getTime(); if(now < en) { globalTests.push(d); pendingCount++; } } });
-                document.getElementById('testsPending').innerText = pendingCount; globalTests.sort((a,b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+                globalTests = []; 
+                let comp = JSON.parse(localStorage.getItem('completedTests') || '[]'); 
+                let pendingCount = 0; 
+                let now = new Date().getTime();
+                
+                snap.forEach(doc => { 
+                    let d = doc.data(); d.id = doc.id; 
+                    if(!comp.includes(d.id) && d.startTime) { 
+                        let en = new Date(d.endTime).getTime(); 
+                        if(now < en) { globalTests.push(d); pendingCount++; } 
+                    } 
+                });
+                
+                document.getElementById('testsPending').innerText = pendingCount; 
+                globalTests.sort((a,b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+                
                 let el = document.getElementById('homeTestStatus');
-                if(globalTests.length > 0) { let next = globalTests[0]; el.innerHTML = `${next.subject} - ${next.filename} <br> <span style="color:#fff;">Starts: ${new Date(next.startTime).toLocaleString()}</span>`; } else { el.innerHTML = "No pending live tests."; }
+                if(globalTests.length > 0) { 
+                    let next = globalTests[0]; 
+                    el.innerHTML = `${next.subject} - ${next.filename} <br> <span style="color:#fff;">Starts: ${new Date(next.startTime).toLocaleString()}</span>`; 
+                } else { 
+                    el.innerHTML = "No pending live tests."; 
+                }
             });
         }
 
-        let countdownInt = null;
         function checkTimerLogic() {
-            if(globalTests.length === 0) return; let now = new Date().getTime(); let compArr = JSON.parse(localStorage.getItem('completedTests') || '[]');
+            if(globalTests.length === 0) return; 
+            let now = new Date().getTime(); 
+            let compArr = JSON.parse(localStorage.getItem('completedTests') || '[]');
             
             for(let i=0; i<globalTests.length; i++) {
-                let test = globalTests[i]; if(compArr.includes(test.id)) continue; 
-                let st = new Date(test.startTime).getTime(); let en = new Date(test.endTime).getTime(); let dist = st - now;
+                let test = globalTests[i]; 
+                if(compArr.includes(test.id)) continue; 
                 
-                if(dist <= 20000 && dist > 10000 && !test.preAlarmPlayed) { playSelectedAlarm(10000); test.preAlarmPlayed = true; }
+                let st = new Date(test.startTime).getTime(); 
+                let en = new Date(test.endTime).getTime(); 
+                let dist = st - now;
+                
+                if(dist <= 20000 && dist > 10000 && !test.preAlarmPlayed) { 
+                    playSelectedAlarm(10000); test.preAlarmPlayed = true; 
+                }
                 
                 if(dist <= 10000 && dist > 0 && !test.lockdownStarted) { 
                     test.lockdownStarted = true;
@@ -679,34 +1366,87 @@
                     openViewer(test.id, 'live_mock'); 
                     
                     document.getElementById('lockdownModal').style.display = 'flex';
-                    let cdVal = 10; document.getElementById('lockdownTimer').innerText = cdVal;
+                    let cdVal = 10; 
+                    document.getElementById('lockdownTimer').innerText = cdVal;
                     
-                    countdownInt = setInterval(() => { cdVal--; document.getElementById('lockdownTimer').innerText = cdVal; playBeep(); if(cdVal <= 0) clearInterval(countdownInt); }, 1000);
+                    countdownInt = setInterval(() => { 
+                        cdVal--; 
+                        document.getElementById('lockdownTimer').innerText = cdVal; 
+                        playBeep(); 
+                        if(cdVal <= 0) clearInterval(countdownInt); 
+                    }, 1000);
                 }
                 
-                // 🔴 EXAM STARTS: ENTER FULLSCREEN & LOCKDOWN 🔴
                 if(dist <= 0 && document.getElementById('lockdownModal').style.display === 'flex') { 
                     clearInterval(countdownInt); 
                     document.getElementById('lockdownModal').style.display = 'none'; 
-                    isExamRunning = true; // Blocks Back Button
-                    enterFullscreen(); // Full Screen Mode
+                    isExamRunning = true; 
+                    enterFullscreen(); 
                     showToast("⚠️ Exam Started! Device Locked.");
                 }
             }
         }
 
         // === 11. STANDARD FILE LISTS ===
-        function openSubject(name) { activeSubject = name; document.getElementById('folderTitle').innerText = name; goTo('view-subfolders'); }
+        function openSubject(name) { 
+            activeSubject = name; 
+            document.getElementById('folderTitle').innerText = name; 
+            goTo('view-subfolders'); 
+        }
+
+        // === 🔴 12. ROBUST DOWNLOAD LOGIC WITH FETCH OR SYSTEM BROWSER 🔴 ===
+        async function processDownload(url, filename) {
+            if(!url) { showToast("❌ Download link not found."); return; }
+            if(confirm(`আপনি কি '${filename}' ডাউনলোড করতে চান?`)) {
+                showToast("⏳ Downloading, please wait...");
+                
+                try {
+                    const response = await fetch(url);
+                    if(!response.ok) throw new Error("Network response was not ok");
+                    
+                    const blob = await response.blob();
+                    const blobUrl = window.URL.createObjectURL(blob);
+                    
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = blobUrl;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    
+                    window.URL.revokeObjectURL(blobUrl);
+                    showToast("✅ Download Successful!");
+                } catch(e) {
+                    console.log("Fetch failed, using fallback:", e);
+                    // Fallback to system browser which handles downloads automatically
+                    window.open(url, '_system');
+                    showToast("✅ Opening in Browser to Download!");
+                }
+            }
+        }
 
         function loadFiles(listType) {
-            let title = ""; if(listType === 'guide') title = "Study Guide (Q&A)"; else if(listType === 'pdf') title = "PDF Notes"; else if(listType === 'live_mock') title = "Live Mock Tests"; else if(listType === 'mock_results') title = "Live Test Results"; else if(listType === 'saved_mock') title = "Practice Mock Tests";
-            document.getElementById('listTitle').innerText = title; goTo('view-files');
-            const box = document.getElementById('filesContainer'); box.innerHTML = "<div style='text-align:center; padding:40px;'><i class='fas fa-circle-notch fa-spin' style='font-size:40px; color:var(--accent-pink);'></i></div>";
+            let title = ""; 
+            if(listType === 'guide') title = "Study Guide (Q&A)"; 
+            else if(listType === 'pdf') title = "PDF Notes"; 
+            else if(listType === 'live_mock') title = "Live Mock Tests"; 
+            else if(listType === 'mock_results') title = "Live Test Results"; 
+            else if(listType === 'saved_mock') title = "Practice Mock Tests";
+            
+            document.getElementById('listTitle').innerText = title; 
+            goTo('view-files');
+            
+            const box = document.getElementById('filesContainer'); 
+            box.innerHTML = "<div style='text-align:center; padding:40px;'><i class='fas fa-circle-notch fa-spin' style='font-size:40px; color:var(--accent-pink);'></i></div>";
+            
             let fetchType = (listType === 'mock_results' || listType === 'saved_mock') ? 'live_mock' : listType;
 
             db.collection("study_materials").where("subject", "==", activeSubject).where("type", "==", fetchType).get().then((snap) => {
-                box.innerHTML = ""; let files = []; snap.forEach(doc => { let d = doc.data(); d.id = doc.id; files.push(d); });
-                const now = new Date().getTime(); files.sort((a, b) => { let ta = a.timestamp?a.timestamp.toMillis():0; let tb = b.timestamp?b.timestamp.toMillis():0; return ta - tb; }); 
+                box.innerHTML = ""; let files = []; 
+                snap.forEach(doc => { let d = doc.data(); d.id = doc.id; files.push(d); });
+                const now = new Date().getTime(); 
+                files.sort((a, b) => { let ta = a.timestamp?a.timestamp.toMillis():0; let tb = b.timestamp?b.timestamp.toMillis():0; return ta - tb; }); 
                 window.currentFilesMap = {}; let count = 0;
 
                 files.forEach((f) => {
@@ -715,26 +1455,45 @@
                         let st = new Date(f.startTime).getTime(); let en = new Date(f.endTime).getTime();
                         if(now < st) { isLocked = true; lockText = "Starts: " + new Date(st).toLocaleString(); } else if(now > en) { isEnded = true; }
                     }
-                    let compArr = JSON.parse(localStorage.getItem('completedTests') || '[]'); let manuallyEnded = compArr.includes(f.id); let finalIsEnded = (isEnded || manuallyEnded);
+                    
+                    let compArr = JSON.parse(localStorage.getItem('completedTests') || '[]'); 
+                    let manuallyEnded = compArr.includes(f.id); 
+                    let finalIsEnded = (isEnded || manuallyEnded);
 
                     if(listType === 'live_mock' && finalIsEnded) return; 
                     if((listType === 'mock_results' || listType === 'saved_mock') && !finalIsEnded) return; 
 
                     count++; window.currentFilesMap[f.id] = f; 
-                    let iconColor = (f.type === 'pdf') ? 'var(--accent-pink)' : (f.type === 'guide' ? '#2ed573' : 'var(--accent-blue)'); let iconClass = (f.filename.toLowerCase().includes('.pdf')) ? 'fas fa-file-pdf' : 'fab fa-html5';
+                    let iconColor = (f.type === 'pdf') ? 'var(--accent-pink)' : (f.type === 'guide' ? '#2ed573' : 'var(--accent-blue)'); 
+                    let iconClass = (f.filename.toLowerCase().includes('.pdf')) ? 'fas fa-file-pdf' : 'fab fa-html5';
 
                     if(isLocked && listType === 'live_mock') {
                         box.innerHTML += `<div class="file-item"><div class="lock-overlay"><i class="fas fa-lock"></i> ${lockText}</div><div class="file-icon-box" style="color:${iconColor};"><i class="${iconClass}"></i></div><div class="file-info"><h4>${f.filename}</h4><p>Locked</p></div></div>`;
                     } else {
-                        let subTxt = "Interactive File"; if(listType === 'mock_results') subTxt = "View answers (Cloud Saved)"; if(listType === 'saved_mock') subTxt = "Practice Mode";
-                        box.innerHTML += `<div class="file-item"><div class="file-icon-box" style="color:${iconColor};" onclick="openViewer('${f.id}', '${listType}')"><i class="${iconClass}"></i></div><div class="file-info" onclick="openViewer('${f.id}', '${listType}')"><h4>${f.filename}</h4><p>${subTxt}</p></div><div class="action-row"><div class="act-btn" style="color:var(--accent-pink);" onclick="delFile('${f.id}', '${listType}')"><i class="fas fa-trash-alt"></i></div></div></div>`;
+                        let subTxt = "Interactive File"; 
+                        if(listType === 'mock_results') subTxt = "View answers (Cloud Saved)"; 
+                        if(listType === 'saved_mock') subTxt = "Practice Mode (No Cloud Save)";
+                        
+                        // Download action for normal lists
+                        let dnAction = `processDownload('${f.url}', '${f.filename}')`;
+                        
+                        box.innerHTML += `
+                            <div class="file-item">
+                                <div class="file-icon-box" style="color:${iconColor};" onclick="openViewer('${f.id}', '${listType}')"><i class="${iconClass}"></i></div>
+                                <div class="file-info" onclick="openViewer('${f.id}', '${listType}')"><h4>${f.filename}</h4><p>${subTxt}</p></div>
+                                <div class="action-row">
+                                    <div class="act-btn" style="color:var(--accent-blue);" onclick="${dnAction}"><i class="fas fa-download"></i></div>
+                                    <div class="act-btn" style="color:var(--accent-pink);" onclick="delFile('${f.id}', '${listType}')"><i class="fas fa-trash-alt"></i></div>
+                                </div>
+                            </div>
+                        `;
                     }
                 });
                 if(count === 0) { box.innerHTML = "<div class='glass-card' style='text-align:center;'><p>No files here.</p></div>"; }
             });
         }
 
-        // === 🔴 12. GALLERY VIEW SYSTEM (PDF & GUIDES) 🔴 ===
+        // === 13. GALLERY VIEW SYSTEM (PDF & GUIDES) ===
         function openGalleryFolders(subj) {
             activeSubject = subj;
             document.getElementById('gallerySubjTitle').innerText = subj + " Gallery";
@@ -758,11 +1517,14 @@
                 files.forEach((f) => {
                     count++; window.currentFilesMap[f.id] = f; 
                     let icon = type === 'pdf' ? 'fas fa-file-pdf' : 'fas fa-book-reader';
-                    let iconColor = type === 'pdf' ? '#FF0076' : '#2ed573';
+                    let iconColor = type === 'pdf' ? 'var(--accent-pink)' : '#2ed573';
                     
-                    // One click confirmation for download
-                    let dnAction = `confirmDownload('${f.url}', '${f.filename}')`;
-                    let shAction = `window.open('whatsapp://send?text=Download ${f.filename}: ${f.url}')`;
+                    // 🔴 One click confirmation for download using Blob fetch
+                    let dnAction = `processDownload('${f.url}', '${f.filename}')`;
+                    
+                    // 🔴 Proper WhatsApp sharing using encodeURIComponent and _system intent
+                    let encodedText = encodeURIComponent(`Study Material: ${f.filename}\nLink: ${f.url}`);
+                    let shAction = `window.open('whatsapp://send?text=${encodedText}', '_system')`;
 
                     box.innerHTML += `
                         <div class="photo-card">
@@ -783,20 +1545,24 @@
             });
         }
 
-        function confirmDownload(url, name) {
-            if(!url) { showToast("Download link not available."); return; }
-            if(confirm("আপনি কি '" + name + "' ডাউনলোড করতে চান?")) {
-                showToast("Downloading...");
-                const a = document.createElement('a'); a.href = url; a.download = name; a.target = '_blank'; document.body.appendChild(a); a.click(); document.body.removeChild(a); 
-            }
+        function delFile(id, listType) { 
+            let key = prompt("Enter Master Key to delete:"); 
+            if(key === MASTER_KEY) { 
+                db.collection("study_materials").doc(id).delete().then(() => { 
+                    showToast("✅ Deleted!"); 
+                    loadFiles(listType); 
+                }); 
+            } else if(key !== null) { 
+                showToast("❌ Wrong Key!"); 
+            } 
         }
 
-        function delFile(id, listType) { let key = prompt("Enter Master Key to delete:"); if(key === MASTER_KEY) { db.collection("study_materials").doc(id).delete().then(() => { showToast("✅ Deleted!"); loadFiles(listType); }); } else if(key !== null) { showToast("❌ Wrong Key!"); } }
-
-        // === 13. ADMIN UPLOAD & SCORE OVERRIDE ===
-        function toggleTimerFields() { let type = document.getElementById('adType').value; document.getElementById('timerFields').style.display = (type === 'live_mock') ? 'block' : 'none'; }
+        // === 14. ADMIN UPLOAD & SCORE OVERRIDE ===
+        function toggleTimerFields() { 
+            let type = document.getElementById('adType').value; 
+            document.getElementById('timerFields').style.display = (type === 'live_mock') ? 'block' : 'none'; 
+        }
         
-        // Admin edits user score manually
         function updateAdminStats() {
             let pts = document.getElementById('adPts').value;
             let pct = document.getElementById('adPct').value;
@@ -807,42 +1573,90 @@
                 points: parseInt(pts), percent: parseInt(pct), correct: parseInt(cor), wrong: parseInt(wr)
             }, {merge: true}).then(() => { 
                 showToast("✅ Stats Force Updated!"); 
-                loadDashboardStats(); // Refresh local screen
+                loadDashboardStats(); 
             });
         }
 
         async function processAdminUpload() {
-            const file = document.getElementById('adFileInput').files[0]; const title = document.getElementById('adName').value; const type = document.getElementById('adType').value;
+            const file = document.getElementById('adFileInput').files[0]; 
+            const title = document.getElementById('adName').value; 
+            const type = document.getElementById('adType').value;
+            
             if (!file || !title) { showToast("Select file and enter name!"); return; }
             if (type === 'live_mock' && (!document.getElementById('adStartTime').value || !document.getElementById('adEndTime').value)) { showToast("Set Start/End Time!"); return; }
-            document.getElementById('adBtn').innerText = "Uploading..."; document.getElementById('adBtn').disabled = true;
+            
+            document.getElementById('adBtn').innerText = "Uploading..."; 
+            document.getElementById('adBtn').disabled = true;
 
             try {
                 if(file.name.toLowerCase().endsWith('.html') || file.name.toLowerCase().endsWith('.htm')) {
                     const reader = new FileReader();
                     reader.onload = async function(e) {
-                        await db.collection("study_materials").add({ subject: document.getElementById('adSubj').value, type: type, filename: title, htmlContent: e.target.result, startTime: document.getElementById('adStartTime').value, endTime: document.getElementById('adEndTime').value, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); 
-                        showToast("✅ Exam Uploaded!"); document.getElementById('adName').value = ''; document.getElementById('adFileInput').value = ''; resetAdminBtn();
-                    }; reader.readAsText(file);
+                        await db.collection("study_materials").add({ 
+                            subject: document.getElementById('adSubj').value, 
+                            type: type, 
+                            filename: title, 
+                            htmlContent: e.target.result, 
+                            startTime: document.getElementById('adStartTime').value, 
+                            endTime: document.getElementById('adEndTime').value, 
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp() 
+                        }); 
+                        showToast("✅ Exam Uploaded!"); 
+                        document.getElementById('adName').value = ''; 
+                        document.getElementById('adFileInput').value = ''; 
+                        resetAdminBtn();
+                    }; 
+                    reader.readAsText(file);
                 } 
                 else {
-                    const formData = new FormData(); formData.append('file', file); formData.append('upload_preset', 'priyanpka_pp'); 
-                    const res = await fetch('https://api.cloudinary.com/v1_1/dbzsbe4vo/auto/upload', { method: 'POST', body: formData }); const data = await res.json();
+                    const formData = new FormData(); 
+                    formData.append('file', file); 
+                    formData.append('upload_preset', 'priyanpka_pp'); 
+                    
+                    const res = await fetch('https://api.cloudinary.com/v1_1/dbzsbe4vo/auto/upload', { method: 'POST', body: formData }); 
+                    const data = await res.json();
+                    
                     if(data.secure_url) {
-                        await db.collection("study_materials").add({ subject: document.getElementById('adSubj').value, type: type, filename: title, url: data.secure_url.replace("http://", "https://"), timestamp: firebase.firestore.FieldValue.serverTimestamp() }); 
-                        showToast("✅ File Uploaded!"); document.getElementById('adName').value = ''; document.getElementById('adFileInput').value = ''; resetAdminBtn();
-                    } else { showToast("Cloudinary Error"); resetAdminBtn(); }
+                        await db.collection("study_materials").add({ 
+                            subject: document.getElementById('adSubj').value, 
+                            type: type, 
+                            filename: title, 
+                            url: data.secure_url.replace("http://", "https://"), 
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp() 
+                        }); 
+                        showToast("✅ File Uploaded!"); 
+                        document.getElementById('adName').value = ''; 
+                        document.getElementById('adFileInput').value = ''; 
+                        resetAdminBtn();
+                    } else { 
+                        showToast("Cloudinary Error"); 
+                        resetAdminBtn(); 
+                    }
                 }
-            } catch (e) { showToast("❌ Upload Error."); resetAdminBtn(); }
+            } catch (e) { 
+                showToast("❌ Upload Error."); 
+                resetAdminBtn(); 
+            }
         }
-        function resetAdminBtn() { document.getElementById('adBtn').innerHTML = "<i class='fas fa-upload'></i> Upload Directly"; document.getElementById('adBtn').disabled = false; }
+        
+        function resetAdminBtn() { 
+            document.getElementById('adBtn').innerHTML = "<i class='fas fa-upload'></i> Upload Directly"; 
+            document.getElementById('adBtn').disabled = false; 
+        }
 
-        // === 14. FILE VIEWER & PRACTICE REFRESH ===
-        let pdfDoc = null, pageNum = 1, pageRendering = false, pageNumPending = null; const canvas = document.getElementById('pdfCanvas'); const ctx = canvas.getContext('2d');
+        // === 15. FILE VIEWER & PRACTICE REFRESH ===
+        let pdfDoc = null, pageNum = 1, pageRendering = false, pageNumPending = null; 
+        const canvas = document.getElementById('pdfCanvas'); 
+        const ctx = canvas.getContext('2d');
 
         async function openViewer(fileId, listType) {
-            let f = window.currentFilesMap[fileId]; if(!f) return;
-            let title = f.filename; let url = f.url || ""; let htmlContent = f.htmlContent || ""; let endTime = f.endTime || "";
+            let f = window.currentFilesMap[fileId]; 
+            if(!f) return;
+            
+            let title = f.filename; 
+            let url = f.url || ""; 
+            let htmlContent = f.htmlContent || ""; 
+            let endTime = f.endTime || "";
 
             currentTestMode = listType; 
 
@@ -854,14 +1668,27 @@
             document.getElementById('testTimerBanner').style.display = 'none';
             document.getElementById('submitTestBtn').style.display = 'none';
             
-            if(listType === 'saved_mock') { document.getElementById('viewerRefreshBtn').style.display = 'block'; }
-            else { document.getElementById('viewerRefreshBtn').style.display = 'none'; }
+            if(listType === 'saved_mock') { 
+                document.getElementById('viewerRefreshBtn').style.display = 'block'; 
+            } else { 
+                document.getElementById('viewerRefreshBtn').style.display = 'none'; 
+            }
 
-            currentFileViewerId = fileId; alarmPlayed20s = false;
+            currentFileViewerId = fileId; 
+            alarmPlayed20s = false;
 
             if(title.toLowerCase().includes('.pdf')) {
-                document.getElementById('pdfNativeContainer').style.display = 'flex'; document.getElementById('loadingText').innerText = "Loading PDF...";
-                try { pdfDoc = await pdfjsLib.getDocument(url).promise; document.getElementById('pageCount').innerText = pdfDoc.numPages; pageNum = 1; renderPage(pageNum); document.getElementById('viewerLoading').style.display = 'none'; } catch (e) { document.getElementById('viewerLoading').innerHTML = `<p style="color:var(--accent-pink);">Error loading PDF</p>`; }
+                document.getElementById('pdfNativeContainer').style.display = 'flex'; 
+                document.getElementById('loadingText').innerText = "Loading PDF...";
+                try { 
+                    pdfDoc = await pdfjsLib.getDocument(url).promise; 
+                    document.getElementById('pageCount').innerText = pdfDoc.numPages; 
+                    pageNum = 1; 
+                    renderPage(pageNum); 
+                    document.getElementById('viewerLoading').style.display = 'none'; 
+                } catch (e) { 
+                    document.getElementById('viewerLoading').innerHTML = `<p style="color:var(--accent-pink);">Error loading PDF</p>`; 
+                }
             } 
             else {
                 document.getElementById('htmlViewerFrame').style.display = 'block';
@@ -869,53 +1696,111 @@
                 if(listType === 'mock_results') {
                     document.getElementById('loadingText').innerText = "Fetching Cloud Data...";
                     let userId = localStorage.getItem('savedUserId') || "guest";
+                    
                     db.collection("exam_results").doc(userId + "_" + fileId).get().then((docSnap) => {
                         if(docSnap.exists) {
                             let savedResult = docSnap.data().htmlData;
-                            try { let encodedHtml = btoa(unescape(encodeURIComponent(savedResult))); document.getElementById('htmlViewerFrame').src = "data:text/html;base64," + encodedHtml; } 
-                            catch(e) { document.getElementById('htmlViewerFrame').srcdoc = savedResult; }
-                        } else { document.getElementById('htmlViewerFrame').srcdoc = "<div style='text-align:center; padding:50px; font-family:sans-serif;'><h2>No Result Found in Cloud!</h2><p>Exam was not submitted properly.</p></div>"; }
+                            try { 
+                                let encodedHtml = btoa(unescape(encodeURIComponent(savedResult))); 
+                                document.getElementById('htmlViewerFrame').src = "data:text/html;base64," + encodedHtml; 
+                            } catch(e) { 
+                                document.getElementById('htmlViewerFrame').srcdoc = savedResult; 
+                            }
+                        } else { 
+                            document.getElementById('htmlViewerFrame').srcdoc = "<div style='text-align:center; padding:50px; font-family:sans-serif;'><h2>No Result Found in Cloud!</h2><p>Exam was not submitted properly.</p></div>"; 
+                        }
                         document.getElementById('viewerLoading').style.display = 'none';
-                    }).catch(err => { document.getElementById('viewerLoading').style.display = 'none'; document.getElementById('htmlViewerFrame').srcdoc = "<h2>Cloud Error</h2>"; });
+                    }).catch(err => { 
+                        document.getElementById('viewerLoading').style.display = 'none'; 
+                        document.getElementById('htmlViewerFrame').srcdoc = "<h2>Cloud Error</h2>"; 
+                    });
                     return; 
                 }
 
                 setTimeout(() => { document.getElementById('viewerLoading').style.display = 'none'; }, 500);
                 
                 if(htmlContent) {
-                    try { let encodedHtml = btoa(unescape(encodeURIComponent(htmlContent))); document.getElementById('htmlViewerFrame').src = "data:text/html;base64," + encodedHtml; } 
-                    catch(e) { document.getElementById('htmlViewerFrame').srcdoc = htmlContent; }
-                } else if(url) { document.getElementById('htmlViewerFrame').src = url; }
+                    try { 
+                        let encodedHtml = btoa(unescape(encodeURIComponent(htmlContent))); 
+                        document.getElementById('htmlViewerFrame').src = "data:text/html;base64," + encodedHtml; 
+                    } catch(e) { 
+                        document.getElementById('htmlViewerFrame').srcdoc = htmlContent; 
+                    }
+                } else if(url) { 
+                    document.getElementById('htmlViewerFrame').src = url; 
+                }
 
-                if(listType === 'live_mock' && endTime) { document.getElementById('testTimerBanner').style.display = 'block'; startTestTimer(endTime); }
+                if(listType === 'live_mock' && endTime) { 
+                    document.getElementById('testTimerBanner').style.display = 'block'; 
+                    startTestTimer(endTime); 
+                }
             }
         }
 
-        function refreshViewer() { if(currentTestMode === 'saved_mock' && currentFileViewerId) { openViewer(currentFileViewerId, currentTestMode); } }
+        function refreshViewer() { 
+            if(currentTestMode === 'saved_mock' && currentFileViewerId) { 
+                openViewer(currentFileViewerId, currentTestMode); 
+            } 
+        }
 
         function startTestTimer(endTimeStr) {
-            clearInterval(testInterval); let endTarget = new Date(endTimeStr).getTime();
+            clearInterval(testInterval); 
+            let endTarget = new Date(endTimeStr).getTime();
+            
             testInterval = setInterval(function() {
                 let distance = endTarget - new Date().getTime();
                 if (distance < 0) {
-                    clearInterval(testInterval); document.getElementById('testTimeLeft').innerHTML = "EXPIRED"; showToast("⚠️ Auto Submitting...");
+                    clearInterval(testInterval); 
+                    document.getElementById('testTimeLeft').innerHTML = "EXPIRED"; 
+                    showToast("⚠️ Auto Submitting...");
                     try { document.getElementById('htmlViewerFrame').contentWindow.postMessage("SUBMIT_NOW", "*"); } catch(e) {} 
-                    setTimeout(() => { forceSubmitTest(); }, 2000); return;
+                    setTimeout(() => { forceSubmitTest(); }, 2000); 
+                    return;
                 }
+                
                 let totalSeconds = Math.floor(distance / 1000);
-                if (totalSeconds === 20 && !alarmPlayed20s) { showToast("⚠️ 20 Seconds Remaining!"); playSelectedAlarm(5000); alarmPlayed20s = true; }
-                let h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); let m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)); let s = Math.floor((distance % (1000 * 60)) / 1000);
+                if (totalSeconds === 20 && !alarmPlayed20s) { 
+                    showToast("⚠️ 20 Seconds Remaining!"); 
+                    playSelectedAlarm(5000); 
+                    alarmPlayed20s = true; 
+                }
+                
+                let h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); 
+                let m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)); 
+                let s = Math.floor((distance % (1000 * 60)) / 1000);
+                
                 document.getElementById('testTimeLeft').innerHTML = h + "h " + m + "m " + s + "s ";
             }, 1000);
         }
 
         function forceSubmitTest() {
-            let testId = currentFileViewerId; let compArr = JSON.parse(localStorage.getItem('completedTests') || '[]');
-            if(!compArr.includes(testId)) { compArr.push(testId); localStorage.setItem('completedTests', JSON.stringify(compArr)); }
-            closeViewer(); goTo('view-subfolders');
+            let testId = currentFileViewerId; 
+            let compArr = JSON.parse(localStorage.getItem('completedTests') || '[]');
+            if(!compArr.includes(testId)) { 
+                compArr.push(testId); 
+                localStorage.setItem('completedTests', JSON.stringify(compArr)); 
+            }
+            closeViewer(); 
+            goTo('view-subfolders');
         }
 
-        function renderPage(num) { pageRendering = true; pdfDoc.getPage(num).then(function(page) { const viewport = page.getViewport({scale: (window.innerWidth - 20) / page.getViewport({scale: 1}).width}); canvas.height = viewport.height; canvas.width = viewport.width; page.render({ canvasContext: ctx, viewport: viewport }).promise.then(function() { pageRendering = false; if (pageNumPending !== null) { renderPage(pageNumPending); pageNumPending = null; } }); }); document.getElementById('pageNum').innerText = num; }
+        function renderPage(num) { 
+            pageRendering = true; 
+            pdfDoc.getPage(num).then(function(page) { 
+                const viewport = page.getViewport({scale: (window.innerWidth - 20) / page.getViewport({scale: 1}).width}); 
+                canvas.height = viewport.height; 
+                canvas.width = viewport.width; 
+                page.render({ canvasContext: ctx, viewport: viewport }).promise.then(function() { 
+                    pageRendering = false; 
+                    if (pageNumPending !== null) { 
+                        renderPage(pageNumPending); 
+                        pageNumPending = null; 
+                    } 
+                }); 
+            }); 
+            document.getElementById('pageNum').innerText = num; 
+        }
+        
         function queueRenderPage(num) { if (pageRendering) { pageNumPending = num; } else { renderPage(num); } }
         function prevPage() { if (pageNum <= 1) return; pageNum--; queueRenderPage(pageNum); }
         function nextPage() { if (pageNum >= pdfDoc.numPages) return; pageNum++; queueRenderPage(pageNum); }
@@ -926,15 +1811,17 @@
             document.getElementById('htmlViewerFrame').src = ""; 
             currentFileViewerId = null; 
             
-            // 🔴 Exit Exam Lockdown Mode 🔴
+            // Release Lockdown Security
             isExamRunning = false;
             exitFullscreen();
         }
 
-        // === 15. PRACTICE FREEZE & SCORING LOGIC (+1/-1) ===
+        // === 16. PRACTICE FREEZE & SCORING LOGIC (+1/-1) ===
         window.addEventListener('message', function(event) {
             if (event.data && event.data.action === 'TEST_SUBMITTED') {
-                let testId = currentFileViewerId; let userId = localStorage.getItem('savedUserId') || "guest"; let compArr = JSON.parse(localStorage.getItem('completedTests') || '[]');
+                let testId = currentFileViewerId; 
+                let userId = localStorage.getItem('savedUserId') || "guest"; 
+                let compArr = JSON.parse(localStorage.getItem('completedTests') || '[]');
 
                 if(currentTestMode === 'saved_mock') { 
                     showToast("Practice Test Checked! Scroll to see answers."); 
@@ -943,19 +1830,35 @@
 
                 if(event.data.htmlData && currentTestMode === 'live_mock') {
                     showToast("Saving result to Cloud...");
-                    db.collection("exam_results").doc(userId + "_" + testId).set({ userId: userId, testId: testId, htmlData: event.data.htmlData, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).catch(err => { console.log("Cloud Save Error"); });
+                    db.collection("exam_results").doc(userId + "_" + testId).set({ 
+                        userId: userId, 
+                        testId: testId, 
+                        htmlData: event.data.htmlData, 
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp() 
+                    }).catch(err => { console.log("Cloud Save Error"); });
                 }
 
-                if(compArr.includes(testId)) { showToast("Test Finished!"); setTimeout(() => { closeViewer(); loadFiles('mock_results'); }, 2000); return; }
+                if(compArr.includes(testId)) { 
+                    showToast("Test Finished!"); 
+                    setTimeout(() => { closeViewer(); loadFiles('mock_results'); }, 2000); 
+                    return; 
+                }
 
-                compArr.push(testId); localStorage.setItem('completedTests', JSON.stringify(compArr));
+                compArr.push(testId); 
+                localStorage.setItem('completedTests', JSON.stringify(compArr));
                 
                 let newCorrect = parseInt(event.data.correct) || 0; 
                 let newWrong = parseInt(event.data.wrong) || 0; 
                 let newPoints = newCorrect - newWrong; 
 
                 db.collection("user_settings").doc("dashboard_stats").get().then((doc) => {
-                    let cPts = 0, cCor = 0, cWr = 0; if(doc.exists) { let d = doc.data(); cPts = parseInt(d.points)||0; cCor = parseInt(d.correct)||0; cWr = parseInt(d.wrong)||0; }
+                    let cPts = 0, cCor = 0, cWr = 0; 
+                    if(doc.exists) { 
+                        let d = doc.data(); 
+                        cPts = parseInt(d.points)||0; 
+                        cCor = parseInt(d.correct)||0; 
+                        cWr = parseInt(d.wrong)||0; 
+                    }
                     
                     let tPts = cPts + newPoints; 
                     let tCor = cCor + newCorrect; 
@@ -963,8 +1866,12 @@
                     let totalAttempted = tCor + tWr; 
                     let pct = totalAttempted > 0 ? Math.round((tCor / totalAttempted) * 100) : 0;
 
-                    db.collection("user_settings").doc("dashboard_stats").set({ points: tPts, correct: tCor, wrong: tWr, percent: pct }, {merge: true}).then(() => {
-                        loadDashboardStats(); fetchUpcomingTests(); showToast("🏆 Exam Submitted & Cloud Saved!"); 
+                    db.collection("user_settings").doc("dashboard_stats").set({ 
+                        points: tPts, correct: tCor, wrong: tWr, percent: pct 
+                    }, {merge: true}).then(() => {
+                        loadDashboardStats(); 
+                        fetchUpcomingTests(); 
+                        showToast("🏆 Exam Submitted & Cloud Saved!"); 
                         setTimeout(() => { closeViewer(); loadFiles('mock_results'); }, 2500);
                     });
                 });
