@@ -42,612 +42,116 @@
             --nav-bg: rgba(255, 255, 255, 0.95);
         }
 
-        body.theme-purple { 
-            --bg-dark: #2a0845; 
-            --bg-mid: #6441A5; 
-            --accent-pink: #ff6a00; 
-            --accent-blue: #ee0979; 
-        }
-        
-        body.theme-teal { 
-            --bg-dark: #000000; 
-            --bg-mid: #0f9b0f; 
-            --accent-pink: #00C9FF; 
-            --accent-blue: #92FE9D; 
-        }
-        
-        body.theme-green { 
-            --bg-dark: #134E5E; 
-            --bg-mid: #71B280; 
-            --accent-pink: #F9D423; 
-            --accent-blue: #FF4E50; 
-        }
+        body.theme-purple { --bg-dark: #2a0845; --bg-mid: #6441A5; --accent-pink: #ff6a00; --accent-blue: #ee0979; }
+        body.theme-teal { --bg-dark: #000000; --bg-mid: #0f9b0f; --accent-pink: #00C9FF; --accent-blue: #92FE9D; }
+        body.theme-green { --bg-dark: #134E5E; --bg-mid: #71B280; --accent-pink: #F9D423; --accent-blue: #FF4E50; }
 
         /* ================= GLOBAL STYLES ================= */
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: 'Poppins', sans-serif; 
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent;}
+        body { background: linear-gradient(to bottom, var(--bg-dark), var(--bg-mid)); color: var(--text-main); height: 100vh; width: 100vw; overflow: hidden; position: relative; transition: background 0.5s, color 0.5s; }
         
-        body { 
-            background: linear-gradient(to bottom, var(--bg-dark), var(--bg-mid)); 
-            color: var(--text-main); 
-            height: 100vh; 
-            width: 100vw; 
-            overflow: hidden; 
-            position: relative; 
-            transition: background 0.5s, color 0.5s; 
-        }
+        .app-container { width: 100%; height: 100%; overflow-y: auto; padding: 20px; padding-bottom: 100px; position: relative; z-index: 1;}
+        .app-container::-webkit-scrollbar { display: none; }
         
-        .app-container { 
-            width: 100%; 
-            height: 100%; 
-            overflow-y: auto; 
-            padding: 20px; 
-            padding-bottom: 100px; 
-            position: relative; 
-            z-index: 1;
-        }
-        
-        .app-container::-webkit-scrollbar { 
-            display: none; 
-        }
-        
-        .view { 
-            display: none; 
-            animation: slideUp 0.3s ease-out; 
-        } 
-        
-        .view.active { 
-            display: block; 
-        }
-        
-        @keyframes slideUp { 
-            from { opacity: 0; transform: translateY(15px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
+        .view { display: none; animation: slideUp 0.3s ease-out; } 
+        .view.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         
         /* ================= SPLASH SCREEN & LOGIN LOADER ================= */
         #custom-splash { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100vw; 
-            height: 100vh; 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
             background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); 
-            z-index: 99999999; 
-            display: none; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            color: white; 
-            transition: opacity 0.3s ease-out; 
+            z-index: 99999999; display: none; flex-direction: column; 
+            justify-content: center; align-items: center; color: white; transition: opacity 0.3s ease-out; 
         }
-        
-        .splash-icon { 
-            font-size: 80px; 
-            color: #00C9FF; 
-            margin-bottom: 15px; 
-            animation: pulseSplash 1s infinite; 
-            filter: drop-shadow(0 0 15px rgba(0,201,255,0.6)); 
-        }
-        
-        @keyframes pulseSplash { 
-            0% { transform: scale(0.9); } 
-            50% { transform: scale(1.1); } 
-            100% { transform: scale(0.9); } 
-        }
-        
-        .splash-title { 
-            font-size: 32px; 
-            font-weight: 800; 
-            letter-spacing: 2px; 
-            margin: 0; 
-        }
-        
-        .splash-sub { 
-            font-size: 14px; 
-            color: #aaa; 
-            margin-top: 5px; 
-            font-weight: 600; 
-        }
-        
-        .loading-line { 
-            width: 250px; 
-            height: 6px; 
-            background: rgba(255,255,255,0.1); 
-            border-radius: 10px; 
-            overflow: hidden; 
-            margin-top: 30px; 
-            position: relative;
-        }
-        
-        .loading-progress { 
-            width: 0%; 
-            height: 100%; 
-            background: linear-gradient(90deg, #FF0076, #00C9FF); 
-            box-shadow: 0 0 10px #FF0076; 
-            transition: width 0.1s linear;
-        }
-        
-        .loading-percentage { 
-            margin-top: 10px; 
-            font-size: 16px; 
-            font-weight: bold; 
-            color: #00C9FF; 
-        }
+        .splash-icon { font-size: 80px; color: var(--accent-blue); margin-bottom: 15px; animation: pulseSplash 1s infinite; filter: drop-shadow(0 0 15px rgba(0,201,255,0.6)); }
+        @keyframes pulseSplash { 0% { transform: scale(0.9); } 50% { transform: scale(1.1); } 100% { transform: scale(0.9); } }
+        .splash-title { font-size: 32px; font-weight: 800; letter-spacing: 2px; margin: 0; }
+        .splash-sub { font-size: 14px; color: #aaa; margin-top: 5px; font-weight: 600; }
+        .loading-line { width: 250px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-top: 30px; position: relative;}
+        .loading-progress { width: 0%; height: 100%; background: linear-gradient(90deg, var(--accent-pink), var(--accent-blue)); box-shadow: 0 0 10px var(--accent-pink); transition: width 0.1s linear;}
+        .loading-percentage { margin-top: 10px; font-size: 16px; font-weight: bold; color: var(--accent-blue); }
 
         /* ================= UI COMPONENTS ================= */
-        .glass-card { 
-            background: var(--card-bg); 
-            backdrop-filter: blur(20px); 
-            border: 1px solid var(--card-border); 
-            border-radius: 20px; 
-            padding: 20px; 
-            box-shadow: var(--box-shadow); 
-            margin-bottom: 15px;
-        }
+        .glass-card { background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--card-border); border-radius: 20px; padding: 20px; box-shadow: var(--box-shadow); margin-bottom: 15px;}
+        .input-glass { width: 100%; padding: 15px; background: rgba(255, 255, 255, 0.9); border: none; border-radius: 12px; color: #333; font-size: 14px; margin-bottom: 15px; outline: none; font-weight: 600;}
+        .btn-main { width: 100%; padding: 15px; border: none; border-radius: 14px; font-weight: 700; font-size: 15px; background: linear-gradient(135deg, var(--accent-pink), var(--accent-blue)); color: white; cursor: pointer; box-shadow: 0 8px 20px rgba(255, 0, 118, 0.4); display: flex; justify-content: center; align-items: center; gap: 10px;}
         
-        .input-glass { 
-            width: 100%; 
-            padding: 15px; 
-            background: rgba(255, 255, 255, 0.9); 
-            border: none; 
-            border-radius: 12px; 
-            color: #333; 
-            font-size: 14px; 
-            margin-bottom: 15px; 
-            outline: none; 
-            font-weight: 600;
-        }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; margin-top: 5px; }
+        .icon-btn { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; font-size: 18px; cursor: pointer; backdrop-filter: blur(10px); color: var(--text-main);}
         
-        .btn-main { 
-            width: 100%; 
-            padding: 15px; 
-            border: none; 
-            border-radius: 14px; 
-            font-weight: 700; 
-            font-size: 15px; 
-            background: linear-gradient(135deg, var(--accent-pink), var(--accent-blue)); 
-            color: white; 
-            cursor: pointer; 
-            box-shadow: 0 8px 20px rgba(255, 0, 118, 0.4); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            gap: 10px;
-        }
+        .neon-box { position: relative; background: var(--neon-bg); border-radius: 18px; padding: 15px; z-index: 1; cursor: pointer; overflow: hidden; margin-bottom: 12px; box-shadow: var(--box-shadow); display: flex; align-items: center; gap: 15px;}
+        .neon-box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, transparent, var(--accent-blue), var(--accent-pink), var(--accent-blue)); animation: rotateRGB 3s linear infinite; z-index: -1; }
+        .neon-box::after { content: ''; position: absolute; inset: 3px; background: var(--neon-bg); border-radius: 15px; z-index: -1;}
+        @keyframes rotateRGB { 100% { transform: rotate(360deg); } }
         
-        .header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 20px; 
-            margin-top: 5px; 
-        }
+        .subject-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; } 
+        .subj-icon { font-size: 30px; margin-bottom: 8px; }
         
-        .icon-btn { 
-            width: 40px; 
-            height: 40px; 
-            border-radius: 12px; 
-            background: rgba(255,255,255,0.1); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            font-size: 18px; 
-            cursor: pointer; 
-            backdrop-filter: blur(10px); 
-            color: var(--text-main);
-        }
+        .progress-box { display: flex; justify-content: space-between; align-items: center; }
+        .circ-chart { position: relative; width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(var(--accent-pink) var(--prog), rgba(255,255,255,0.1) 0deg); display: flex; justify-content: center; align-items: center; }
+        .circ-chart::after { content: ''; position: absolute; width: 64px; height: 64px; background: var(--neon-bg); border-radius: 50%; }
+        .circ-val { position: relative; z-index: 1; font-weight: bold; font-size: 16px; color: var(--text-main); }
         
-        .neon-box { 
-            position: relative; 
-            background: var(--neon-bg); 
-            border-radius: 18px; 
-            padding: 15px; 
-            z-index: 1; 
-            cursor: pointer; 
-            overflow: hidden; 
-            margin-bottom: 12px; 
-            box-shadow: var(--box-shadow); 
-            display: flex; 
-            align-items: center; 
-            gap: 15px;
-        }
-        
-        .neon-box::before { 
-            content: ''; 
-            position: absolute; 
-            top: -50%; 
-            left: -50%; 
-            width: 200%; 
-            height: 200%; 
-            background: conic-gradient(transparent, transparent, transparent, var(--accent-blue), var(--accent-pink), var(--accent-blue)); 
-            animation: rotateRGB 3s linear infinite; 
-            z-index: -1; 
-        }
-        
-        .neon-box::after { 
-            content: ''; 
-            position: absolute; 
-            inset: 3px; 
-            background: var(--neon-bg); 
-            border-radius: 15px; 
-            z-index: -1;
-        }
-        
-        @keyframes rotateRGB { 
-            100% { transform: rotate(360deg); } 
-        }
-        
-        .subject-grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 12px; 
-        } 
-        
-        .subj-icon { 
-            font-size: 30px; 
-            margin-bottom: 8px; 
-        }
-        
-        .progress-box { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-        }
-        
-        .circ-chart { 
-            position: relative; 
-            width: 80px; 
-            height: 80px; 
-            border-radius: 50%; 
-            background: conic-gradient(var(--accent-pink) var(--prog), rgba(255,255,255,0.1) 0deg); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-        }
-        
-        .circ-chart::after { 
-            content: ''; 
-            position: absolute; 
-            width: 64px; 
-            height: 64px; 
-            background: var(--neon-bg); 
-            border-radius: 50%; 
-        }
-        
-        .circ-val { 
-            position: relative; 
-            z-index: 1; 
-            font-weight: bold; 
-            font-size: 16px; 
-            color: var(--text-main); 
-        }
-        
-        .live-marquee { 
-            background: rgba(255, 0, 118, 0.15); 
-            border-left: 4px solid var(--accent-pink); 
-            padding: 12px; 
-            border-radius: 12px; 
-            margin-top: 15px; 
-            margin-bottom: 20px; 
-            overflow: hidden; 
-            white-space: nowrap; 
-            position: relative; 
-            display: flex; 
-            align-items: center; 
-            cursor: pointer;
-        }
-        
-        .pulse-dot { 
-            width: 10px; 
-            height: 10px; 
-            background: var(--accent-pink); 
-            border-radius: 50%; 
-            animation: pulse 1s infinite; 
-            margin-right: 10px;
-        }
-        
-        @keyframes pulse { 
-            0% { box-shadow: 0 0 0 0 rgba(255,0,118,0.7); } 
-            70% { box-shadow: 0 0 0 10px rgba(255,0,118,0); } 
-            100% { box-shadow: 0 0 0 0 rgba(255,0,118,0); } 
-        }
+        .live-marquee { background: rgba(255, 0, 118, 0.15); border-left: 4px solid var(--accent-pink); padding: 12px; border-radius: 12px; margin-top: 15px; margin-bottom: 20px; overflow: hidden; white-space: nowrap; position: relative; display: flex; align-items: center; cursor: pointer;}
+        .pulse-dot { width: 10px; height: 10px; background: var(--accent-pink); border-radius: 50%; animation: pulse 1s infinite; margin-right: 10px;}
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,0,118,0.7); } 70% { box-shadow: 0 0 0 10px rgba(255,0,118,0); } 100% { box-shadow: 0 0 0 0 rgba(255,0,118,0); } }
         
         /* === FILE LIST ITEMS === */
-        .file-item { 
-            background: var(--card-bg); 
-            border-radius: 16px; 
-            padding: 15px; 
-            margin-bottom: 12px; 
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-            border: 1px solid var(--card-border); 
-            position: relative;
-        }
-        
-        .file-icon-box { 
-            width: 45px; 
-            height: 45px; 
-            border-radius: 12px; 
-            background: rgba(255,255,255,0.1); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            font-size: 22px; 
-            cursor: pointer; 
-        }
-        
-        .file-info { 
-            flex-grow: 1; 
-            overflow: hidden; 
-            cursor: pointer; 
-        }
-        
-        .file-info h4 { 
-            font-size: 14px; 
-            font-weight: 600; 
-            white-space: nowrap; 
-            overflow: hidden; 
-            text-overflow: ellipsis; 
-            color: var(--text-main); 
-            margin-bottom: 2px;
-        }
-        
-        .file-info p { 
-            font-size: 11px; 
-            color: var(--text-sub); 
-        }
-        
-        .act-btn { 
-            width: 32px; 
-            height: 32px; 
-            border-radius: 8px; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            background: rgba(255,255,255,0.15); 
-            cursor: pointer; 
-            font-size: 14px; 
-            color: var(--text-main);
-        }
-        
-        .lock-overlay { 
-            position: absolute; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.8); 
-            backdrop-filter: blur(5px); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            gap: 10px; 
-            color: #fff; 
-            font-weight: bold; 
-            font-size: 13px; 
-            z-index: 2;
-        }
+        .file-item { background: var(--card-bg); border-radius: 16px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; border: 1px solid var(--card-border); position: relative;}
+        .file-icon-box { width: 45px; height: 45px; border-radius: 12px; background: rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; font-size: 22px; cursor: pointer; }
+        .file-info { flex-grow: 1; overflow: hidden; cursor: pointer; }
+        .file-info h4 { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main); margin-bottom: 2px;}
+        .file-info p { font-size: 11px; color: var(--text-sub); }
+        .act-btn { width: 32px; height: 32px; border-radius: 8px; display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.15); cursor: pointer; font-size: 14px; color: var(--text-main);}
+        .lock-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; gap: 10px; color: #fff; font-weight: bold; font-size: 13px; z-index: 2;}
         
         /* === PHOTO GALLERY STYLE FOR PDFs & GUIDES === */
-        .photo-gallery-grid { 
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 15px; 
-        }
-        
-        .photo-card { 
-            background: var(--card-bg); 
-            border: 1px solid var(--card-border); 
-            border-radius: 16px; 
-            overflow: hidden; 
-            display: flex; 
-            flex-direction: column; 
-            position: relative; 
-            box-shadow: var(--box-shadow); 
-            transition: transform 0.2s;
-        }
-        
-        .photo-card:active { 
-            transform: scale(0.95); 
-        }
-        
-        .photo-thumb { 
-            height: 120px; 
-            background: linear-gradient(135deg, var(--bg-mid), var(--bg-dark)); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            font-size: 50px; 
-            color: rgba(255,255,255,0.8); 
-            cursor: pointer; 
-            position: relative;
-        }
-        
-        .photo-thumb::after { 
-            content: ''; 
-            position: absolute; 
-            inset: 0; 
-            background: rgba(0,0,0,0.2); 
-        }
-        
-        .photo-details { 
-            padding: 12px; 
-        }
-        
-        .photo-details h4 { 
-            font-size: 13px; 
-            font-weight: 600; 
-            white-space: nowrap; 
-            overflow: hidden; 
-            text-overflow: ellipsis; 
-            margin-bottom: 5px; 
-        }
-        
-        .photo-actions { 
-            display: flex; 
-            justify-content: space-between; 
-            margin-top: 10px; 
-            border-top: 1px solid rgba(255,255,255,0.1); 
-            padding-top: 10px;
-        }
-        
-        .photo-btn { 
-            font-size: 18px; 
-            color: var(--text-sub); 
-            cursor: pointer; 
-            padding: 5px; 
-        }
-        
-        .photo-btn:active { 
-            color: var(--accent-blue); 
-        }
+        .photo-gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .photo-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: var(--box-shadow); transition: transform 0.2s;}
+        .photo-card:active { transform: scale(0.95); }
+        .photo-thumb { height: 120px; background: linear-gradient(135deg, var(--bg-mid), var(--bg-dark)); display: flex; justify-content: center; align-items: center; font-size: 50px; color: rgba(255,255,255,0.8); cursor: pointer; position: relative;}
+        .photo-thumb::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.2); }
+        .photo-details { padding: 12px; }
+        .photo-details h4 { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px; }
+        .photo-actions { display: flex; justify-content: space-between; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;}
+        .photo-btn { font-size: 18px; color: var(--text-sub); cursor: pointer; padding: 5px; }
+        .photo-btn:active { color: var(--accent-blue); }
 
         /* === NAVIGATION & SIDEBAR === */
-        .bottom-nav { 
-            position: fixed; 
-            bottom: 0; left: 0; width: 100%; 
-            background: var(--nav-bg); 
-            backdrop-filter: blur(20px); 
-            padding: 15px 30px; 
-            border-radius: 25px 25px 0 0; 
-            display: flex; 
-            justify-content: space-between; 
-            border-top: 1px solid var(--card-border); 
-            z-index: 100;
-        }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--nav-bg); backdrop-filter: blur(20px); padding: 15px 30px; border-radius: 25px 25px 0 0; display: flex; justify-content: space-between; border-top: 1px solid var(--card-border); z-index: 100;}
+        .nav-icon { font-size: 22px; color: var(--text-sub); cursor: pointer; transition: 0.3s; }
+        .nav-icon.active { color: var(--accent-blue); transform: translateY(-4px); }
         
-        .nav-icon { 
-            font-size: 22px; 
-            color: var(--text-sub); 
-            cursor: pointer; 
-            transition: 0.3s; 
-        }
-        
-        .nav-icon.active { 
-            color: var(--accent-blue); 
-            transform: translateY(-4px); 
-        }
-        
-        #sidebar { 
-            position: fixed; 
-            top: 0; left: -280px; width: 260px; height: 100vh; 
-            background: var(--nav-bg); 
-            backdrop-filter: blur(20px); 
-            z-index: 10000; 
-            transition: 0.3s ease; 
-            padding: 30px 20px; 
-            border-right: 1px solid var(--card-border); 
-            box-shadow: 10px 0 30px rgba(0,0,0,0.5);
-        }
-        
+        #sidebar { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--nav-bg); backdrop-filter: blur(20px); z-index: 10000; transition: 0.3s ease; padding: 30px 20px; border-right: 1px solid var(--card-border); box-shadow: 10px 0 30px rgba(0,0,0,0.5);}
         #sidebar.open { left: 0; } 
-        
-        .sb-item { 
-            padding: 15px; 
-            border-radius: 12px; 
-            margin-bottom: 10px; 
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-            cursor: pointer; 
-            background: rgba(255,255,255,0.05); 
-        }
-        
-        .sb-overlay { 
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
-            background: rgba(0,0,0,0.5); 
-            z-index: 9999; display: none;
-        }
+        .sb-item { padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; cursor: pointer; background: rgba(255,255,255,0.05); }
+        .sb-overlay { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.5); z-index: 9999; display: none;}
         
         /* === CROPPER MODAL === */
-        #cropModal { 
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
-            background: rgba(0,0,0,0.9); 
-            z-index: 1000000; display: none; flex-direction: column; 
-            justify-content: center; align-items: center; padding: 20px; 
-        }
-        
-        .crop-container { 
-            width: 100%; max-width: 400px; height: 400px; 
-            background: #333; margin-bottom: 20px; 
-            border-radius: 12px; overflow: hidden; 
-        }
-        
-        .crop-btn-row { 
-            display: flex; gap: 15px; width: 100%; max-width: 400px; 
-        }
+        #cropModal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 1000000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
+        .crop-container { width: 100%; max-width: 400px; height: 400px; background: #333; margin-bottom: 20px; border-radius: 12px; overflow: hidden; }
+        .crop-btn-row { display: flex; gap: 15px; width: 100%; max-width: 400px; }
 
         /* === VIEWER OVERLAYS === */
-        #fullscreenViewer { 
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
-            background: var(--bg-dark); 
-            z-index: 99999; display: none; flex-direction: column;
-        }
-        
-        .viewer-head { 
-            padding: 15px; background: var(--bg-mid); 
-            display: flex; justify-content: space-between; align-items: center; 
-            border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
-        }
-        
-        #viewerRefreshBtn { 
-            display: none; font-size: 20px; color: var(--accent-blue); 
-            cursor: pointer; margin-right: 15px; 
-        }
-        
+        #fullscreenViewer { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-dark); z-index: 99999; display: none; flex-direction: column;}
+        .viewer-head { padding: 15px; background: var(--bg-mid); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--text-main);}
+        #viewerRefreshBtn { display: none; font-size: 20px; color: var(--accent-blue); cursor: pointer; margin-right: 15px; }
         #pdfNativeContainer { display: none; flex-direction: column; height: 100%; background: #e0e5ec; } 
         .pdf-canvas-wrapper { flex-grow: 1; overflow: auto; display: flex; justify-content: center; padding: 10px; background: #525659; } 
         #pdfCanvas { max-width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); background: white; border-radius: 5px; }
         #htmlViewerFrame { width: 100%; height: 100%; border: none; background: #fff; display: none; }
         #testTimerBanner { background: var(--accent-pink); color: white; text-align: center; padding: 10px; font-weight: bold; font-size: 14px; display: none; }
-        
-        #viewerLoading { 
-            display:none; flex-direction:column; justify-content:center; 
-            align-items:center; height:100%; color:var(--accent-blue); gap:10px; 
-            position: absolute; width: 100%; background: var(--bg-dark); z-index: 5; 
-        }
+        #viewerLoading { display:none; flex-direction:column; justify-content:center; align-items:center; height:100%; color:var(--accent-blue); gap:10px; position: absolute; width: 100%; background: var(--bg-dark); z-index: 5; }
         
         /* === 10-SECOND LOCKDOWN MODAL === */
-        #lockdownModal { 
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
-            background: rgba(15, 12, 41, 0.98); 
-            z-index: 1000000; display: none; flex-direction: column; 
-            justify-content: center; align-items: center; text-align: center; 
-            backdrop-filter: blur(15px); 
-        }
-        
-        .lock-circle { 
-            width: 180px; height: 180px; border-radius: 50%; 
-            border: 8px solid var(--accent-pink); display: flex; 
-            justify-content: center; align-items: center; font-size: 60px; 
-            font-weight: 800; color: #fff; box-shadow: 0 0 40px rgba(255,0,118,0.6); 
-            margin-bottom: 20px; animation: pulseLock 1s infinite; 
-        }
-        
-        @keyframes pulseLock { 
-            0% { transform: scale(1); } 
-            50% { transform: scale(1.05); } 
-            100% { transform: scale(1); } 
-        }
+        #lockdownModal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 12, 41, 0.98); z-index: 1000000; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; backdrop-filter: blur(15px); }
+        .lock-circle { width: 180px; height: 180px; border-radius: 50%; border: 8px solid var(--accent-pink); display: flex; justify-content: center; align-items: center; font-size: 60px; font-weight: 800; color: #fff; box-shadow: 0 0 40px rgba(255,0,118,0.6); margin-bottom: 20px; animation: pulseLock 1s infinite; }
+        @keyframes pulseLock { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
         
         /* === TOASTS & CONTROLS === */
-        #toast { 
-            visibility: hidden; min-width: 250px; background: #fff; color: #333; 
-            text-align: center; border-radius: 20px; padding: 15px; 
-            position: fixed; z-index: 10000000; left: 50%; bottom: 90px; 
-            transform: translateX(-50%); font-weight: bold; font-size: 13px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
-        }
-        
-        #toast.show { 
-            visibility: visible; animation: fadein 0.3s, fadeout 0.3s 2.5s; 
-        }
-        
+        #toast { visibility: hidden; min-width: 250px; background: #fff; color: #333; text-align: center; border-radius: 20px; padding: 15px; position: fixed; z-index: 10000000; left: 50%; bottom: 90px; transform: translateX(-50%); font-weight: bold; font-size: 13px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        #toast.show { visibility: visible; animation: fadein 0.3s, fadeout 0.3s 2.5s; }
         @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 90px; opacity: 1; } } 
         @keyframes fadeout { from { bottom: 90px; opacity: 1; } to { bottom: 0; opacity: 0; } }
         
@@ -659,12 +163,7 @@
         input:checked + .slider:before { transform: translateX(18px); }
 
         /* BRIGHTNESS OVERLAY */
-        #brightnessOverlay { 
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
-            background: rgba(0,0,0,0); pointer-events: none; z-index: 999999999; 
-            transition: background 0.3s; 
-        }
-        
+        #brightnessOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0); pointer-events: none; z-index: 999999999; transition: background 0.3s; }
         input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: var(--accent-blue); cursor: pointer; margin-top: -6px; }
         input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: rgba(255,255,255,0.2); border-radius: 5px; }
@@ -679,24 +178,20 @@
         <i class="fas fa-graduation-cap splash-icon"></i>
         <h1 class="splash-title">Priyanka Study</h1>
         <p class="splash-sub" id="splashStatusText">Authenticating User...</p>
-        <div class="loading-line">
-            <div class="loading-progress" id="splashProgressBar"></div>
-        </div>
+        <div class="loading-line"><div class="loading-progress" id="splashProgressBar"></div></div>
         <div class="loading-percentage" id="splashPercentage">0%</div>
     </div>
 
     <div id="lockdownModal">
         <h2 style="color: #00C9FF; margin-bottom: 5px; font-size: 24px;">Test Starting In</h2>
-        <p style="color: #aaa; margin-bottom: 30px;">Get Ready! Screen is locked.</p>
+        <p style="color: #aaa; margin-bottom: 30px;">Get Ready! Device is Locked.</p>
         <div class="lock-circle" id="lockdownTimer">10</div>
-        <p style="color: var(--accent-pink); font-weight: bold;">Do not close the app</p>
+        <p style="color: var(--accent-pink); font-weight: bold;">Do not press back button</p>
     </div>
 
     <div id="cropModal">
         <h2 style="color: #fff; margin-bottom: 20px;">Crop Profile Picture</h2>
-        <div class="crop-container">
-            <img id="cropImage" src="" style="max-width: 100%;">
-        </div>
+        <div class="crop-container"><img id="cropImage" src="" style="max-width: 100%;"></div>
         <div class="crop-btn-row">
             <button class="btn-main" style="background: #333;" onclick="closeCrop()">Cancel</button>
             <button class="btn-main" style="background: #2ed573;" onclick="applyCrop()">Crop & Save</button>
@@ -724,7 +219,6 @@
         <div class="viewer-head">
             <i class="fas fa-arrow-left" style="font-size: 22px; cursor: pointer;" onclick="closeViewer()"></i>
             <h3 id="viewerTitle" style="font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 50%;">Document</h3>
-            
             <div style="display:flex; align-items:center;">
                 <i class="fas fa-redo-alt" id="viewerRefreshBtn" onclick="refreshViewer()" title="Restart Practice"></i>
                 <div style="width: 10px;"></div>
@@ -750,13 +244,13 @@
 
     <div class="app-container">
         
-        <div id="view-login" class="view active">
+        <div id="view-login" class="view">
             <div style="text-align: center; margin: 60px 0 40px 0;">
                 <i class="fas fa-graduation-cap" style="font-size: 60px; color: var(--accent-blue); margin-bottom: 15px; filter: drop-shadow(0 0 10px rgba(0,201,255,0.5));"></i>
                 <h1 style="font-size: 32px; font-weight: 800;">Priyanka Study</h1>
                 <p style="color: var(--text-sub); font-size: 14px;">Premium Exam Portal</p>
             </div>
-            <div class="glass-card">
+            <div class="glass-card" id="loginCardContainer">
                 <h2 style="font-size: 18px; margin-bottom: 20px;">Sign In to Continue</h2>
                 <div id="loginStudentMode">
                     <input type="text" id="userId" class="input-glass" placeholder="User ID">
@@ -769,9 +263,6 @@
                     <label class="switch"><input type="checkbox" id="adminToggle" onchange="toggleLoginMode()"><span class="slider"></span></label>
                     <span style="font-size: 13px; color: var(--text-sub);">Login as Admin</span>
                 </div>
-                
-                <p id="savedLoginText" style="display:none; font-size:12px; color:#2ed573; text-align:center; margin-bottom:10px;">Saved credentials found. Click Login.</p>
-                
                 <button class="btn-main" onclick="executeLogin()">Secure Login <i class="fas fa-sign-in-alt"></i></button>
             </div>
         </div>
@@ -814,29 +305,21 @@
         </div>
 
         <div id="view-subfolders" class="view">
-            <div class="header">
-                <div class="icon-btn" onclick="goTo('view-home')"><i class="fas fa-chevron-left"></i></div>
-                <h2 id="folderTitle" style="font-size: 18px;">Subject</h2><div style="width: 40px;"></div>
-            </div>
+            <div class="header"><div class="icon-btn" onclick="goTo('view-home')"><i class="fas fa-chevron-left"></i></div><h2 id="folderTitle" style="font-size: 18px;">Subject</h2><div style="width: 40px;"></div></div>
             <div style="margin-top: 20px;">
-                <div class="neon-box" onclick="loadFiles('live_mock')"><div style="width: 50px; height: 50px; background: rgba(255, 0, 118, 0.2); border-radius: 14px; display:flex; justify-content:center; align-items:center; font-size:24px; color:var(--accent-pink);"><i class="fas fa-laptop-code"></i></div><div><h3 style="font-size: 15px;">Live Mock Tests</h3><p style="font-size: 11px; color: var(--text-sub);">Time locked pending tests</p></div></div>
-                <div class="neon-box" onclick="loadFiles('mock_results')"><div style="width: 50px; height: 50px; background: rgba(0, 201, 255, 0.2); border-radius: 14px; display:flex; justify-content:center; align-items:center; font-size:24px; color:var(--accent-blue);"><i class="fas fa-poll-h"></i></div><div><h3 style="font-size: 15px;">Live Test Results</h3><p style="font-size: 11px; color: var(--text-sub);">Cloud saved hard-copies</p></div></div>
-                <div class="neon-box" onclick="loadFiles('saved_mock')"><div style="width: 50px; height: 50px; background: rgba(155, 89, 182, 0.2); border-radius: 14px; display:flex; justify-content:center; align-items:center; font-size:24px; color:#9b59b6;"><i class="fas fa-redo-alt"></i></div><div><h3 style="font-size: 15px;">Practice Mock Tests</h3><p style="font-size: 11px; color: var(--text-sub);">Scores will not save to cloud</p></div></div>
+                <div class="neon-box" onclick="loadFiles('live_mock')"><div style="width: 50px; height: 50px; background: rgba(255, 0, 118, 0.2); border-radius: 14px; display:flex; justify-content:center; align-items:center; font-size:24px; color:var(--accent-pink);"><i class="fas fa-laptop-code"></i></div><div><h3 style="font-size: 15px;">Live Mock Tests</h3><p style="font-size: 11px; color: var(--text-sub);">Time locked tests</p></div></div>
+                <div class="neon-box" onclick="loadFiles('mock_results')"><div style="width: 50px; height: 50px; background: rgba(0, 201, 255, 0.2); border-radius: 14px; display:flex; justify-content:center; align-items:center; font-size:24px; color:var(--accent-blue);"><i class="fas fa-poll-h"></i></div><div><h3 style="font-size: 15px;">Live Test Results</h3><p style="font-size: 11px; color: var(--text-sub);">Cloud saved copies</p></div></div>
+                <div class="neon-box" onclick="loadFiles('saved_mock')"><div style="width: 50px; height: 50px; background: rgba(155, 89, 182, 0.2); border-radius: 14px; display:flex; justify-content:center; align-items:center; font-size:24px; color:#9b59b6;"><i class="fas fa-redo-alt"></i></div><div><h3 style="font-size: 15px;">Practice Mock Tests</h3><p style="font-size: 11px; color: var(--text-sub);">Scores not saved to cloud</p></div></div>
             </div>
         </div>
 
         <div id="view-files" class="view">
-            <div class="header">
-                <div class="icon-btn" onclick="goTo('view-subfolders')"><i class="fas fa-chevron-left"></i></div>
-                <h2 id="listTitle" style="font-size: 16px;">Files</h2><div style="width: 40px;"></div>
-            </div>
+            <div class="header"><div class="icon-btn" onclick="goTo('view-subfolders')"><i class="fas fa-chevron-left"></i></div><h2 id="listTitle" style="font-size: 16px;">Files</h2><div style="width: 40px;"></div></div>
             <div id="filesContainer" style="margin-top: 15px;"></div>
         </div>
 
         <div id="view-gallery-subjects" class="view">
-            <div class="header">
-                <div style="width: 40px;"></div><h2 style="font-size: 18px;">Library Gallery</h2><div style="width: 40px;"></div>
-            </div>
+            <div class="header"><div style="width: 40px;"></div><h2 style="font-size: 18px;">Library Gallery</h2><div style="width: 40px;"></div></div>
             <h3 style="font-size: 14px; margin-bottom: 15px; color: var(--text-sub); text-align:center;">Select a subject to view gallery</h3>
             <div class="subject-grid">
                 <div class="glass-card" style="text-align: center; padding: 15px; cursor:pointer;" onclick="openGalleryFolders('Education')"><i class="fas fa-book-open subj-icon" style="color: var(--accent-pink);"></i><h3 style="font-size:14px;">Education</h3></div>
@@ -848,36 +331,28 @@
         </div>
 
         <div id="view-gallery-folders" class="view">
-            <div class="header">
-                <div class="icon-btn" onclick="goTo('view-gallery-subjects')"><i class="fas fa-chevron-left"></i></div>
-                <h2 id="gallerySubjTitle" style="font-size: 18px;">Subject</h2><div style="width: 40px;"></div>
-            </div>
+            <div class="header"><div class="icon-btn" onclick="goTo('view-gallery-subjects')"><i class="fas fa-chevron-left"></i></div><h2 id="gallerySubjTitle" style="font-size: 16px;">Subject</h2><div style="width: 40px;"></div></div>
             <div style="margin-top: 20px;">
-                <div class="neon-box" onclick="loadGalleryGrid('pdf')"><div style="width: 50px; height: 50px; background: rgba(246, 211, 101, 0.2); border-radius: 14px; display:flex; justify-content:center; align-items:center; font-size:24px; color:#f6d365;"><i class="fas fa-file-pdf"></i></div><div><h3 style="font-size: 15px;">PDF Notes Gallery</h3><p style="font-size: 11px; color: var(--text-sub);">View as Photos</p></div></div>
-                <div class="neon-box" onclick="loadGalleryGrid('guide')"><div style="width: 50px; height: 50px; background: rgba(46, 213, 115, 0.2); border-radius: 14px; display:flex; justify-content:center; align-items:center; font-size:24px; color:#2ed573;"><i class="fas fa-book-reader"></i></div><div><h3 style="font-size: 15px;">Study Guide Gallery</h3><p style="font-size: 11px; color: var(--text-sub);">View as Photos</p></div></div>
+                <div class="glass-card" onclick="loadGalleryGrid('pdf')" style="cursor:pointer; display:flex; align-items:center; gap:15px;"><i class="fas fa-file-pdf" style="font-size:30px; color:#FF0076;"></i><div><h3 style="font-size:15px;">PDF Gallery</h3><p style="font-size:11px; color:var(--text-sub);">Read & Download</p></div></div>
+                <div class="glass-card" onclick="loadGalleryGrid('guide')" style="cursor:pointer; display:flex; align-items:center; gap:15px;"><i class="fas fa-book-reader" style="font-size:30px; color:#2ed573;"></i><div><h3 style="font-size:15px;">Guide Gallery</h3><p style="font-size:11px; color:var(--text-sub);">Read & Download</p></div></div>
             </div>
         </div>
 
         <div id="view-gallery-grid" class="view">
-            <div class="header">
-                <div class="icon-btn" onclick="goTo('view-gallery-folders')"><i class="fas fa-chevron-left"></i></div>
-                <h2 id="galleryGridTitle" style="font-size: 16px;">Gallery</h2><div style="width: 40px;"></div>
-            </div>
+            <div class="header"><div class="icon-btn" onclick="goTo('view-gallery-folders')"><i class="fas fa-chevron-left"></i></div><h2 id="galleryGridTitle" style="font-size: 15px;">Gallery</h2><div style="width: 40px;"></div></div>
             <div id="galleryGridContainer" class="photo-gallery-grid"></div>
         </div>
+
         <div id="view-settings" class="view">
-            <div class="header">
-                <div class="icon-btn" onclick="goTo('view-home')"><i class="fas fa-arrow-left"></i></div>
-                <h2>Settings</h2><div style="width:40px;"></div>
-            </div>
+            <div class="header"><div class="icon-btn" onclick="goTo('view-home')"><i class="fas fa-arrow-left"></i></div><h2>Settings</h2><div style="width:40px;"></div></div>
             
             <div class="glass-card" style="text-align: center;">
                 <div style="position: relative; display: inline-block;">
                     <img id="setProfilePic" src="https://via.placeholder.com/100" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent-blue);">
                     <div style="position: absolute; bottom: 0; right: 0; background: var(--accent-blue); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="document.getElementById('picInput').click()"><i class="fas fa-camera" style="color: #fff; font-size: 12px;"></i></div>
                 </div>
-                <h3 style="margin-top: 10px;">Student Profile</h3>
                 <input type="file" id="picInput" accept="image/*" style="display: none;" onchange="openCropper(event)">
+                <h3 style="margin-top: 10px; font-size:15px;">Student Profile</h3>
                 <p style="font-size: 11px; color: var(--text-sub);">Saved to Cloud Database</p>
             </div>
             
@@ -907,10 +382,8 @@
                     <div><span style="display:block;"><i class="fas fa-music" style="color: var(--accent-pink); margin-right: 10px;"></i> Alarm Tune</span><span style="font-size: 10px; color: var(--text-sub);">For exam warnings</span></div>
                     <div style="display: flex; gap: 10px; align-items: center;">
                         <select id="alarmTuneSelect" class="input-glass" style="padding: 8px; margin:0; width: auto; font-size: 12px; background: rgba(255,255,255,0.2); color: var(--text-main);" onchange="saveSettings()">
-                            <option value="1" style="color:black;">1. Classic Beep</option>
-                            <option value="2" style="color:black;">2. Digital Watch</option>
-                            <option value="3" style="color:black;">3. Loud Buzzer</option>
-                            <option value="4" style="color:black;">4. High Trill</option>
+                            <option value="1" style="color:black;">1. Classic Beep</option><option value="2" style="color:black;">2. Digital Watch</option>
+                            <option value="3" style="color:black;">3. Loud Buzzer</option><option value="4" style="color:black;">4. High Trill</option>
                         </select>
                         <i class="fas fa-play-circle" style="font-size: 24px; color: #2ed573; cursor: pointer;" onclick="testAlarmTune()"></i>
                     </div>
@@ -924,35 +397,37 @@
         </div>
 
         <div id="view-admin" class="view">
-            <div class="header">
-                <div class="icon-btn" style="color: var(--accent-pink);" onclick="logoutConfirm()"><i class="fas fa-power-off"></i></div>
-                <h2 style="font-size: 18px;">Admin Panel</h2><div style="width:40px;"></div>
-            </div>
+            <div class="header"><div class="icon-btn" style="color: var(--accent-pink);" onclick="logoutConfirm()"><i class="fas fa-power-off"></i></div><h2 style="font-size: 18px;">Admin Panel</h2><div style="width:40px;"></div></div>
             
             <div class="glass-card">
-                <h3 style="font-size: 15px; margin-bottom: 15px; color: var(--accent-blue);">1. Update Student Stats</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <input type="number" id="adPts" class="input-glass" placeholder="Total Points">
-                    <input type="number" id="adPct" class="input-glass" placeholder="Progress %">
-                    <input type="number" id="adCor" class="input-glass" placeholder="Correct Ans">
-                    <input type="number" id="adWr" class="input-glass" placeholder="Wrong Ans">
-                </div>
-                <button class="btn-main" style="padding: 12px; border-radius: 12px;" onclick="updateAdminStats()">Force Update Stats</button>
+                <h3 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-blue);">1. Set Student Login</h3>
+                <input type="text" id="adSetId" class="input-glass" placeholder="Set Student ID (e.g. Priyanka)">
+                <input type="text" id="adSetPass" class="input-glass" placeholder="Set Password (e.g. 12345)">
+                <button class="btn-main" style="padding: 10px;" onclick="saveStudentCredentials()">Save Credentials</button>
             </div>
 
             <div class="glass-card">
-                <h3 style="font-size: 15px; margin-bottom: 15px; color: var(--accent-pink);">2. Direct File Upload</h3>
-                <select id="adSubj" class="input-glass"><option value="Education">Education</option><option value="Philosophy">Philosophy</option><option value="Bengali">Bengali</option><option value="Geography">Geography</option><option value="Env. Science">Env. Science</option></select>
-                <select id="adType" class="input-glass" onchange="toggleTimerFields()"><option value="live_mock">Live Mock Test (HTML)</option><option value="pdf">PDF Note</option><option value="guide">Study Guide</option></select>
-                <input type="text" id="adName" class="input-glass" placeholder="File Name (e.g. Chapter 1)">
-                <input type="file" id="adFileInput" class="input-glass" accept="*/*" style="padding: 10px; background: rgba(255,255,255,0.8);">
-                <div id="timerFields" style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 12px; margin-bottom: 15px;">
-                    <label style="font-size: 11px; color: var(--accent-blue);">Start Time (Auto Open):</label>
-                    <input type="datetime-local" id="adStartTime" class="input-glass" style="margin-bottom: 10px; padding: 10px;">
-                    <label style="font-size: 11px; color: var(--accent-pink);">End Time (Auto Submit):</label>
-                    <input type="datetime-local" id="adEndTime" class="input-glass" style="margin-bottom: 0; padding: 10px;">
+                <h3 style="font-size: 14px; margin-bottom: 10px; color: #2ed573;">2. Update Stats</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <input type="number" id="adPts" class="input-glass" placeholder="Total Pts">
+                    <input type="number" id="adPct" class="input-glass" placeholder="Prog %">
+                    <input type="number" id="adCor" class="input-glass" placeholder="Correct">
+                    <input type="number" id="adWr" class="input-glass" placeholder="Wrong">
                 </div>
-                <button class="btn-main" id="adBtn" onclick="processAdminUpload()"><i class="fas fa-upload"></i> Upload Directly</button>
+                <button class="btn-main" style="padding: 10px; background:#2ed573;" onclick="updateAdminStats()">Force Update</button>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-pink);">3. File Upload (Telegram/Firebase)</h3>
+                <select id="adSubj" class="input-glass" style="padding:10px;"><option value="Education">Education</option><option value="Philosophy">Philosophy</option><option value="Bengali">Bengali</option><option value="Geography">Geography</option><option value="Env. Science">Env. Science</option></select>
+                <select id="adType" class="input-glass" style="padding:10px;" onchange="toggleTimerFields()"><option value="live_mock">Live Mock Test</option><option value="pdf">PDF Note</option><option value="guide">Study Guide</option></select>
+                <input type="text" id="adName" class="input-glass" placeholder="File Name" style="padding:10px;">
+                <input type="file" id="adFileInput" class="input-glass" accept="*/*" style="padding: 8px; background: rgba(255,255,255,0.8);">
+                <div id="timerFields" style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px; margin-bottom: 10px;">
+                    <label style="font-size: 10px; color: var(--accent-blue);">Start Time:</label><input type="datetime-local" id="adStartTime" class="input-glass" style="padding:8px; margin-bottom:5px;">
+                    <label style="font-size: 10px; color: var(--accent-pink);">End Time:</label><input type="datetime-local" id="adEndTime" class="input-glass" style="padding:8px; margin-bottom:0;">
+                </div>
+                <button class="btn-main" id="adBtn" onclick="processAdminUpload()">Upload Directly</button>
             </div>
         </div>
     </div>
@@ -960,95 +435,75 @@
     <div class="bottom-nav" id="bottomNav" style="display: none;">
         <i class="fas fa-home nav-icon active" onclick="goTo('view-home'); updateNav(this)"></i>
         <i class="fas fa-folder-open nav-icon" onclick="goTo('view-gallery-subjects'); updateNav(this)"></i>
-        <i class="fas fa-user nav-icon" onclick="goTo('view-settings'); updateNav(this)"></i>
+        <i class="fas fa-cog nav-icon" onclick="goTo('view-settings'); updateNav(this)"></i>
     </div>
 
     <script>
-        // === 1. GLOBAL VARIABLES & INIT ===
+        // === 0. INSTANT BOOT LOGIC (NO LOADING SCREEN) ===
+        const isStudent = localStorage.getItem('isStudentLoggedIn') === 'true';
+        const isAdmin = localStorage.getItem('isAdminLoggedIn') === 'true';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            if(isStudent) { 
+                document.getElementById('view-home').classList.add('active'); 
+                document.getElementById('bottomNav').style.display = 'flex';
+            } else if (isAdmin) { 
+                document.getElementById('view-admin').classList.add('active'); 
+            } else { 
+                document.getElementById('view-login').classList.add('active'); 
+            }
+        });
+
+        // === 1. FIREBASE INIT ===
         const firebaseConfig = { apiKey: "AIzaSyAY97_iFryUusBSTrJsBzSIFRnIovcA4LY", authDomain: "my-photo-301f2.firebaseapp.com", projectId: "my-photo-301f2" };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.firestore();
         const MASTER_KEY = "7602594913";
 
-        let activeSubject = ""; 
-        let testInterval = null; 
-        let currentFileViewerId = null; 
-        let globalTests = []; 
-        let alarmPlayed20s = false; 
-        let currentTestMode = null; 
-        let globalVolume = 1.0; 
-        let imageCropper = null; 
-        let isExamRunning = false; 
-        window.currentFilesMap = {};
+        let activeSubject = ""; let testInterval = null; let currentFileViewerId = null; let globalTests = []; let alarmPlayed20s = false; 
+        let currentTestMode = null; let globalVolume = 1.0; let imageCropper = null; let isExamRunning = false; window.currentFilesMap = {};
 
         const pdfjsLib = window['pdfjs-dist/build/pdf'];
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-        // === 2. DEVICE BACK BUTTON & APP EXIT SECURITY ===
-        document.addEventListener("deviceready", onDeviceReady, false);
-        
-        function onDeviceReady() {
+        // === 2. NATIVE DEVICE SECURITY & SPLASH FIX ===
+        document.addEventListener("deviceready", function() {
+            if(navigator.splashscreen) { navigator.splashscreen.hide(); }
+
             document.addEventListener("backbutton", function(e){
                 if(isExamRunning) {
-                    e.preventDefault();
-                    showToast("⚠️ পরীক্ষা চলাকালীন ব্যাক করা নিষেধ!");
+                    e.preventDefault(); showToast("⚠️ পরীক্ষা চলাকালীন ব্যাক করা নিষেধ!");
                 } else if(document.getElementById('view-home').classList.contains('active')) {
-                    e.preventDefault();
-                    if(confirm("আপনি কি অ্যাপ থেকে বের হতে চান?")) {
-                        navigator.app.exitApp();
-                    }
-                } else {
-                    goTo('view-home'); 
-                }
+                    e.preventDefault(); if(confirm("আপনি কি অ্যাপ থেকে বের হতে চান?")) { navigator.app.exitApp(); }
+                } else { goTo('view-home'); }
             }, false);
-        }
+        }, false);
 
         function enterFullscreen() {
-            let elem = document.documentElement;
-            if (elem.requestFullscreen) { elem.requestFullscreen(); }
-            else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen(); }
-            else if (elem.msRequestFullscreen) { elem.msRequestFullscreen(); }
+            if(window.AndroidFullScreen) { window.AndroidFullScreen.immersiveMode(); }
+            else {
+                let elem = document.documentElement;
+                if (elem.requestFullscreen) { elem.requestFullscreen(); }
+                else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen(); }
+            }
         }
         function exitFullscreen() {
-            if(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement) {
-                if (document.exitFullscreen) { document.exitFullscreen(); }
-                else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); }
-                else if (document.msExitFullscreen) { document.msExitFullscreen(); }
-            }
+            if(window.AndroidFullScreen) { window.AndroidFullScreen.showSystemUI(); }
+            else { if(document.exitFullscreen) { document.exitFullscreen(); } }
         }
 
-        // === 3. BOOT LOGIC & AUTOFILL ===
-        window.onload = () => {
+        // === 3. LOAD DATA ON BOOT ===
+        window.addEventListener('DOMContentLoaded', () => {
             loadSettings(); 
-            
-            if(localStorage.getItem('isStudentLoggedIn') === 'true') { 
-                let savedId = localStorage.getItem('savedUserId');
-                if(savedId) document.getElementById('dispUserName').innerText = savedId;
-                
-                document.getElementById('custom-splash').style.display = 'none';
-                
-                loadFirebaseProfilePic(); 
-                loadDashboardStats(); 
-                fetchUpcomingTests();
-                setInterval(fetchUpcomingTests, 60000); 
-                setInterval(checkTimerLogic, 1000); 
-                goTo('view-home'); 
-
-            } else if (localStorage.getItem('isAdminLoggedIn') === 'true') { 
-                document.getElementById('custom-splash').style.display = 'none';
-                goTo('view-admin'); 
-            } else { 
-                document.getElementById('custom-splash').style.display = 'none';
-                if(localStorage.getItem('savedUserId')) {
-                    document.getElementById('userId').value = localStorage.getItem('savedUserId');
-                    document.getElementById('userPass').value = localStorage.getItem('savedUserPass');
-                    document.getElementById('savedLoginText').style.display = 'block';
-                }
-                goTo('view-login'); 
+            if(isStudent) { 
+                document.getElementById('dispUserName').innerText = localStorage.getItem('savedUserId') || "Student";
+                loadFirebaseProfilePic(); loadDashboardStats(); fetchUpcomingTests();
+                setInterval(fetchUpcomingTests, 60000); setInterval(checkTimerLogic, 1000); 
             }
-        };
+        });
 
-        // === 4. LOGIN EXECUTION ===
+        // === 4. SUPERFAST REAL-TIME LOGIN ===
         function toggleLoginMode() { 
             let isAd = document.getElementById('adminToggle').checked; 
             document.getElementById('loginStudentMode').style.display = isAd ? 'none' : 'block'; 
@@ -1059,137 +514,108 @@
             if(document.getElementById('adminToggle').checked) {
                 if(document.getElementById('adminKey').value === MASTER_KEY) { 
                     localStorage.setItem('isAdminLoggedIn', 'true'); 
-                    goTo('view-admin');
-                } else { 
-                    showToast("❌ Invalid Key"); 
-                }
+                    goTo('view-admin'); 
+                } else { showToast("❌ Invalid Key"); }
             } else {
-                let uId = document.getElementById('userId').value;
-                let uPass = document.getElementById('userPass').value;
+                let uId = document.getElementById('userId').value.trim();
+                let uPass = document.getElementById('userPass').value.trim();
                 
                 if(uId !== "" && uPass !== "") { 
-                    document.getElementById('custom-splash').style.display = 'flex';
-                    document.getElementById('custom-splash').style.opacity = '1';
+                    let validId = "Priyanka"; let validPass = "12345"; 
                     
-                    let progress = 0; 
-                    let textArr = ["Connecting to Server...", "Verifying ID...", "Fetching Data...", "Login Successful!"];
-                    let bar = document.getElementById('splashProgressBar'); 
-                    let perc = document.getElementById('splashPercentage'); 
-                    let txt = document.getElementById('splashStatusText');
-                    
-                    let loginInterval = setInterval(() => {
-                        progress += 10;
-                        bar.style.width = progress + '%'; 
-                        perc.innerText = progress + '%';
-                        
-                        if(progress === 30) txt.innerText = textArr[1];
-                        if(progress === 60) txt.innerText = textArr[2];
-                        if(progress === 90) txt.innerText = textArr[3];
-                        
-                        if(progress >= 100) {
-                            clearInterval(loginInterval);
-                            
-                            localStorage.setItem('savedUserId', uId); 
-                            localStorage.setItem('savedUserPass', uPass); 
-                            localStorage.setItem('isStudentLoggedIn', 'true'); 
-                            
-                            document.getElementById('dispUserName').innerText = uId;
-                            loadFirebaseProfilePic(); 
-                            loadDashboardStats(); 
-                            fetchUpcomingTests();
-                            
-                            setInterval(fetchUpcomingTests, 60000); 
-                            setInterval(checkTimerLogic, 1000);
-                            
-                            setTimeout(() => {
-                                document.getElementById('custom-splash').style.opacity = '0';
-                                setTimeout(() => { 
-                                    document.getElementById('custom-splash').style.display = 'none'; 
-                                    goTo('view-home'); 
-                                }, 300);
-                            }, 500);
-                        }
-                    }, 100); 
-                } else { 
-                    showToast("Enter ID and Password"); 
-                }
-            }
-        }
-        
-        function logoutConfirm() { 
-            if(confirm("Are you sure you want to logout?")) {
-                localStorage.removeItem('isStudentLoggedIn');
-                localStorage.removeItem('isAdminLoggedIn');
-                location.reload(); 
+                    db.collection("admin_settings").doc("student_credentials").get().then((doc) => {
+                        if(doc.exists && doc.data().userId) { validId = doc.data().userId; validPass = doc.data().password; }
+                        processStudentLogin(uId, uPass, validId, validPass);
+                    }).catch(()=> { 
+                        processStudentLogin(uId, uPass, validId, validPass); 
+                    });
+                } else { showToast("Enter ID and Password"); }
             }
         }
 
-        // === 5. PROFILE PICTURE & CROPPER ===
+        function processStudentLogin(uId, uPass, validId, validPass) {
+            if(uId === validId && uPass === validPass) {
+                document.getElementById('custom-splash').style.display = 'flex';
+                document.getElementById('custom-splash').style.opacity = '1';
+                
+                let progress = 0; let textArr = ["Connecting...", "Verifying...", "Fetching Data...", "Success!"];
+                let bar = document.getElementById('splashProgressBar'); let perc = document.getElementById('splashPercentage'); let txt = document.getElementById('splashStatusText');
+                
+                let loginInterval = setInterval(() => {
+                    progress += 10;
+                    bar.style.width = progress + '%'; perc.innerText = progress + '%';
+                    if(progress === 30) txt.innerText = textArr[1];
+                    if(progress === 60) txt.innerText = textArr[2];
+                    if(progress === 90) txt.innerText = textArr[3];
+                    
+                    if(progress >= 100) {
+                        clearInterval(loginInterval);
+                        localStorage.setItem('savedUserId', uId); localStorage.setItem('savedUserPass', uPass); localStorage.setItem('isStudentLoggedIn', 'true'); 
+                        
+                        document.getElementById('dispUserName').innerText = uId;
+                        loadFirebaseProfilePic(); loadDashboardStats(); fetchUpcomingTests();
+                        setInterval(fetchUpcomingTests, 60000); setInterval(checkTimerLogic, 1000);
+                        
+                        setTimeout(() => {
+                            document.getElementById('custom-splash').style.opacity = '0';
+                            setTimeout(() => { document.getElementById('custom-splash').style.display = 'none'; goTo('view-home'); }, 300);
+                        }, 300);
+                    }
+                }, 100); 
+            } else { showToast("❌ Wrong ID or Password!"); }
+        }
+        
+        // 🔴 LOGOUT FIX 🔴
+        function logoutConfirm() { 
+            if(confirm("আপনি কি লগআউট করতে চান?")) { 
+                localStorage.removeItem('isStudentLoggedIn');
+                localStorage.removeItem('isAdminLoggedIn');
+                
+                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                document.getElementById('view-login').classList.add('active');
+                document.getElementById('bottomNav').style.display = 'none';
+                
+                showToast("Logged out successfully!");
+            } 
+        }
+
+        // === 5. CROPPER (Firebase DP) ===
         function openCropper(event) {
             let file = event.target.files[0];
             if(file) {
                 let reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById('cropImage').src = e.target.result; 
-                    document.getElementById('cropModal').style.display = 'flex';
+                    document.getElementById('cropImage').src = e.target.result; document.getElementById('cropModal').style.display = 'flex';
                     if(imageCropper) imageCropper.destroy();
-                    imageCropper = new Cropper(document.getElementById('cropImage'), { 
-                        aspectRatio: 1, viewMode: 1, autoCropArea: 0.8 
-                    });
-                };
-                reader.readAsDataURL(file);
+                    imageCropper = new Cropper(document.getElementById('cropImage'), { aspectRatio: 1, viewMode: 1, autoCropArea: 0.8 });
+                }; reader.readAsDataURL(file);
             }
         }
-        
         function applyCrop() {
             if(imageCropper) {
-                let canvas = imageCropper.getCroppedCanvas({ width: 250, height: 250 }); 
-                let base64DP = canvas.toDataURL();
-                
-                document.getElementById('setProfilePic').src = base64DP; 
-                document.getElementById('cropModal').style.display = 'none';
-                
+                let canvas = imageCropper.getCroppedCanvas({ width: 250, height: 250 }); let base64DP = canvas.toDataURL();
+                document.getElementById('setProfilePic').src = base64DP; document.getElementById('cropModal').style.display = 'none';
                 let uId = localStorage.getItem('savedUserId') || "guest";
-                db.collection("users").doc(uId).set({ profilePic: base64DP }, { merge: true })
-                .then(() => { showToast("✅ Profile Pic Saved to Cloud!"); });
+                db.collection("users").doc(uId).set({ profilePic: base64DP }, { merge: true }).then(() => { showToast("✅ DP Saved!"); });
             }
         }
-        
-        function closeCrop() { 
-            document.getElementById('cropModal').style.display = 'none'; 
-        }
-        
+        function closeCrop() { document.getElementById('cropModal').style.display = 'none'; }
         function loadFirebaseProfilePic() {
             let uId = localStorage.getItem('savedUserId');
-            if(uId) { 
-                db.collection("users").doc(uId).get().then(doc => { 
-                    if(doc.exists && doc.data().profilePic) { 
-                        document.getElementById('setProfilePic').src = doc.data().profilePic; 
-                    } 
-                }); 
-            }
+            if(uId) { db.collection("users").doc(uId).get().then(doc => { if(doc.exists && doc.data().profilePic) { document.getElementById('setProfilePic').src = doc.data().profilePic; } }); }
         }
 
-        // === 6. AUDIO ALARM SYSTEM ===
+        // === 6. AUDIO ALARM ===
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playTone(freq, type, startTime, duration) {
             if(audioCtx.state === 'suspended') audioCtx.resume();
-            let osc = audioCtx.createOscillator(); 
-            let gain = audioCtx.createGain();
-            osc.type = type; 
-            osc.frequency.value = freq; 
-            osc.connect(gain); 
-            gain.connect(audioCtx.destination);
-            gain.gain.setValueAtTime(0.5 * globalVolume, startTime); 
-            gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
-            osc.start(startTime); 
-            osc.stop(startTime + duration);
+            let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+            osc.type = type; osc.frequency.value = freq; osc.connect(gain); gain.connect(audioCtx.destination);
+            gain.gain.setValueAtTime(0.5 * globalVolume, startTime); gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+            osc.start(startTime); osc.stop(startTime + duration);
         }
-        
         function playSelectedAlarm(durationMs) {
-            let tune = parseInt(localStorage.getItem('alarmTune')) || 1; 
-            let loops = durationMs / 1000; 
-            let t = audioCtx.currentTime;
+            let tune = parseInt(localStorage.getItem('alarmTune')) || 1; let loops = durationMs / 1000; let t = audioCtx.currentTime;
             for(let i=0; i<loops; i++) {
                 let start = t + i;
                 if(tune===1) { playTone(800, 'sine', start, 0.5); playTone(1000, 'sine', start+0.5, 0.5); } 
@@ -1199,97 +625,30 @@
             }
             if(navigator.vibrate && globalVolume > 0) navigator.vibrate(durationMs);
         }
-        
-        function playBeep() { 
-            if(globalVolume > 0) { 
-                playTone(800, 'sine', audioCtx.currentTime, 0.2); 
-                if(navigator.vibrate) navigator.vibrate(200); 
-            } 
-        }
-        
-        function testAlarmTune() { 
-            saveSettings(); 
-            showToast("Playing preview..."); 
-            playSelectedAlarm(2000); 
-        }
+        function playBeep() { if(globalVolume > 0) { playTone(800, 'sine', audioCtx.currentTime, 0.2); if(navigator.vibrate) navigator.vibrate(200); } }
+        function testAlarmTune() { saveSettings(); showToast("Playing preview..."); playSelectedAlarm(2000); }
 
         // === 7. SETTINGS CONTROLS ===
         function loadSettings() {
-            let th = localStorage.getItem('appTheme') || 'default'; 
-            document.getElementById('themeSelect').value = th; 
-            changeTheme();
+            let savedId = localStorage.getItem('savedUserId'); let savedPass = localStorage.getItem('savedUserPass');
+            if(savedId) document.getElementById('userId').value = savedId;
+            if(savedPass) document.getElementById('userPass').value = savedPass;
             
-            let br = localStorage.getItem('appBrightness') || '1'; 
-            document.getElementById('brightnessSlider').value = br; 
-            changeBrightness(br);
-            
-            let vol = localStorage.getItem('appVolume') || '1'; 
-            document.getElementById('volumeSlider').value = vol; 
-            changeVolume(vol);
+            let th = localStorage.getItem('appTheme') || 'default'; document.getElementById('themeSelect').value = th; changeTheme();
+            let br = localStorage.getItem('appBrightness') || '1'; document.getElementById('brightnessSlider').value = br; changeBrightness(br);
+            let vol = localStorage.getItem('appVolume') || '1'; document.getElementById('volumeSlider').value = vol; changeVolume(vol);
         }
-        
-        function saveSettings() { 
-            localStorage.setItem('alarmTune', document.getElementById('alarmTuneSelect').value); 
-            showToast("Settings Saved!"); 
-        }
-        
-        function changeTheme() { 
-            let th = document.getElementById('themeSelect').value; 
-            localStorage.setItem('appTheme', th); 
-            document.body.className = ''; 
-            if(th !== 'default') { document.body.classList.add('theme-' + th); } 
-        }
-        
-        function changeBrightness(val) { 
-            localStorage.setItem('appBrightness', val); 
-            let darkness = 1 - parseFloat(val); 
-            document.getElementById('brightnessOverlay').style.backgroundColor = `rgba(0,0,0,${darkness})`; 
-        }
-        
-        function changeVolume(val) { 
-            localStorage.setItem('appVolume', val); 
-            globalVolume = parseFloat(val); 
-        }
-        
-        function clearDataConfirm() { 
-            if(confirm("Warning! This will clear all saved app data and log you out. Continue?")) {
-                localStorage.clear(); 
-                showToast("App Data Cleared!"); 
-                location.reload(); 
-            }
-        }
+        function saveSettings() { localStorage.setItem('alarmTune', document.getElementById('alarmTuneSelect').value); showToast("Settings Saved!"); }
+        function changeTheme() { let th = document.getElementById('themeSelect').value; localStorage.setItem('appTheme', th); document.body.className = ''; if(th !== 'default') { document.body.classList.add('theme-' + th); } }
+        function changeBrightness(val) { localStorage.setItem('appBrightness', val); let darkness = 1 - parseFloat(val); document.getElementById('brightnessOverlay').style.backgroundColor = `rgba(0,0,0,${darkness})`; }
+        function changeVolume(val) { localStorage.setItem('appVolume', val); globalVolume = parseFloat(val); }
+        function clearDataConfirm() { if(confirm("Clear App Data?")) { localStorage.clear(); location.reload(); } }
 
         // === 8. NAVIGATION ===
-        function showToast(msg) { 
-            let t = document.getElementById("toast"); 
-            t.innerText = msg; 
-            t.className = "show"; 
-            setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000); 
-        }
-        
-        function goTo(viewId) { 
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); 
-            document.getElementById(viewId).classList.add('active'); 
-            document.getElementById('bottomNav').style.display = 
-                (viewId === 'view-home' || viewId === 'view-settings' || viewId === 'view-subfolders' || 
-                 viewId === 'view-gallery-subjects' || viewId === 'view-gallery-folders' || viewId === 'view-gallery-grid') 
-                 ? 'flex' : 'none'; 
-        }
-        
-        function updateNav(el) { 
-            document.querySelectorAll('.nav-icon').forEach(i => i.classList.remove('active')); 
-            el.classList.add('active'); 
-        }
-        
-        function toggleSidebar() { 
-            let sb = document.getElementById('sidebar'); 
-            let ov = document.getElementById('sbOverlay'); 
-            if(sb.classList.contains('open')) { 
-                sb.classList.remove('open'); ov.style.display = 'none'; 
-            } else { 
-                sb.classList.add('open'); ov.style.display = 'block'; 
-            } 
-        }
+        function showToast(msg) { let t = document.getElementById("toast"); t.innerText = msg; t.className = "show"; setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000); }
+        function goTo(viewId) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById(viewId).classList.add('active'); document.getElementById('bottomNav').style.display = (viewId === 'view-home' || viewId === 'view-settings' || viewId === 'view-subfolders' || viewId === 'view-gallery-subjects' || viewId === 'view-gallery-folders' || viewId === 'view-gallery-grid') ? 'flex' : 'none'; }
+        function updateNav(el) { document.querySelectorAll('.nav-icon').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
+        function toggleSidebar() { let sb = document.getElementById('sidebar'); let ov = document.getElementById('sbOverlay'); if(sb.classList.contains('open')) { sb.classList.remove('open'); ov.style.display = 'none'; } else { sb.classList.add('open'); ov.style.display = 'block'; } }
 
         // === 9. SCOREBOARD CALCULATION ===
         function loadDashboardStats() {
@@ -1301,7 +660,6 @@
                     document.getElementById('dashWrong').innerText = d.wrong || "0"; 
                     document.getElementById('dashRing').style.setProperty('--prog', (d.percent || 0) + '%'); 
                     document.getElementById('dashPercent').innerText = (d.percent || 0) + '%'; 
-                    
                     if(document.getElementById('adPts')) {
                         document.getElementById('adPts').value = d.points || 0;
                         document.getElementById('adPct').value = d.percent || 0;
@@ -1310,55 +668,29 @@
                     }
                 }
             });
-            let comp = JSON.parse(localStorage.getItem('completedTests') || '[]'); 
-            document.getElementById('testsGiven').innerText = comp.length;
+            let comp = JSON.parse(localStorage.getItem('completedTests') || '[]'); document.getElementById('testsGiven').innerText = comp.length;
         }
 
         // === 10. LIVE EXAM COUNTDOWN & LOCKDOWN ===
         function fetchUpcomingTests() {
             db.collection("study_materials").where("type", "==", "live_mock").get().then((snap) => {
-                globalTests = []; 
-                let comp = JSON.parse(localStorage.getItem('completedTests') || '[]'); 
-                let pendingCount = 0; 
-                let now = new Date().getTime();
-                
-                snap.forEach(doc => { 
-                    let d = doc.data(); d.id = doc.id; 
-                    if(!comp.includes(d.id) && d.startTime) { 
-                        let en = new Date(d.endTime).getTime(); 
-                        if(now < en) { globalTests.push(d); pendingCount++; } 
-                    } 
-                });
-                
-                document.getElementById('testsPending').innerText = pendingCount; 
-                globalTests.sort((a,b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
-                
+                globalTests = []; let comp = JSON.parse(localStorage.getItem('completedTests') || '[]'); let pendingCount = 0; let now = new Date().getTime();
+                snap.forEach(doc => { let d = doc.data(); d.id = doc.id; if(!comp.includes(d.id) && d.startTime) { let en = new Date(d.endTime).getTime(); if(now < en) { globalTests.push(d); pendingCount++; } } });
+                document.getElementById('testsPending').innerText = pendingCount; globalTests.sort((a,b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
                 let el = document.getElementById('homeTestStatus');
-                if(globalTests.length > 0) { 
-                    let next = globalTests[0]; 
-                    el.innerHTML = `${next.subject} - ${next.filename} <br> <span style="color:#fff;">Starts: ${new Date(next.startTime).toLocaleString()}</span>`; 
-                } else { 
-                    el.innerHTML = "No pending live tests."; 
-                }
+                if(globalTests.length > 0) { let next = globalTests[0]; el.innerHTML = `${next.subject} - ${next.filename} <br> <span style="color:#fff;">Starts: ${new Date(next.startTime).toLocaleString()}</span>`; } else { el.innerHTML = "No pending live tests."; }
             });
         }
 
+        let countdownInt = null;
         function checkTimerLogic() {
-            if(globalTests.length === 0) return; 
-            let now = new Date().getTime(); 
-            let compArr = JSON.parse(localStorage.getItem('completedTests') || '[]');
+            if(globalTests.length === 0) return; let now = new Date().getTime(); let compArr = JSON.parse(localStorage.getItem('completedTests') || '[]');
             
             for(let i=0; i<globalTests.length; i++) {
-                let test = globalTests[i]; 
-                if(compArr.includes(test.id)) continue; 
+                let test = globalTests[i]; if(compArr.includes(test.id)) continue; 
+                let st = new Date(test.startTime).getTime(); let en = new Date(test.endTime).getTime(); let dist = st - now;
                 
-                let st = new Date(test.startTime).getTime(); 
-                let en = new Date(test.endTime).getTime(); 
-                let dist = st - now;
-                
-                if(dist <= 20000 && dist > 10000 && !test.preAlarmPlayed) { 
-                    playSelectedAlarm(10000); test.preAlarmPlayed = true; 
-                }
+                if(dist <= 20000 && dist > 10000 && !test.preAlarmPlayed) { playSelectedAlarm(10000); test.preAlarmPlayed = true; }
                 
                 if(dist <= 10000 && dist > 0 && !test.lockdownStarted) { 
                     test.lockdownStarted = true;
@@ -1366,87 +698,48 @@
                     openViewer(test.id, 'live_mock'); 
                     
                     document.getElementById('lockdownModal').style.display = 'flex';
-                    let cdVal = 10; 
-                    document.getElementById('lockdownTimer').innerText = cdVal;
+                    let cdVal = 10; document.getElementById('lockdownTimer').innerText = cdVal;
                     
-                    countdownInt = setInterval(() => { 
-                        cdVal--; 
-                        document.getElementById('lockdownTimer').innerText = cdVal; 
-                        playBeep(); 
-                        if(cdVal <= 0) clearInterval(countdownInt); 
-                    }, 1000);
+                    countdownInt = setInterval(() => { cdVal--; document.getElementById('lockdownTimer').innerText = cdVal; playBeep(); if(cdVal <= 0) clearInterval(countdownInt); }, 1000);
                 }
                 
                 if(dist <= 0 && document.getElementById('lockdownModal').style.display === 'flex') { 
                     clearInterval(countdownInt); 
                     document.getElementById('lockdownModal').style.display = 'none'; 
-                    isExamRunning = true; 
-                    enterFullscreen(); 
+                    isExamRunning = true; // Blocks Back Button
+                    enterFullscreen(); // Full Screen Mode
                     showToast("⚠️ Exam Started! Device Locked.");
                 }
             }
         }
 
-        // === 11. STANDARD FILE LISTS ===
-        function openSubject(name) { 
-            activeSubject = name; 
-            document.getElementById('folderTitle').innerText = name; 
-            goTo('view-subfolders'); 
-        }
-
-        // === 🔴 12. ROBUST DOWNLOAD LOGIC WITH FETCH OR SYSTEM BROWSER 🔴 ===
-        async function processDownload(url, filename) {
-            if(!url) { showToast("❌ Download link not found."); return; }
+        // === 11. DOWNLOAD & SHARE ===
+        function processDownload(url, filename) {
+            if(!url) { showToast("❌ Link not found."); return; }
             if(confirm(`আপনি কি '${filename}' ডাউনলোড করতে চান?`)) {
-                showToast("⏳ Downloading, please wait...");
-                
-                try {
-                    const response = await fetch(url);
-                    if(!response.ok) throw new Error("Network response was not ok");
-                    
-                    const blob = await response.blob();
-                    const blobUrl = window.URL.createObjectURL(blob);
-                    
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = blobUrl;
-                    a.download = filename;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    
-                    window.URL.revokeObjectURL(blobUrl);
-                    showToast("✅ Download Successful!");
-                } catch(e) {
-                    console.log("Fetch failed, using fallback:", e);
-                    // Fallback to system browser which handles downloads automatically
-                    window.open(url, '_system');
-                    showToast("✅ Opening in Browser to Download!");
-                }
+                showToast("Downloading...");
+                window.open(url, '_system'); 
             }
         }
 
+        function processShare(url, filename) {
+            if(!url) { showToast("❌ Link not found."); return; }
+            let shareText = encodeURIComponent(`Study Material: ${filename}\nLink: ${url}`);
+            window.open('https://api.whatsapp.com/send?text=' + shareText, '_system');
+        }
+
+        // === 12. STANDARD FILE LISTS ===
+        function openSubject(name) { activeSubject = name; document.getElementById('folderTitle').innerText = name; goTo('view-subfolders'); }
+
         function loadFiles(listType) {
-            let title = ""; 
-            if(listType === 'guide') title = "Study Guide (Q&A)"; 
-            else if(listType === 'pdf') title = "PDF Notes"; 
-            else if(listType === 'live_mock') title = "Live Mock Tests"; 
-            else if(listType === 'mock_results') title = "Live Test Results"; 
-            else if(listType === 'saved_mock') title = "Practice Mock Tests";
-            
-            document.getElementById('listTitle').innerText = title; 
-            goTo('view-files');
-            
-            const box = document.getElementById('filesContainer'); 
-            box.innerHTML = "<div style='text-align:center; padding:40px;'><i class='fas fa-circle-notch fa-spin' style='font-size:40px; color:var(--accent-pink);'></i></div>";
-            
+            let title = ""; if(listType === 'guide') title = "Study Guide (Q&A)"; else if(listType === 'pdf') title = "PDF Notes"; else if(listType === 'live_mock') title = "Live Mock Tests"; else if(listType === 'mock_results') title = "Live Test Results"; else if(listType === 'saved_mock') title = "Practice Mock Tests";
+            document.getElementById('listTitle').innerText = title; goTo('view-files');
+            const box = document.getElementById('filesContainer'); box.innerHTML = "<div style='text-align:center; padding:40px;'><i class='fas fa-circle-notch fa-spin' style='font-size:40px; color:var(--accent-pink);'></i></div>";
             let fetchType = (listType === 'mock_results' || listType === 'saved_mock') ? 'live_mock' : listType;
 
             db.collection("study_materials").where("subject", "==", activeSubject).where("type", "==", fetchType).get().then((snap) => {
-                box.innerHTML = ""; let files = []; 
-                snap.forEach(doc => { let d = doc.data(); d.id = doc.id; files.push(d); });
-                const now = new Date().getTime(); 
-                files.sort((a, b) => { let ta = a.timestamp?a.timestamp.toMillis():0; let tb = b.timestamp?b.timestamp.toMillis():0; return ta - tb; }); 
+                box.innerHTML = ""; let files = []; snap.forEach(doc => { let d = doc.data(); d.id = doc.id; files.push(d); });
+                const now = new Date().getTime(); files.sort((a, b) => { let ta = a.timestamp?a.timestamp.toMillis():0; let tb = b.timestamp?b.timestamp.toMillis():0; return ta - tb; }); 
                 window.currentFilesMap = {}; let count = 0;
 
                 files.forEach((f) => {
@@ -1455,38 +748,27 @@
                         let st = new Date(f.startTime).getTime(); let en = new Date(f.endTime).getTime();
                         if(now < st) { isLocked = true; lockText = "Starts: " + new Date(st).toLocaleString(); } else if(now > en) { isEnded = true; }
                     }
-                    
-                    let compArr = JSON.parse(localStorage.getItem('completedTests') || '[]'); 
-                    let manuallyEnded = compArr.includes(f.id); 
-                    let finalIsEnded = (isEnded || manuallyEnded);
+                    let compArr = JSON.parse(localStorage.getItem('completedTests') || '[]'); let manuallyEnded = compArr.includes(f.id); let finalIsEnded = (isEnded || manuallyEnded);
 
                     if(listType === 'live_mock' && finalIsEnded) return; 
                     if((listType === 'mock_results' || listType === 'saved_mock') && !finalIsEnded) return; 
 
                     count++; window.currentFilesMap[f.id] = f; 
-                    let iconColor = (f.type === 'pdf') ? 'var(--accent-pink)' : (f.type === 'guide' ? '#2ed573' : 'var(--accent-blue)'); 
-                    let iconClass = (f.filename.toLowerCase().includes('.pdf')) ? 'fas fa-file-pdf' : 'fab fa-html5';
+                    let iconColor = (f.type === 'pdf') ? 'var(--accent-pink)' : (f.type === 'guide' ? '#2ed573' : 'var(--accent-blue)'); let iconClass = (f.filename.toLowerCase().includes('.pdf')) ? 'fas fa-file-pdf' : 'fab fa-html5';
 
                     if(isLocked && listType === 'live_mock') {
                         box.innerHTML += `<div class="file-item"><div class="lock-overlay"><i class="fas fa-lock"></i> ${lockText}</div><div class="file-icon-box" style="color:${iconColor};"><i class="${iconClass}"></i></div><div class="file-info"><h4>${f.filename}</h4><p>Locked</p></div></div>`;
                     } else {
-                        let subTxt = "Interactive File"; 
-                        if(listType === 'mock_results') subTxt = "View answers (Cloud Saved)"; 
-                        if(listType === 'saved_mock') subTxt = "Practice Mode (No Cloud Save)";
+                        let subTxt = "Interactive File"; if(listType === 'mock_results') subTxt = "View answers"; if(listType === 'saved_mock') subTxt = "Practice Mode";
                         
-                        // Download action for normal lists
-                        let dnAction = `processDownload('${f.url}', '${f.filename}')`;
+                        let actionBtn = "";
+                        if(f.type === 'pdf' || f.type === 'guide') {
+                            actionBtn = `<div class="act-btn" style="color:var(--accent-blue);" onclick="processDownload('${f.url}', '${f.filename}')"><i class="fas fa-download"></i></div>`;
+                        } else {
+                            actionBtn = `<div class="act-btn" style="color:var(--accent-blue);" onclick="openViewer('${f.id}', '${listType}')"><i class="fas fa-play"></i></div>`;
+                        }
                         
-                        box.innerHTML += `
-                            <div class="file-item">
-                                <div class="file-icon-box" style="color:${iconColor};" onclick="openViewer('${f.id}', '${listType}')"><i class="${iconClass}"></i></div>
-                                <div class="file-info" onclick="openViewer('${f.id}', '${listType}')"><h4>${f.filename}</h4><p>${subTxt}</p></div>
-                                <div class="action-row">
-                                    <div class="act-btn" style="color:var(--accent-blue);" onclick="${dnAction}"><i class="fas fa-download"></i></div>
-                                    <div class="act-btn" style="color:var(--accent-pink);" onclick="delFile('${f.id}', '${listType}')"><i class="fas fa-trash-alt"></i></div>
-                                </div>
-                            </div>
-                        `;
+                        box.innerHTML += `<div class="file-item"><div class="file-icon-box" style="color:${iconColor};" onclick="openViewer('${f.id}', '${listType}')"><i class="${iconClass}"></i></div><div class="file-info" onclick="openViewer('${f.id}', '${listType}')"><h4>${f.filename}</h4><p>${subTxt}</p></div><div class="action-row">${actionBtn}<div class="act-btn" style="color:var(--accent-pink);" onclick="delFile('${f.id}', '${listType}')"><i class="fas fa-trash-alt"></i></div></div></div>`;
                     }
                 });
                 if(count === 0) { box.innerHTML = "<div class='glass-card' style='text-align:center;'><p>No files here.</p></div>"; }
@@ -1517,15 +799,12 @@
                 files.forEach((f) => {
                     count++; window.currentFilesMap[f.id] = f; 
                     let icon = type === 'pdf' ? 'fas fa-file-pdf' : 'fas fa-book-reader';
-                    let iconColor = type === 'pdf' ? 'var(--accent-pink)' : '#2ed573';
+                    let iconColor = type === 'pdf' ? '#FF0076' : '#2ed573';
                     
-                    // 🔴 One click confirmation for download using Blob fetch
                     let dnAction = `processDownload('${f.url}', '${f.filename}')`;
-                    
-                    // 🔴 Proper WhatsApp sharing using encodeURIComponent and _system intent
-                    let encodedText = encodeURIComponent(`Study Material: ${f.filename}\nLink: ${f.url}`);
-                    let shAction = `window.open('whatsapp://send?text=${encodedText}', '_system')`;
+                    let shAction = `window.open('whatsapp://send?text=Download ${f.filename}: ${f.url}')`;
 
+                    // 🔴 GALLERY DELETE FIX 🔴
                     box.innerHTML += `
                         <div class="photo-card">
                             <div class="photo-thumb" onclick="openViewer('${f.id}', '${type}')">
@@ -1536,6 +815,7 @@
                                 <div class="photo-actions">
                                     <i class="fas fa-download photo-btn" title="Download" onclick="${dnAction}"></i>
                                     <i class="fab fa-whatsapp photo-btn" title="Share" style="color:#25D366;" onclick="${shAction}"></i>
+                                    <i class="fas fa-trash-alt photo-btn" title="Delete" style="color:var(--accent-pink);" onclick="delFile('${f.id}', '${type}')"></i>
                                 </div>
                             </div>
                         </div>
@@ -1546,14 +826,18 @@
         }
 
         function delFile(id, listType) { 
-            let key = prompt("Enter Master Key to delete:"); 
+            let key = prompt("ফাইলটি ডিলিট করতে অ্যাডমিন পিন (Master Key) দিন:"); 
             if(key === MASTER_KEY) { 
                 db.collection("study_materials").doc(id).delete().then(() => { 
-                    showToast("✅ Deleted!"); 
-                    loadFiles(listType); 
+                    showToast("✅ Deleted Successfully!"); 
+                    if(listType === 'pdf' || listType === 'guide') {
+                        loadGalleryGrid(listType); 
+                    } else {
+                        loadFiles(listType); 
+                    }
                 }); 
-            } else if(key !== null) { 
-                showToast("❌ Wrong Key!"); 
+            } else if(key !== null && key !== "") { 
+                showToast("❌ Wrong Admin Key!"); 
             } 
         }
 
@@ -1575,6 +859,11 @@
                 showToast("✅ Stats Force Updated!"); 
                 loadDashboardStats(); 
             });
+        }
+
+        function saveStudentCredentials() {
+            let nId = document.getElementById('adSetId').value.trim(); let nPass = document.getElementById('adSetPass').value.trim();
+            if(nId && nPass) { db.collection("admin_settings").doc("student_credentials").set({ userId: nId, password: nPass }, {merge:true}).then(()=>{ showToast("✅ Credentials Updated!"); }); } else { showToast("Enter ID and Pass"); }
         }
 
         async function processAdminUpload() {
@@ -1609,29 +898,28 @@
                     reader.readAsText(file);
                 } 
                 else {
-                    const formData = new FormData(); 
-                    formData.append('file', file); 
-                    formData.append('upload_preset', 'priyanpka_pp'); 
-                    
-                    const res = await fetch('https://api.cloudinary.com/v1_1/dbzsbe4vo/auto/upload', { method: 'POST', body: formData }); 
-                    const data = await res.json();
-                    
-                    if(data.secure_url) {
-                        await db.collection("study_materials").add({ 
-                            subject: document.getElementById('adSubj').value, 
-                            type: type, 
-                            filename: title, 
-                            url: data.secure_url.replace("http://", "https://"), 
-                            timestamp: firebase.firestore.FieldValue.serverTimestamp() 
-                        }); 
-                        showToast("✅ File Uploaded!"); 
-                        document.getElementById('adName').value = ''; 
-                        document.getElementById('adFileInput').value = ''; 
-                        resetAdminBtn();
-                    } else { 
-                        showToast("Cloudinary Error"); 
-                        resetAdminBtn(); 
-                    }
+                    const botToken = '8491153047:AAFuRywcM4w0JkQcl1A5TI1KOAUNptObE5g'; 
+                    const chatId = '-1003798466600';     
+
+                    const formData = new FormData();
+                    formData.append('chat_id', chatId);
+                    formData.append('document', file);
+
+                    const tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendDocument`, { method: 'POST', body: formData });
+                    const tgData = await tgRes.json();
+
+                    if(tgData.ok) {
+                        const fileId = tgData.result.document.file_id;
+                        const pathRes = await fetch(`https://api.telegram.org/bot${botToken}/getFile?file_id=${fileId}`);
+                        const pathData = await pathRes.json();
+
+                        if(pathData.ok) {
+                            const downloadUrl = `https://api.telegram.org/file/bot${botToken}/${pathData.result.file_path}`;
+                            await db.collection("study_materials").add({ subject: document.getElementById('adSubj').value, type: type, filename: title, url: downloadUrl, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); 
+                            showToast("✅ Uploaded via Telegram!"); 
+                            document.getElementById('adName').value = ''; document.getElementById('adFileInput').value = ''; resetAdminBtn();
+                        } else { showToast("❌ Telegram Path Error"); resetAdminBtn(); }
+                    } else { showToast("❌ Telegram Upload Failed"); resetAdminBtn(); }
                 }
             } catch (e) { 
                 showToast("❌ Upload Error."); 
@@ -1644,7 +932,7 @@
             document.getElementById('adBtn').disabled = false; 
         }
 
-        // === 15. FILE VIEWER & PRACTICE REFRESH ===
+        // === 15. VIEWER & PRACTICE REFRESH ===
         let pdfDoc = null, pageNum = 1, pageRendering = false, pageNumPending = null; 
         const canvas = document.getElementById('pdfCanvas'); 
         const ctx = canvas.getContext('2d');
@@ -1811,12 +1099,11 @@
             document.getElementById('htmlViewerFrame').src = ""; 
             currentFileViewerId = null; 
             
-            // Release Lockdown Security
             isExamRunning = false;
             exitFullscreen();
         }
 
-        // === 16. PRACTICE FREEZE & SCORING LOGIC (+1/-1) ===
+        // === 16. PRACTICE FREEZE & SCORING LOGIC ===
         window.addEventListener('message', function(event) {
             if (event.data && event.data.action === 'TEST_SUBMITTED') {
                 let testId = currentFileViewerId; 
