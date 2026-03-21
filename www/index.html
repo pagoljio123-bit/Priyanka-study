@@ -84,7 +84,7 @@
         .act-btn { width: 32px; height: 32px; border-radius: 8px; display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.15); cursor: pointer; font-size: 14px; color: var(--text-main);}
         .lock-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; gap: 10px; color: #fff; font-weight: bold; font-size: 13px; z-index: 2;}
         
-        /* === PHOTO GALLERY STYLE FOR PDFs & GUIDES === */
+        /* === PHOTO GALLERY === */
         .photo-gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .photo-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: var(--box-shadow); transition: transform 0.2s;}
         .photo-card:active { transform: scale(0.95); }
@@ -141,7 +141,7 @@
 
     </style>
 </head>
-<body id="appBody">
+<body id="appBody" class="theme-light">
 
     <div id="brightnessOverlay"></div>
 
@@ -226,17 +226,15 @@
                 <div id="loginStudentMode">
                     <input type="text" id="userId" class="input-glass" placeholder="User ID">
                     <input type="password" id="userPass" class="input-glass" placeholder="Password">
+                    <button class="btn-main" id="stuLoginBtn" onclick="executeLogin('student')">Secure Login <i class="fas fa-sign-in-alt"></i></button>
+                    <p style="text-align:center; margin-top:20px; font-size:14px; font-weight:600; color:var(--accent-blue); cursor:pointer;" onclick="toggleLoginMode('admin')">🔑 Login as Admin</p>
                 </div>
                 <div id="loginAdminMode" style="display: none;">
                     <input type="password" id="adminKey" class="input-glass" placeholder="Enter Master Key (Admin)">
+                    <button class="btn-main" style="background: var(--accent-pink);" onclick="executeLogin('admin')">Admin Login <i class="fas fa-user-shield"></i></button>
+                    <p style="text-align:center; margin-top:20px; font-size:14px; font-weight:600; color:var(--text-sub); cursor:pointer;" onclick="toggleLoginMode('student')">🔙 Back to Student Login</p>
                 </div>
-                <div style="display: flex; align-items: center; margin-bottom: 20px; gap: 10px;">
-                    <label class="switch"><input type="checkbox" id="adminToggle" onchange="toggleLoginMode()"><span class="slider"></span></label>
-                    <span style="font-size: 13px; color: var(--text-sub);">Login as Admin</span>
-                </div>
-                <p id="savedLoginText" style="display:none; font-size:12px; color:var(--accent-green); text-align:center; margin-bottom:10px;">Saved credentials found. Click Login.</p>
-                
-                <button class="btn-main" onclick="executeLogin()">Secure Login <i class="fas fa-sign-in-alt"></i></button>
+                <p id="savedLoginText" style="display:none; font-size:12px; color:var(--accent-green); text-align:center; margin-top:15px;">Saved credentials found. Click Login.</p>
             </div>
         </div>
 
@@ -349,8 +347,8 @@
                 <div style="margin-bottom: 20px; border-bottom: 1px solid var(--card-border); padding-bottom: 15px;">
                     <span style="display:block; margin-bottom:10px;"><i class="fas fa-palette" style="color: var(--accent-blue); margin-right: 10px;"></i> App Theme</span>
                     <select id="themeSelect" class="input-glass" style="padding: 10px; margin:0;" onchange="changeTheme()">
+                        <option value="light" style="color:black;">Light Mode (Default)</option>
                         <option value="default" style="color:black;">Default Dark</option>
-                        <option value="light" style="color:black;">Light Mode</option>
                         <option value="purple" style="color:black;">Purple Glow</option>
                         <option value="teal" style="color:black;">Teal Ocean</option>
                         <option value="green" style="color:black;">Green Nature</option>
@@ -436,11 +434,18 @@
     <div class="bottom-nav" id="bottomNav" style="display: none;">
         <i class="fas fa-home nav-icon active" onclick="goTo('view-home'); updateNav(this)"></i>
         <i class="fas fa-folder-open nav-icon" onclick="goTo('view-gallery-subjects'); updateNav(this)"></i>
-        <i class="fas fa-user nav-icon" onclick="goTo('view-settings'); updateNav(this)"></i>
+        <i class="fas fa-cog nav-icon" onclick="goTo('view-settings'); updateNav(this)"></i>
     </div>
 
     <script>
-        // === 🔴 SAFE LOCALSTORAGE WRAPPERS (CRASH FIX) 🔴 ===
+        // === 1. ERROR HANDLER (PREVENTS WHITE SCREEN ON DIRECT FILE OPEN) ===
+        window.onerror = function(msg, url, line) {
+            console.log("Error caught: " + msg);
+            document.getElementById('view-login').style.display = 'block';
+            return true;
+        };
+
+        // === 2. SAFE LOCALSTORAGE WRAPPERS (CRASH FIX) ===
         function sGet(k) { try { return localStorage.getItem(k); } catch(e) { return null; } }
         function sSet(k, v) { try { localStorage.setItem(k, v); } catch(e) {} }
         function sRem(k) { try { localStorage.removeItem(k); } catch(e) {} }
@@ -461,6 +466,7 @@
             }
         });
 
+        // === 3. FIREBASE INIT ===
         const firebaseConfig = { apiKey: "AIzaSyAY97_iFryUusBSTrJsBzSIFRnIovcA4LY", authDomain: "my-photo-301f2.firebaseapp.com", projectId: "my-photo-301f2" };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.firestore();
@@ -506,61 +512,88 @@
             }
         });
 
-        function toggleLoginMode() { 
-            let isAd = document.getElementById('adminToggle').checked; 
-            document.getElementById('loginStudentMode').style.display = isAd ? 'none' : 'block'; 
-            document.getElementById('loginAdminMode').style.display = isAd ? 'block' : 'none'; 
+        // === 4. SUPERFAST REAL-TIME LOGIN (NO RELOAD) ===
+        function toggleLoginMode(mode) { 
+            try {
+                if(mode === 'admin') {
+                    document.getElementById('loginStudentMode').style.display = 'none';
+                    document.getElementById('loginAdminMode').style.display = 'block';
+                } else {
+                    document.getElementById('loginStudentMode').style.display = 'block';
+                    document.getElementById('loginAdminMode').style.display = 'none';
+                }
+            } catch(e) { console.log(e); }
         }
         
-        function executeLogin() {
-            if(document.getElementById('adminToggle').checked) {
-                if(document.getElementById('adminKey').value === MASTER_KEY) { 
-                    sSet('isAdminLoggedIn', 'true'); 
-                    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-                    document.getElementById('view-admin').classList.add('active');
-                    loadCurrentCredentials();
-                    showToast("✅ Admin Logged In");
-                } else { showToast("❌ Invalid Key"); }
-            } else {
-                let uId = document.getElementById('userId').value.trim();
-                let uPass = document.getElementById('userPass').value.trim();
-                
-                if(uId !== "" && uPass !== "") { 
-                    db.collection("admin_settings").doc("student_credentials").get().then((doc) => {
-                        let validId = "Priyanka"; let validPass = "12345"; 
-                        if(doc.exists && doc.data().userId) { validId = doc.data().userId; validPass = doc.data().password; }
+        function executeLogin(type) {
+            try {
+                if(type === 'admin') {
+                    if(document.getElementById('adminKey').value === MASTER_KEY) { 
+                        sSet('isAdminLoggedIn', 'true'); 
+                        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                        document.getElementById('view-admin').classList.add('active');
+                        loadCurrentCredentials();
+                        showToast("✅ Admin Logged In");
+                    } else { showToast("❌ Invalid Key"); }
+                } else {
+                    let uId = document.getElementById('userId').value.trim();
+                    let uPass = document.getElementById('userPass').value.trim();
+                    
+                    if(uId !== "" && uPass !== "") { 
+                        let btn = document.getElementById('stuLoginBtn');
+                        let originalText = btn.innerHTML;
+                        btn.innerText = "Checking...";
                         
-                        if(uId === validId && uPass === validPass) {
-                            document.getElementById('custom-splash').style.display = 'flex';
-                            document.getElementById('custom-splash').style.opacity = '1';
+                        db.collection("admin_settings").doc("student_credentials").get().then((doc) => {
+                            let validId = "Priyanka"; let validPass = "12345"; 
+                            if(doc.exists && doc.data().userId) { validId = doc.data().userId; validPass = doc.data().password; }
                             
-                            let progress = 0; let textArr = ["Connecting...", "Verifying...", "Fetching Data...", "Success!"];
-                            let bar = document.getElementById('splashProgressBar'); let perc = document.getElementById('splashPercentage'); let txt = document.getElementById('splashStatusText');
-                            
-                            let loginInterval = setInterval(() => {
-                                progress += 10;
-                                bar.style.width = progress + '%'; perc.innerText = progress + '%';
-                                if(progress === 30) txt.innerText = textArr[1];
-                                if(progress === 60) txt.innerText = textArr[2];
-                                if(progress === 90) txt.innerText = textArr[3];
+                            if(uId === validId && uPass === validPass) {
+                                btn.innerHTML = originalText;
+                                document.getElementById('custom-splash').style.display = 'flex';
+                                document.getElementById('custom-splash').style.opacity = '1';
                                 
-                                if(progress >= 100) {
-                                    clearInterval(loginInterval);
-                                    sSet('savedUserId', uId); sSet('savedUserPass', uPass); sSet('isStudentLoggedIn', 'true'); 
+                                let progress = 0; let textArr = ["Connecting...", "Verifying...", "Fetching Data...", "Success!"];
+                                let bar = document.getElementById('splashProgressBar'); let perc = document.getElementById('splashPercentage'); let txt = document.getElementById('splashStatusText');
+                                
+                                let loginInterval = setInterval(() => {
+                                    progress += 10;
+                                    bar.style.width = progress + '%'; perc.innerText = progress + '%';
+                                    if(progress === 30) txt.innerText = textArr[1];
+                                    if(progress === 60) txt.innerText = textArr[2];
+                                    if(progress === 90) txt.innerText = textArr[3];
                                     
-                                    document.getElementById('dispUserName').innerText = uId;
-                                    loadFirebaseProfilePic(); loadDashboardStats(); fetchUpcomingTests();
-                                    setInterval(fetchUpcomingTests, 60000); setInterval(checkTimerLogic, 1000);
-                                    
-                                    setTimeout(() => {
-                                        document.getElementById('custom-splash').style.opacity = '0';
-                                        setTimeout(() => { document.getElementById('custom-splash').style.display = 'none'; goTo('view-home'); }, 300);
-                                    }, 300);
-                                }
-                            }, 100); 
-                        } else { showToast("❌ Wrong ID or Password!"); }
-                    }).catch(()=> { showToast("Network Error! Try Again."); });
-                } else { showToast("Enter ID and Password"); }
+                                    if(progress >= 100) {
+                                        clearInterval(loginInterval);
+                                        sSet('savedUserId', uId); sSet('savedUserPass', uPass); sSet('isStudentLoggedIn', 'true'); 
+                                        
+                                        document.getElementById('dispUserName').innerText = uId;
+                                        loadFirebaseProfilePic(); loadDashboardStats(); fetchUpcomingTests();
+                                        setInterval(fetchUpcomingTests, 60000); setInterval(checkTimerLogic, 1000);
+                                        
+                                        setTimeout(() => {
+                                            document.getElementById('custom-splash').style.opacity = '0';
+                                            setTimeout(() => { 
+                                                document.getElementById('custom-splash').style.display = 'none'; 
+                                                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                                                document.getElementById('view-home').classList.add('active');
+                                                document.getElementById('bottomNav').style.display = 'flex';
+                                            }, 300);
+                                        }, 300);
+                                    }
+                                }, 100); 
+                            } else { 
+                                btn.innerHTML = originalText;
+                                showToast("❌ Wrong ID or Password!"); 
+                            }
+                        }).catch(()=> { 
+                            btn.innerHTML = originalText;
+                            showToast("Network Error! Try Again."); 
+                        });
+                    } else { showToast("Enter ID and Password"); }
+                }
+            } catch (error) {
+                showToast("An error occurred during login.");
             }
         }
         
@@ -573,10 +606,15 @@
                 document.getElementById('view-login').classList.add('active');
                 document.getElementById('bottomNav').style.display = 'none';
                 
+                document.getElementById('userId').value = '';
+                document.getElementById('userPass').value = '';
+                document.getElementById('adminKey').value = '';
+                
                 showToast("Logged out successfully!");
             } 
         }
 
+        // === 5. CROPPER ===
         function openCropper(event) {
             let file = event.target.files[0];
             if(file) {
@@ -602,6 +640,7 @@
             if(uId) { db.collection("users").doc(uId).get().then(doc => { if(doc.exists && doc.data().profilePic) { document.getElementById('setProfilePic').src = doc.data().profilePic; } }); }
         }
 
+        // === 6. AUDIO ALARM ===
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playTone(freq, type, startTime, duration) {
             if(audioCtx.state === 'suspended') audioCtx.resume();
@@ -624,12 +663,13 @@
         function playBeep() { if(globalVolume > 0) { playTone(800, 'sine', audioCtx.currentTime, 0.2); if(navigator.vibrate) navigator.vibrate(200); } }
         function testAlarmTune() { saveSettings(); showToast("Playing preview..."); playSelectedAlarm(2000); }
 
+        // === 7. SETTINGS ===
         function loadSettings() {
             let savedId = sGet('savedUserId'); let savedPass = sGet('savedUserPass');
             if(savedId) document.getElementById('userId').value = savedId;
             if(savedPass) document.getElementById('userPass').value = savedPass;
             
-            let th = sGet('appTheme') || 'default'; document.getElementById('themeSelect').value = th; changeTheme();
+            let th = sGet('appTheme') || 'light'; document.getElementById('themeSelect').value = th; changeTheme();
             let br = sGet('appBrightness') || '1'; document.getElementById('brightnessSlider').value = br; changeBrightness(br);
             let vol = sGet('appVolume') || '1'; document.getElementById('volumeSlider').value = vol; changeVolume(vol);
         }
@@ -639,11 +679,13 @@
         function changeVolume(val) { sSet('appVolume', val); globalVolume = parseFloat(val); }
         function clearDataConfirm() { if(confirm("Clear App Data?")) { localStorage.clear(); location.reload(); } }
 
+        // === 8. NAVIGATION ===
         function showToast(msg) { let t = document.getElementById("toast"); t.innerText = msg; t.className = "show"; setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000); }
         function goTo(viewId) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById(viewId).classList.add('active'); document.getElementById('bottomNav').style.display = (viewId === 'view-home' || viewId === 'view-settings' || viewId === 'view-subfolders' || viewId === 'view-gallery-subjects' || viewId === 'view-gallery-folders' || viewId === 'view-gallery-grid') ? 'flex' : 'none'; }
         function updateNav(el) { document.querySelectorAll('.nav-icon').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
         function toggleSidebar() { let sb = document.getElementById('sidebar'); let ov = document.getElementById('sbOverlay'); if(sb.classList.contains('open')) { sb.classList.remove('open'); ov.style.display = 'none'; } else { sb.classList.add('open'); ov.style.display = 'block'; } }
 
+        // === 9. SCOREBOARD ===
         function loadDashboardStats() {
             db.collection("user_settings").doc("dashboard_stats").get().then((doc) => {
                 if(doc.exists) { 
@@ -664,6 +706,7 @@
             let comp = JSON.parse(sGet('completedTests') || '[]'); document.getElementById('testsGiven').innerText = comp.length;
         }
 
+        // === 10. LIVE EXAM LOCKDOWN ===
         function fetchUpcomingTests() {
             db.collection("study_materials").where("type", "==", "live_mock").get().then((snap) => {
                 globalTests = []; let comp = JSON.parse(sGet('completedTests') || '[]'); let pendingCount = 0; let now = new Date().getTime();
@@ -697,11 +740,74 @@
             }
         }
 
+        // === 11. DOWNLOAD & SHARE ===
         function processDownload(url, filename) {
             if(!url) { showToast("❌ Link not found."); return; }
-            if(confirm(`আপনি কি '${filename}' ডাউনলোড করতে চান?`)) {
-                showToast("Downloading...");
-                window.open(url, '_system'); 
+            
+            let toastEl = document.getElementById("toast");
+            toastEl.className = "show";
+            toastEl.innerText = "⏳ Downloading... 0%";
+
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.responseType = 'blob';
+            
+            xhr.onprogress = function(event) {
+                if (event.lengthComputable) {
+                    let percentComplete = Math.round((event.loaded / event.total) * 100);
+                    toastEl.innerText = `⏳ Downloading... ${percentComplete}%`;
+                }
+            };
+            
+            xhr.onload = function() {
+                if (this.status === 200) {
+                    let blob = this.response;
+                    if (window.cordova && cordova.file) {
+                        toastEl.innerText = "💾 Saving to File Manager...";
+                        window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory + "Download/", function(dirEntry) {
+                            dirEntry.getFile(filename, { create: true, exclusive: false }, function(fileEntry) {
+                                fileEntry.createWriter(function(fileWriter) {
+                                    fileWriter.onwriteend = function() {
+                                        toastEl.innerText = "✅ Download Successful! Saved in Downloads.";
+                                        setTimeout(() => { toastEl.className = toastEl.className.replace("show", ""); }, 4000);
+                                    };
+                                    fileWriter.onerror = function() { fallbackDownload(blob, filename, toastEl, url); };
+                                    fileWriter.write(blob);
+                                });
+                            }, function() { fallbackDownload(blob, filename, toastEl, url); });
+                        }, function() { fallbackDownload(blob, filename, toastEl, url); });
+                    } else { fallbackDownload(blob, filename, toastEl, url); }
+                } else {
+                    toastEl.innerText = "⚠️ Trying external browser...";
+                    window.open(url, '_system');
+                    setTimeout(() => { toastEl.className = toastEl.className.replace("show", ""); }, 3000);
+                }
+            };
+            
+            xhr.onerror = function() {
+                toastEl.innerText = "⚠️ Trying external browser...";
+                window.open(url, '_system');
+                setTimeout(() => { toastEl.className = toastEl.className.replace("show", ""); }, 3000);
+            };
+            
+            xhr.send();
+        }
+
+        function fallbackDownload(blob, filename, toastEl, originalUrl) {
+            try {
+                let blobUrl = window.URL.createObjectURL(blob);
+                let a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = blobUrl;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                setTimeout(() => { window.URL.revokeObjectURL(blobUrl); }, 5000);
+                toastEl.innerText = "✅ Download Successful!";
+                setTimeout(() => { toastEl.className = toastEl.className.replace("show", ""); }, 3000);
+            } catch(e) {
+                window.open(originalUrl, '_system');
             }
         }
 
@@ -711,6 +817,7 @@
             window.open('https://api.whatsapp.com/send?text=' + shareText, '_system');
         }
 
+        // === 12. STANDARD FILE LISTS ===
         function openSubject(name) { activeSubject = name; document.getElementById('folderTitle').innerText = name; goTo('view-subfolders'); }
 
         function loadFiles(listType) {
@@ -750,13 +857,14 @@
                             actionBtn = `<div class="act-btn" style="color:var(--accent-blue);" onclick="openViewer('${f.id}', '${listType}')"><i class="fas fa-play"></i></div>`;
                         }
                         
-                        box.innerHTML += `<div class="file-item"><div class="file-icon-box" style="color:${iconColor};" onclick="openViewer('${f.id}', '${listType}')"><i class="${iconClass}"></i></div><div class="file-info" onclick="openViewer('${f.id}', '${listType}')"><h4>${f.filename}</h4><p>${subTxt}</p></div><div class="action-row">${actionBtn}<div class="act-btn" style="color:var(--accent-pink);" onclick="delFile('${f.id}', '${listType}')"><i class="fas fa-trash-alt"></i></div></div></div>`;
+                        box.innerHTML += `<div class="file-item"><div class="file-icon-box" style="color:${iconColor};" onclick="openViewer('${f.id}', '${listType}')"><i class="${iconClass}"></i></div><div class="file-info" onclick="openViewer('${f.id}', '${listType}')"><h4>${f.filename}</h4><p>${subTxt}</p></div><div class="action-row" style="display:flex; gap:10px;">${actionBtn}<div class="act-btn" style="color:var(--accent-pink);" onclick="delFile('${f.id}', '${listType}')"><i class="fas fa-trash-alt"></i></div></div></div>`;
                     }
                 });
                 if(count === 0) { box.innerHTML = "<div class='glass-card' style='text-align:center;'><p>No files here.</p></div>"; }
             });
         }
 
+        // === 13. GALLERY VIEW ===
         function openGalleryFolders(subj) { activeSubject = subj; document.getElementById('gallerySubjTitle').innerText = subj + " Gallery"; goTo('view-gallery-folders'); }
         function loadGalleryGrid(type) {
             let title = type === 'pdf' ? "PDF Gallery" : "Study Guides"; document.getElementById('galleryGridTitle').innerText = title; goTo('view-gallery-grid');
@@ -776,11 +884,11 @@
 
                     box.innerHTML += `
                         <div class="photo-card">
-                            <div class="photo-thumb" onclick="openViewer('${f.id}', '${type}')">
+                            <div class="photo-thumb" onclick="${dnAction}">
                                 <i class="${icon}" style="color: ${iconColor};"></i>
                             </div>
                             <div class="photo-details">
-                                <h4 onclick="openViewer('${f.id}', '${type}')">${f.filename}</h4>
+                                <h4 onclick="${dnAction}">${f.filename}</h4>
                                 <div class="photo-actions">
                                     <i class="fas fa-download photo-btn" title="Download" onclick="${dnAction}"></i>
                                     <i class="fab fa-whatsapp photo-btn" title="Share" style="color:#25D366;" onclick="${shAction}"></i>
@@ -810,6 +918,7 @@
             } 
         }
 
+        // === 14. ADMIN UPLOAD ===
         function toggleTimerFields() { let type = document.getElementById('adType').value; document.getElementById('timerFields').style.display = (type === 'live_mock') ? 'block' : 'none'; }
         
         function updateAdminStats() {
@@ -817,7 +926,6 @@
             db.collection("user_settings").doc("dashboard_stats").set({ points: parseInt(pts), percent: parseInt(pct), correct: parseInt(cor), wrong: parseInt(wr) }, {merge: true}).then(() => { showToast("✅ Stats Force Updated!"); loadDashboardStats(); });
         }
 
-        // 🔴 ADMIN CREDENTIALS FETCH FIX 🔴
         function loadCurrentCredentials() {
             db.collection("admin_settings").doc("student_credentials").get().then((doc) => {
                 if(doc.exists && doc.data().userId) {
@@ -835,21 +943,11 @@
 
         function saveStudentCredentials() {
             let nId = document.getElementById('adSetId').value.trim(); let nPass = document.getElementById('adSetPass').value.trim();
-            if(nId && nPass) { 
-                db.collection("admin_settings").doc("student_credentials").set({ userId: nId, password: nPass }, {merge:true}).then(()=>{ 
-                    showToast("✅ Credentials Updated!"); 
-                    loadCurrentCredentials(); 
-                    document.getElementById('adSetId').value = '';
-                    document.getElementById('adSetPass').value = '';
-                }); 
-            } else { showToast("Enter ID and Pass"); }
+            if(nId && nPass) { db.collection("admin_settings").doc("student_credentials").set({ userId: nId, password: nPass }, {merge:true}).then(()=>{ showToast("✅ Credentials Updated!"); loadCurrentCredentials(); document.getElementById('adSetId').value=''; document.getElementById('adSetPass').value=''; }); } else { showToast("Enter ID and Pass"); }
         }
 
         async function processAdminUpload() {
-            const file = document.getElementById('adFileInput').files[0]; 
-            const title = document.getElementById('adName').value; 
-            const type = document.getElementById('adType').value;
-            
+            const file = document.getElementById('adFileInput').files[0]; const title = document.getElementById('adName').value; const type = document.getElementById('adType').value;
             if (!file || !title) { showToast("Select file and enter name!"); return; }
             if (type === 'live_mock' && (!document.getElementById('adStartTime').value || !document.getElementById('adEndTime').value)) { showToast("Set Start/End Time!"); return; }
             
@@ -864,21 +962,13 @@
                     }; reader.readAsText(file);
                 } 
                 else {
-                    const botToken = '8491153047:AAFuRywcM4w0JkQcl1A5TI1KOAUNptObE5g'; 
-                    const chatId = '-1003798466600';     
+                    const botToken = '8491153047:AAFuRywcM4w0JkQcl1A5TI1KOAUNptObE5g'; const chatId = '-1003798466600';     
+                    const formData = new FormData(); formData.append('chat_id', chatId); formData.append('document', file);
 
-                    const formData = new FormData();
-                    formData.append('chat_id', chatId);
-                    formData.append('document', file);
-
-                    const tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendDocument`, { method: 'POST', body: formData });
-                    const tgData = await tgRes.json();
+                    const tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendDocument`, { method: 'POST', body: formData }); const tgData = await tgRes.json();
 
                     if(tgData.ok) {
-                        const fileId = tgData.result.document.file_id;
-                        const pathRes = await fetch(`https://api.telegram.org/bot${botToken}/getFile?file_id=${fileId}`);
-                        const pathData = await pathRes.json();
-
+                        const fileId = tgData.result.document.file_id; const pathRes = await fetch(`https://api.telegram.org/bot${botToken}/getFile?file_id=${fileId}`); const pathData = await pathRes.json();
                         if(pathData.ok) {
                             const downloadUrl = `https://api.telegram.org/file/bot${botToken}/${pathData.result.file_path}`;
                             await db.collection("study_materials").add({ subject: document.getElementById('adSubj').value, type: type, filename: title, url: downloadUrl, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); 
@@ -888,9 +978,9 @@
                 }
             } catch (e) { showToast("❌ Upload Error."); resetAdminBtn(); }
         }
-        
         function resetAdminBtn() { document.getElementById('adBtn').innerHTML = "Upload Directly"; document.getElementById('adBtn').disabled = false; }
 
+        // === 15. VIEWER ===
         let pdfDoc = null, pageNum = 1, pageRendering = false, pageNumPending = null; const canvas = document.getElementById('pdfCanvas'); const ctx = canvas.getContext('2d');
 
         async function openViewer(fileId, listType) {
@@ -915,9 +1005,9 @@
                         if(docSnap.exists) {
                             try { let encodedHtml = btoa(unescape(encodeURIComponent(docSnap.data().htmlData))); document.getElementById('htmlViewerFrame').src = "data:text/html;base64," + encodedHtml; } 
                             catch(e) { document.getElementById('htmlViewerFrame').srcdoc = docSnap.data().htmlData; }
-                        } else { document.getElementById('htmlViewerFrame').srcdoc = "<div style='text-align:center; padding:50px; font-family:sans-serif;'><h2>No Result Found in Cloud!</h2><p>Exam was not submitted properly.</p></div>"; }
+                        } else { document.getElementById('htmlViewerFrame').srcdoc = "<h2 style='text-align:center; padding:50px;'>No Result Found in Cloud!</h2>"; }
                         document.getElementById('viewerLoading').style.display = 'none';
-                    }).catch(err => { document.getElementById('viewerLoading').style.display = 'none'; document.getElementById('htmlViewerFrame').srcdoc = "<h2>Cloud Error</h2>"; });
+                    }).catch(err => { document.getElementById('viewerLoading').style.display = 'none'; });
                     return; 
                 }
 
@@ -965,10 +1055,9 @@
             if (event.data && event.data.action === 'TEST_SUBMITTED') {
                 let testId = currentFileViewerId; let userId = sGet('savedUserId') || "guest"; let compArr = JSON.parse(sGet('completedTests') || '[]');
 
-                if(currentTestMode === 'saved_mock') { showToast("Practice Test Checked! Scroll to see answers."); return; }
+                if(currentTestMode === 'saved_mock') { showToast("Practice Test Checked!"); return; }
 
                 if(event.data.htmlData && currentTestMode === 'live_mock') {
-                    showToast("Saving result to Cloud...");
                     db.collection("exam_results").doc(userId + "_" + testId).set({ userId: userId, testId: testId, htmlData: event.data.htmlData, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).catch(err => { console.log("Cloud Save Error"); });
                 }
 
