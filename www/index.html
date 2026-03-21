@@ -43,7 +43,6 @@
         .view { display: none; animation: slideUp 0.3s ease-out; } .view.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* === SPLASH SCREEN === */
         #custom-splash { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); z-index: 99999999; display: none; flex-direction: column; justify-content: center; align-items: center; color: white; transition: opacity 0.3s ease-out; }
         .splash-icon { font-size: 80px; color: #00C9FF; margin-bottom: 15px; animation: pulseSplash 1s infinite; filter: drop-shadow(0 0 15px rgba(0,201,255,0.6)); }
         @keyframes pulseSplash { 0% { transform: scale(0.9); } 50% { transform: scale(1.1); } 100% { transform: scale(0.9); } }
@@ -53,7 +52,6 @@
         .loading-progress { width: 0%; height: 100%; background: linear-gradient(90deg, #FF0076, #00C9FF); box-shadow: 0 0 10px #FF0076; transition: width 0.1s linear;}
         .loading-percentage { margin-top: 10px; font-size: 16px; font-weight: bold; color: #00C9FF; }
 
-        /* === UI COMPONENTS === */
         .glass-card { background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--card-border); border-radius: 20px; padding: 20px; box-shadow: var(--box-shadow); margin-bottom: 15px;}
         .input-glass { width: 100%; padding: 15px; background: rgba(255, 255, 255, 0.9); border: none; border-radius: 12px; color: #333; font-size: 14px; margin-bottom: 15px; outline: none; font-weight: 600;}
         .btn-main { width: 100%; padding: 15px; border: none; border-radius: 14px; font-weight: 700; font-size: 15px; background: linear-gradient(135deg, var(--accent-pink), var(--accent-blue)); color: white; cursor: pointer; box-shadow: 0 8px 20px rgba(255, 0, 118, 0.4); display: flex; justify-content: center; align-items: center; gap: 10px;}
@@ -65,6 +63,9 @@
         .neon-box::after { content: ''; position: absolute; inset: 3px; background: var(--neon-bg); border-radius: 15px; z-index: -1;}
         @keyframes rotateRGB { 100% { transform: rotate(360deg); } }
         
+        /* 🔴 Subject Marquee Overlay 🔴 */
+        .subj-badge { position: absolute; top: 8px; right: 8px; background: rgba(255, 0, 118, 0.2); border: 1px solid var(--accent-pink); padding: 2px 8px; border-radius: 10px; font-size: 9px; font-weight: bold; color: var(--accent-pink); width: 100px; text-align: center; display: none; overflow: hidden; white-space: nowrap; z-index: 5; }
+
         .subject-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; } .subj-icon { font-size: 30px; margin-bottom: 8px; }
         .progress-box { display: flex; justify-content: space-between; align-items: center; }
         .circ-chart { position: relative; width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(var(--accent-pink) var(--prog), rgba(255,255,255,0.1) 0deg); display: flex; justify-content: center; align-items: center; }
@@ -75,7 +76,6 @@
         .pulse-dot { width: 10px; height: 10px; background: var(--accent-pink); border-radius: 50%; animation: pulse 1s infinite; margin-right: 10px;}
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,0,118,0.7); } 70% { box-shadow: 0 0 0 10px rgba(255,0,118,0); } 100% { box-shadow: 0 0 0 0 rgba(255,0,118,0); } }
         
-        /* === FILE LIST ITEMS === */
         .file-item { background: var(--card-bg); border-radius: 16px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; border: 1px solid var(--card-border); position: relative;}
         .file-icon-box { width: 45px; height: 45px; border-radius: 12px; background: rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; font-size: 22px; cursor: pointer; }
         .file-info { flex-grow: 1; overflow: hidden; cursor: pointer; }
@@ -84,7 +84,6 @@
         .act-btn { width: 32px; height: 32px; border-radius: 8px; display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.15); cursor: pointer; font-size: 14px; color: var(--text-main);}
         .lock-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; gap: 10px; color: #fff; font-weight: bold; font-size: 13px; z-index: 2;}
         
-        /* === PHOTO GALLERY === */
         .photo-gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .photo-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: var(--box-shadow); transition: transform 0.2s;}
         .photo-card:active { transform: scale(0.95); }
@@ -96,7 +95,6 @@
         .photo-btn { font-size: 18px; color: var(--text-sub); cursor: pointer; padding: 5px; }
         .photo-btn:active { color: var(--accent-blue); }
 
-        /* === NAVIGATION & SIDEBAR === */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--nav-bg); backdrop-filter: blur(20px); padding: 15px 30px; border-radius: 25px 25px 0 0; display: flex; justify-content: space-between; border-top: 1px solid var(--card-border); z-index: 100;}
         .nav-icon { font-size: 22px; color: var(--text-sub); cursor: pointer; transition: 0.3s; }
         .nav-icon.active { color: var(--accent-blue); transform: translateY(-4px); }
@@ -106,12 +104,10 @@
         .sb-item { padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; cursor: pointer; background: rgba(255,255,255,0.05); }
         .sb-overlay { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.5); z-index: 9999; display: none;}
         
-        /* === CROPPER MODAL === */
         #cropModal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 1000000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
         .crop-container { width: 100%; max-width: 400px; height: 400px; background: #333; margin-bottom: 20px; border-radius: 12px; overflow: hidden; }
         .crop-btn-row { display: flex; gap: 15px; width: 100%; max-width: 400px; }
 
-        /* === VIEWER OVERLAYS === */
         #fullscreenViewer { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-dark); z-index: 99999; display: none; flex-direction: column;}
         .viewer-head { padding: 15px; background: var(--bg-mid); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--text-main);}
         #viewerRefreshBtn { display: none; font-size: 20px; color: var(--accent-blue); cursor: pointer; margin-right: 15px; }
@@ -122,18 +118,15 @@
         #testTimerBanner { background: var(--accent-pink); color: white; text-align: center; padding: 10px; font-weight: bold; font-size: 14px; display: none; }
         #viewerLoading { display:none; flex-direction:column; justify-content:center; align-items:center; height:100%; color:var(--accent-blue); gap:10px; position: absolute; width: 100%; background: var(--bg-dark); z-index: 5; }
         
-        /* === 10-SECOND LOCKDOWN MODAL === */
         #lockdownModal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 12, 41, 0.98); z-index: 1000000; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; backdrop-filter: blur(15px); }
         .lock-circle { width: 180px; height: 180px; border-radius: 50%; border: 8px solid var(--accent-pink); display: flex; justify-content: center; align-items: center; font-size: 60px; font-weight: 800; color: #fff; box-shadow: 0 0 40px rgba(255,0,118,0.6); margin-bottom: 20px; animation: pulseLock 1s infinite; }
         @keyframes pulseLock { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
         
-        /* === TOASTS & CONTROLS === */
         #toast { visibility: hidden; min-width: 250px; background: #fff; color: #333; text-align: center; border-radius: 20px; padding: 15px; position: fixed; z-index: 10000000; left: 50%; bottom: 90px; transform: translateX(-50%); font-weight: bold; font-size: 13px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         #toast.show { visibility: visible; animation: fadein 0.3s, fadeout 0.3s 2.5s; }
         @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 90px; opacity: 1; } } @keyframes fadeout { from { bottom: 90px; opacity: 1; } to { bottom: 0; opacity: 0; } }
         .switch { position: relative; display: inline-block; width: 40px; height: 22px; } .switch input { opacity: 0; width: 0; height: 0; } .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.3); transition: .4s; border-radius: 34px; } .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; } input:checked + .slider { background-color: var(--accent-blue); } input:checked + .slider:before { transform: translateX(18px); }
 
-        /* BRIGHTNESS OVERLAY */
         #brightnessOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0); pointer-events: none; z-index: 999999999; transition: background 0.3s; }
         input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: var(--accent-blue); cursor: pointer; margin-top: -6px; }
@@ -221,19 +214,26 @@
                 <h1 style="font-size: 32px; font-weight: 800;">Priyanka Study</h1>
                 <p style="color: var(--text-sub); font-size: 14px;">Premium Exam Portal</p>
             </div>
+            
             <div class="glass-card" id="loginCardContainer">
                 <h2 style="font-size: 18px; margin-bottom: 20px;">Sign In to Continue</h2>
+                
                 <div id="loginStudentMode">
                     <input type="text" id="userId" class="input-glass" placeholder="User ID">
                     <input type="password" id="userPass" class="input-glass" placeholder="Password">
-                    <button class="btn-main" id="stuLoginBtn" onclick="executeLogin('student')">Secure Login <i class="fas fa-sign-in-alt"></i></button>
-                    <p style="text-align:center; margin-top:20px; font-size:14px; font-weight:600; color:var(--accent-blue); cursor:pointer;" onclick="toggleLoginMode('admin')">🔑 Login as Admin</p>
                 </div>
+                
                 <div id="loginAdminMode" style="display: none;">
                     <input type="password" id="adminKey" class="input-glass" placeholder="Enter Master Key (Admin)">
-                    <button class="btn-main" style="background: var(--accent-pink);" onclick="executeLogin('admin')">Admin Login <i class="fas fa-user-shield"></i></button>
-                    <p style="text-align:center; margin-top:20px; font-size:14px; font-weight:600; color:var(--text-sub); cursor:pointer;" onclick="toggleLoginMode('student')">🔙 Back to Student Login</p>
                 </div>
+
+                <div style="display: flex; align-items: center; margin-bottom: 20px; gap: 10px;">
+                    <label class="switch"><input type="checkbox" id="adminToggle" onchange="toggleLoginMode()"><span class="slider"></span></label>
+                    <span style="font-size: 13px; color: var(--text-sub);">Login as Admin</span>
+                </div>
+                
+                <button class="btn-main" id="stuLoginBtn" onclick="executeLogin()">Secure Login <i class="fas fa-sign-in-alt"></i></button>
+                
                 <p id="savedLoginText" style="display:none; font-size:12px; color:var(--accent-green); text-align:center; margin-top:15px;">Saved credentials found. Click Login.</p>
             </div>
         </div>
@@ -244,6 +244,7 @@
                 <div style="text-align: center;"><p style="font-size: 11px; color: var(--text-sub);">Welcome back</p><h2 style="font-size: 18px;" id="dispUserName">Student</h2></div>
                 <div class="icon-btn" onclick="goTo('view-settings')"><i class="fas fa-cog"></i></div>
             </div>
+            
             <div class="glass-card" style="padding: 25px 20px;">
                 <div class="progress-box">
                     <div>
@@ -252,11 +253,12 @@
                         <p style="font-size: 11px;"><i class="fas fa-check-circle" style="color: #2ed573;"></i> <span id="dashCorrect">0</span> Correct (+1)</p>
                         <p style="font-size: 11px;"><i class="fas fa-times-circle" style="color: var(--accent-pink);"></i> <span id="dashWrong">0</span> Wrong (-1)</p>
                     </div>
-                    <div class="circ-chart" id="dashRing" style="--prog: 0%;"><div class="circ-val" id="dashPercent">0%</div></div>
-                </div>
-                <div style="display: flex; justify-content: space-between; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
-                    <div style="text-align: center;"><p style="font-size: 11px; color: var(--text-sub);">Tests Given</p><h4 id="testsGiven">0</h4></div>
-                    <div style="text-align: center;"><p style="font-size: 11px; color: var(--text-sub);">Pending</p><h4 id="testsPending" style="color: var(--accent-pink);">0</h4></div>
+                    
+                    <div style="border-left: 1px solid rgba(255,255,255,0.2); padding-left: 15px;">
+                        <p style="font-size: 11px; color: #f39c12; margin-bottom: 5px;"><i class="fas fa-exclamation-triangle"></i> Missed: <span id="dashMissed" style="font-weight:bold;">0</span></p>
+                        <p style="font-size: 11px; color: #00C9FF;"><i class="fas fa-layer-group"></i> Total Tests: <span id="dashTotalTests" style="font-weight:bold;">0</span></p>
+                        <p style="font-size: 11px; color: #2ed573; margin-top:5px;"><i class="fas fa-clipboard-check"></i> Given: <span id="dashTaken" style="font-weight:bold;">0</span></p>
+                    </div>
                 </div>
             </div>
             
@@ -266,11 +268,26 @@
 
             <h3 style="font-size: 16px; margin-bottom: 15px;">Subjects Folders</h3>
             <div class="subject-grid">
-                <div class="neon-box" style="display: block; text-align: center;" onclick="openSubject('Education')"><i class="fas fa-book-open subj-icon" style="color: var(--accent-pink);"></i><h3>Education</h3></div>
-                <div class="neon-box" style="display: block; text-align: center;" onclick="openSubject('Philosophy')"><i class="fas fa-brain subj-icon" style="color: var(--accent-blue);"></i><h3>Philosophy</h3></div>
-                <div class="neon-box" style="display: block; text-align: center;" onclick="openSubject('Geography')"><i class="fas fa-globe-asia subj-icon" style="color: #2ed573;"></i><h3>Geography</h3></div>
-                <div class="neon-box" style="display: block; text-align: center;" onclick="openSubject('Bengali')"><i class="fas fa-pen-nib subj-icon" style="color: #f6d365;"></i><h3>Bengali</h3></div>
-                <div class="neon-box" style="display: block; text-align: center; grid-column: span 2;" onclick="openSubject('Env. Science')"><i class="fas fa-leaf subj-icon" style="color: #00b09b;"></i><h3>Env. Science</h3></div>
+                <div class="neon-box" style="display: block; text-align: center;" onclick="openSubject('Education')">
+                    <div id="badge-Education" class="subj-badge"></div>
+                    <i class="fas fa-book-open subj-icon" style="color: var(--accent-pink);"></i><h3>Education</h3>
+                </div>
+                <div class="neon-box" style="display: block; text-align: center;" onclick="openSubject('Philosophy')">
+                    <div id="badge-Philosophy" class="subj-badge"></div>
+                    <i class="fas fa-brain subj-icon" style="color: var(--accent-blue);"></i><h3>Philosophy</h3>
+                </div>
+                <div class="neon-box" style="display: block; text-align: center;" onclick="openSubject('Geography')">
+                    <div id="badge-Geography" class="subj-badge"></div>
+                    <i class="fas fa-globe-asia subj-icon" style="color: #2ed573;"></i><h3>Geography</h3>
+                </div>
+                <div class="neon-box" style="display: block; text-align: center;" onclick="openSubject('Bengali')">
+                    <div id="badge-Bengali" class="subj-badge"></div>
+                    <i class="fas fa-pen-nib subj-icon" style="color: #f6d365;"></i><h3>Bengali</h3>
+                </div>
+                <div class="neon-box" style="display: block; text-align: center; grid-column: span 2;" onclick="openSubject('Env. Science')">
+                    <div id="badge-EnvScience" class="subj-badge"></div>
+                    <i class="fas fa-leaf subj-icon" style="color: #00b09b;"></i><h3>Env. Science</h3>
+                </div>
             </div>
         </div>
 
@@ -438,14 +455,7 @@
     </div>
 
     <script>
-        // === 1. ERROR HANDLER (PREVENTS WHITE SCREEN ON DIRECT FILE OPEN) ===
-        window.onerror = function(msg, url, line) {
-            console.log("Error caught: " + msg);
-            document.getElementById('view-login').style.display = 'block';
-            return true;
-        };
-
-        // === 2. SAFE LOCALSTORAGE WRAPPERS (CRASH FIX) ===
+        // === 1. SAFE LOCALSTORAGE & CRASH PREVENTION ===
         function sGet(k) { try { return localStorage.getItem(k); } catch(e) { return null; } }
         function sSet(k, v) { try { localStorage.setItem(k, v); } catch(e) {} }
         function sRem(k) { try { localStorage.removeItem(k); } catch(e) {} }
@@ -454,19 +464,20 @@
         const isAdmin = sGet('isAdminLoggedIn') === 'true';
         
         document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            if(isStudent) { 
-                document.getElementById('view-home').classList.add('active'); 
-                document.getElementById('bottomNav').style.display = 'flex';
-            } else if (isAdmin) { 
-                document.getElementById('view-admin').classList.add('active'); 
-                loadCurrentCredentials(); // Fetch current ID/Pass for Admin
-            } else { 
-                document.getElementById('view-login').classList.add('active'); 
-            }
+            try {
+                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                if(isStudent) { 
+                    document.getElementById('view-home').classList.add('active'); 
+                    document.getElementById('bottomNav').style.display = 'flex';
+                } else if (isAdmin) { 
+                    document.getElementById('view-admin').classList.add('active'); 
+                    loadCurrentCredentials();
+                } else { 
+                    document.getElementById('view-login').classList.add('active'); 
+                }
+            } catch(e) { console.log("Init Error"); }
         });
 
-        // === 3. FIREBASE INIT ===
         const firebaseConfig = { apiKey: "AIzaSyAY97_iFryUusBSTrJsBzSIFRnIovcA4LY", authDomain: "my-photo-301f2.firebaseapp.com", projectId: "my-photo-301f2" };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.firestore();
@@ -512,22 +523,20 @@
             }
         });
 
-        // === 4. SUPERFAST REAL-TIME LOGIN (NO RELOAD) ===
-        function toggleLoginMode(mode) { 
+        // 🔴 2. FIX LOGIN CLICK ISSUE 🔴
+        function toggleLoginMode() { 
             try {
-                if(mode === 'admin') {
-                    document.getElementById('loginStudentMode').style.display = 'none';
-                    document.getElementById('loginAdminMode').style.display = 'block';
-                } else {
-                    document.getElementById('loginStudentMode').style.display = 'block';
-                    document.getElementById('loginAdminMode').style.display = 'none';
-                }
+                let isAd = document.getElementById('adminToggle').checked; 
+                document.getElementById('loginStudentMode').style.display = isAd ? 'none' : 'block'; 
+                document.getElementById('loginAdminMode').style.display = isAd ? 'block' : 'none';
             } catch(e) { console.log(e); }
         }
         
-        function executeLogin(type) {
+        function executeLogin() {
             try {
-                if(type === 'admin') {
+                let isAdminMode = document.getElementById('adminToggle').checked;
+                
+                if(isAdminMode) {
                     if(document.getElementById('adminKey').value === MASTER_KEY) { 
                         sSet('isAdminLoggedIn', 'true'); 
                         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -592,9 +601,7 @@
                         });
                     } else { showToast("Enter ID and Password"); }
                 }
-            } catch (error) {
-                showToast("An error occurred during login.");
-            }
+            } catch (error) { showToast("An error occurred during login."); }
         }
         
         function logoutConfirm() { 
@@ -614,7 +621,6 @@
             } 
         }
 
-        // === 5. CROPPER ===
         function openCropper(event) {
             let file = event.target.files[0];
             if(file) {
@@ -640,7 +646,6 @@
             if(uId) { db.collection("users").doc(uId).get().then(doc => { if(doc.exists && doc.data().profilePic) { document.getElementById('setProfilePic').src = doc.data().profilePic; } }); }
         }
 
-        // === 6. AUDIO ALARM ===
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playTone(freq, type, startTime, duration) {
             if(audioCtx.state === 'suspended') audioCtx.resume();
@@ -663,7 +668,6 @@
         function playBeep() { if(globalVolume > 0) { playTone(800, 'sine', audioCtx.currentTime, 0.2); if(navigator.vibrate) navigator.vibrate(200); } }
         function testAlarmTune() { saveSettings(); showToast("Playing preview..."); playSelectedAlarm(2000); }
 
-        // === 7. SETTINGS ===
         function loadSettings() {
             let savedId = sGet('savedUserId'); let savedPass = sGet('savedUserPass');
             if(savedId) document.getElementById('userId').value = savedId;
@@ -679,13 +683,12 @@
         function changeVolume(val) { sSet('appVolume', val); globalVolume = parseFloat(val); }
         function clearDataConfirm() { if(confirm("Clear App Data?")) { localStorage.clear(); location.reload(); } }
 
-        // === 8. NAVIGATION ===
         function showToast(msg) { let t = document.getElementById("toast"); t.innerText = msg; t.className = "show"; setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000); }
         function goTo(viewId) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById(viewId).classList.add('active'); document.getElementById('bottomNav').style.display = (viewId === 'view-home' || viewId === 'view-settings' || viewId === 'view-subfolders' || viewId === 'view-gallery-subjects' || viewId === 'view-gallery-folders' || viewId === 'view-gallery-grid') ? 'flex' : 'none'; }
         function updateNav(el) { document.querySelectorAll('.nav-icon').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
         function toggleSidebar() { let sb = document.getElementById('sidebar'); let ov = document.getElementById('sbOverlay'); if(sb.classList.contains('open')) { sb.classList.remove('open'); ov.style.display = 'none'; } else { sb.classList.add('open'); ov.style.display = 'block'; } }
 
-        // === 9. SCOREBOARD ===
+        // 🔴 3. NEW SCOREBOARD STATS (Missed, Total, Taken) 🔴
         function loadDashboardStats() {
             db.collection("user_settings").doc("dashboard_stats").get().then((doc) => {
                 if(doc.exists) { 
@@ -703,21 +706,71 @@
                     }
                 }
             });
-            let comp = JSON.parse(sGet('completedTests') || '[]'); document.getElementById('testsGiven').innerText = comp.length;
+            let comp = JSON.parse(sGet('completedTests') || '[]'); 
+            document.getElementById('testsGiven').innerText = comp.length;
+            document.getElementById('dashTaken').innerText = comp.length;
         }
 
-        // === 10. LIVE EXAM LOCKDOWN ===
+        // 🔴 4. LIVE SUBJECT MARQUEES AND AUTO-OPEN ALARM 🔴
         function fetchUpcomingTests() {
             db.collection("study_materials").where("type", "==", "live_mock").get().then((snap) => {
-                globalTests = []; let comp = JSON.parse(sGet('completedTests') || '[]'); let pendingCount = 0; let now = new Date().getTime();
-                snap.forEach(doc => { let d = doc.data(); d.id = doc.id; if(!comp.includes(d.id) && d.startTime) { let en = new Date(d.endTime).getTime(); if(now < en) { globalTests.push(d); pendingCount++; } } });
-                document.getElementById('testsPending').innerText = pendingCount; globalTests.sort((a,b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+                globalTests = []; 
+                let comp = JSON.parse(sGet('completedTests') || '[]'); 
+                let pendingCount = 0; 
+                let missedCount = 0;
+                let totalTests = 0;
+                let now = new Date().getTime();
+
+                // Reset all badges
+                document.querySelectorAll('.subj-badge').forEach(b => { b.style.display = 'none'; b.innerHTML = ''; });
+
+                snap.forEach(doc => { 
+                    let d = doc.data(); d.id = doc.id; 
+                    totalTests++;
+
+                    if(d.startTime && d.endTime) { 
+                        let st = new Date(d.startTime).getTime();
+                        let en = new Date(d.endTime).getTime(); 
+
+                        if(!comp.includes(d.id)) {
+                            if(now > en) {
+                                missedCount++;
+                            } else {
+                                globalTests.push(d); 
+                                pendingCount++; 
+
+                                // Show subject badge
+                                let safeSubj = d.subject.replace(/[^a-zA-Z]/g, '');
+                                let badgeId = 'badge-' + safeSubj;
+                                let badgeEl = document.getElementById(badgeId);
+                                if(badgeEl) {
+                                    badgeEl.style.display = 'block';
+                                    let dtStr = new Date(st).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                                    badgeEl.innerHTML = `<marquee scrollamount="2" style="width:100%;">Upcoming: ${dtStr}</marquee>`;
+                                }
+                            }
+                        }
+                    } 
+                });
+                
+                document.getElementById('testsPending').innerText = pendingCount; 
+                document.getElementById('dashMissed').innerText = missedCount;
+                document.getElementById('dashTotalTests').innerText = totalTests;
+
+                globalTests.sort((a,b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
                 let el = document.getElementById('homeTestStatus');
-                if(globalTests.length > 0) { let next = globalTests[0]; el.innerHTML = `${next.subject} - ${next.filename} <br> <span style="color:#fff;">Starts: ${new Date(next.startTime).toLocaleString()}</span>`; } else { el.innerHTML = "No pending live tests."; }
+                if(globalTests.length > 0) { 
+                    let next = globalTests[0]; 
+                    el.innerHTML = `${next.subject} - ${next.filename} <br> <span style="color:#fff;">Starts: ${new Date(next.startTime).toLocaleString()}</span>`; 
+                } else { 
+                    el.innerHTML = "No pending live tests."; 
+                }
             });
         }
 
         let countdownInt = null;
+        let bgAlarmLoop = null;
+
         function checkTimerLogic() {
             if(globalTests.length === 0) return; let now = new Date().getTime(); let compArr = JSON.parse(sGet('completedTests') || '[]');
             
@@ -725,89 +778,47 @@
                 let test = globalTests[i]; if(compArr.includes(test.id)) continue; 
                 let st = new Date(test.startTime).getTime(); let en = new Date(test.endTime).getTime(); let dist = st - now;
                 
-                if(dist <= 20000 && dist > 10000 && !test.preAlarmPlayed) { playSelectedAlarm(10000); test.preAlarmPlayed = true; }
+                // Start background continuous alarm 20 seconds before exam
+                if(dist <= 20000 && dist > 10000 && !test.preAlarmPlayed) { 
+                    test.preAlarmPlayed = true; 
+                    
+                    // Continuous loop alarm until unlocked/entered exam
+                    bgAlarmLoop = setInterval(() => {
+                        if(!isExamRunning) playSelectedAlarm(2000);
+                    }, 2500);
+
+                    // Force app foreground attempt (Works if plugin is active, otherwise rings in BG)
+                    try { if(cordova && cordova.plugins && cordova.plugins.backgroundMode) cordova.plugins.backgroundMode.wakeUp(); } catch(e){}
+                }
                 
                 if(dist <= 10000 && dist > 0 && !test.lockdownStarted) { 
-                    test.lockdownStarted = true; window.currentFilesMap[test.id] = test; openViewer(test.id, 'live_mock'); 
-                    document.getElementById('lockdownModal').style.display = 'flex'; let cdVal = 10; document.getElementById('lockdownTimer').innerText = cdVal;
+                    test.lockdownStarted = true;
+                    window.currentFilesMap[test.id] = test; 
+                    openViewer(test.id, 'live_mock'); 
+                    
+                    document.getElementById('lockdownModal').style.display = 'flex';
+                    let cdVal = 10; document.getElementById('lockdownTimer').innerText = cdVal;
+                    
                     countdownInt = setInterval(() => { cdVal--; document.getElementById('lockdownTimer').innerText = cdVal; playBeep(); if(cdVal <= 0) clearInterval(countdownInt); }, 1000);
                 }
                 
                 if(dist <= 0 && document.getElementById('lockdownModal').style.display === 'flex') { 
-                    clearInterval(countdownInt); document.getElementById('lockdownModal').style.display = 'none'; 
-                    isExamRunning = true; enterFullscreen(); showToast("⚠️ Exam Started! Device Locked.");
+                    clearInterval(countdownInt); 
+                    clearInterval(bgAlarmLoop); // Stop the background ring
+                    document.getElementById('lockdownModal').style.display = 'none'; 
+                    isExamRunning = true; 
+                    enterFullscreen(); 
+                    showToast("⚠️ Exam Started! Device Locked.");
                 }
             }
         }
 
-        // === 11. DOWNLOAD & SHARE ===
+        // === 5. SYSTEM DOWNLOAD & SHARE ===
         function processDownload(url, filename) {
             if(!url) { showToast("❌ Link not found."); return; }
-            
-            let toastEl = document.getElementById("toast");
-            toastEl.className = "show";
-            toastEl.innerText = "⏳ Downloading... 0%";
-
-            let xhr = new XMLHttpRequest();
-            xhr.open('GET', url, true);
-            xhr.responseType = 'blob';
-            
-            xhr.onprogress = function(event) {
-                if (event.lengthComputable) {
-                    let percentComplete = Math.round((event.loaded / event.total) * 100);
-                    toastEl.innerText = `⏳ Downloading... ${percentComplete}%`;
-                }
-            };
-            
-            xhr.onload = function() {
-                if (this.status === 200) {
-                    let blob = this.response;
-                    if (window.cordova && cordova.file) {
-                        toastEl.innerText = "💾 Saving to File Manager...";
-                        window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory + "Download/", function(dirEntry) {
-                            dirEntry.getFile(filename, { create: true, exclusive: false }, function(fileEntry) {
-                                fileEntry.createWriter(function(fileWriter) {
-                                    fileWriter.onwriteend = function() {
-                                        toastEl.innerText = "✅ Download Successful! Saved in Downloads.";
-                                        setTimeout(() => { toastEl.className = toastEl.className.replace("show", ""); }, 4000);
-                                    };
-                                    fileWriter.onerror = function() { fallbackDownload(blob, filename, toastEl, url); };
-                                    fileWriter.write(blob);
-                                });
-                            }, function() { fallbackDownload(blob, filename, toastEl, url); });
-                        }, function() { fallbackDownload(blob, filename, toastEl, url); });
-                    } else { fallbackDownload(blob, filename, toastEl, url); }
-                } else {
-                    toastEl.innerText = "⚠️ Trying external browser...";
-                    window.open(url, '_system');
-                    setTimeout(() => { toastEl.className = toastEl.className.replace("show", ""); }, 3000);
-                }
-            };
-            
-            xhr.onerror = function() {
-                toastEl.innerText = "⚠️ Trying external browser...";
-                window.open(url, '_system');
-                setTimeout(() => { toastEl.className = toastEl.className.replace("show", ""); }, 3000);
-            };
-            
-            xhr.send();
-        }
-
-        function fallbackDownload(blob, filename, toastEl, originalUrl) {
-            try {
-                let blobUrl = window.URL.createObjectURL(blob);
-                let a = document.createElement('a');
-                a.style.display = 'none';
-                a.href = blobUrl;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                setTimeout(() => { window.URL.revokeObjectURL(blobUrl); }, 5000);
-                toastEl.innerText = "✅ Download Successful!";
-                setTimeout(() => { toastEl.className = toastEl.className.replace("show", ""); }, 3000);
-            } catch(e) {
-                window.open(originalUrl, '_system');
+            if(confirm(`আপনি কি '${filename}' ডাউনলোড করতে চান?`)) {
+                showToast("Downloading...");
+                window.open(url, '_system'); 
             }
         }
 
@@ -817,7 +828,6 @@
             window.open('https://api.whatsapp.com/send?text=' + shareText, '_system');
         }
 
-        // === 12. STANDARD FILE LISTS ===
         function openSubject(name) { activeSubject = name; document.getElementById('folderTitle').innerText = name; goTo('view-subfolders'); }
 
         function loadFiles(listType) {
@@ -864,7 +874,6 @@
             });
         }
 
-        // === 13. GALLERY VIEW ===
         function openGalleryFolders(subj) { activeSubject = subj; document.getElementById('gallerySubjTitle').innerText = subj + " Gallery"; goTo('view-gallery-folders'); }
         function loadGalleryGrid(type) {
             let title = type === 'pdf' ? "PDF Gallery" : "Study Guides"; document.getElementById('galleryGridTitle').innerText = title; goTo('view-gallery-grid');
@@ -907,18 +916,11 @@
             if(key === MASTER_KEY) { 
                 db.collection("study_materials").doc(id).delete().then(() => { 
                     showToast("✅ Deleted Successfully!"); 
-                    if(listType === 'pdf' || listType === 'guide') {
-                        loadGalleryGrid(listType); 
-                    } else {
-                        loadFiles(listType); 
-                    }
+                    if(listType === 'pdf' || listType === 'guide') { loadGalleryGrid(listType); } else { loadFiles(listType); }
                 }); 
-            } else if(key !== null && key !== "") { 
-                showToast("❌ Wrong Admin Key!"); 
-            } 
+            } else if(key !== null && key !== "") { showToast("❌ Wrong Admin Key!"); } 
         }
 
-        // === 14. ADMIN UPLOAD ===
         function toggleTimerFields() { let type = document.getElementById('adType').value; document.getElementById('timerFields').style.display = (type === 'live_mock') ? 'block' : 'none'; }
         
         function updateAdminStats() {
@@ -980,7 +982,6 @@
         }
         function resetAdminBtn() { document.getElementById('adBtn').innerHTML = "Upload Directly"; document.getElementById('adBtn').disabled = false; }
 
-        // === 15. VIEWER ===
         let pdfDoc = null, pageNum = 1, pageRendering = false, pageNumPending = null; const canvas = document.getElementById('pdfCanvas'); const ctx = canvas.getContext('2d');
 
         async function openViewer(fileId, listType) {
@@ -1005,9 +1006,9 @@
                         if(docSnap.exists) {
                             try { let encodedHtml = btoa(unescape(encodeURIComponent(docSnap.data().htmlData))); document.getElementById('htmlViewerFrame').src = "data:text/html;base64," + encodedHtml; } 
                             catch(e) { document.getElementById('htmlViewerFrame').srcdoc = docSnap.data().htmlData; }
-                        } else { document.getElementById('htmlViewerFrame').srcdoc = "<h2 style='text-align:center; padding:50px;'>No Result Found in Cloud!</h2>"; }
+                        } else { document.getElementById('htmlViewerFrame').srcdoc = "<div style='text-align:center; padding:50px; font-family:sans-serif;'><h2>No Result Found in Cloud!</h2><p>Exam was not submitted properly.</p></div>"; }
                         document.getElementById('viewerLoading').style.display = 'none';
-                    }).catch(err => { document.getElementById('viewerLoading').style.display = 'none'; });
+                    }).catch(err => { document.getElementById('viewerLoading').style.display = 'none'; document.getElementById('htmlViewerFrame').srcdoc = "<h2>Cloud Error</h2>"; });
                     return; 
                 }
 
@@ -1038,6 +1039,7 @@
         function forceSubmitTest() {
             let testId = currentFileViewerId; let compArr = JSON.parse(sGet('completedTests') || '[]');
             if(!compArr.includes(testId)) { compArr.push(testId); sSet('completedTests', JSON.stringify(compArr)); }
+            clearInterval(bgAlarmLoop); // Stop alarm if submitted manually
             closeViewer(); goTo('view-subfolders');
         }
 
