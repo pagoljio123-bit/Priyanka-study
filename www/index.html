@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Priyanka Study - Premium Portal</title>
+    <title>Priyanka Study - Premium Master Portal</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -16,57 +16,80 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
     <style>
+        /* ================= 5 PREMIUM THEMES ================= */
         :root {
-            --bg-dark: #e0c3fc; --bg-mid: #8ec5fc; 
-            --card-bg: rgba(255, 255, 255, 0.6); --card-border: rgba(255, 255, 255, 0.6); 
-            --text-main: #111111; --text-sub: #555555; 
-            --accent-pink: #FF0076; --accent-blue: #00C9FF; 
-            --box-shadow: 0 10px 30px rgba(0,0,0,0.1); --neon-bg: #ffffff; --nav-bg: rgba(255, 255, 255, 0.95);
+            --bg-dark: #0f0c29; 
+            --bg-mid: #302b63; 
+            --card-bg: rgba(255, 255, 255, 0.08); 
+            --card-border: rgba(255, 255, 255, 0.15); 
+            --text-main: #ffffff; 
+            --text-sub: rgba(255, 255, 255, 0.6); 
+            --accent-pink: #FF0076; 
+            --accent-blue: #00C9FF; 
+            --box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+            --neon-bg: #1a1a2e; 
+            --nav-bg: rgba(15, 12, 41, 0.95);
         }
 
-        body.theme-dark {
-            --bg-dark: #0f0c29; --bg-mid: #302b63; 
-            --card-bg: rgba(255, 255, 255, 0.08); --card-border: rgba(255, 255, 255, 0.15); 
-            --text-main: #ffffff; --text-sub: rgba(255, 255, 255, 0.6); 
-            --box-shadow: 0 10px 30px rgba(0,0,0,0.3); --neon-bg: #1a1a2e; --nav-bg: rgba(15, 12, 41, 0.95);
+        body.theme-light {
+            --bg-dark: #e0c3fc; 
+            --bg-mid: #8ec5fc; 
+            --card-bg: rgba(255, 255, 255, 0.6); 
+            --card-border: rgba(255, 255, 255, 0.6); 
+            --text-main: #111111; 
+            --text-sub: #555555; 
+            --neon-bg: #ffffff; 
+            --nav-bg: rgba(255, 255, 255, 0.95);
         }
 
-        body.theme-purple { --bg-dark: #2a0845; --bg-mid: #6441A5; --accent-pink: #ff6a00; --accent-blue: #ee0979; --text-main: #fff; --text-sub: rgba(255,255,255,0.6); --card-bg: rgba(255,255,255,0.1); --neon-bg: #1a1a2e; --nav-bg: rgba(20,10,30,0.95);}
-        body.theme-teal { --bg-dark: #000000; --bg-mid: #0f9b0f; --accent-pink: #00C9FF; --accent-blue: #92FE9D; --text-main: #fff; --text-sub: rgba(255,255,255,0.6); --card-bg: rgba(255,255,255,0.1); --neon-bg: #111; --nav-bg: rgba(10,20,10,0.95);}
+        body.theme-purple { --bg-dark: #2a0845; --bg-mid: #6441A5; --accent-pink: #ff6a00; --accent-blue: #ee0979; }
+        body.theme-teal { --bg-dark: #000000; --bg-mid: #0f9b0f; --accent-pink: #00C9FF; --accent-blue: #92FE9D; }
+        body.theme-green { --bg-dark: #134E5E; --bg-mid: #71B280; --accent-pink: #F9D423; --accent-blue: #FF4E50; }
 
+        /* ================= GLOBAL STYLES ================= */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent;}
         body { background: linear-gradient(to bottom, var(--bg-dark), var(--bg-mid)); color: var(--text-main); height: 100vh; width: 100vw; overflow: hidden; position: relative; transition: background 0.5s, color 0.5s; }
         
         .app-container { width: 100%; height: 100%; overflow-y: auto; padding: 20px; padding-bottom: 100px; position: relative; z-index: 1;}
         .app-container::-webkit-scrollbar { display: none; }
-        .view { display: none; animation: slideUp 0.3s ease-out; } .view.active { display: block; }
+        
+        .view { display: none; animation: slideUp 0.3s ease-out; } 
+        .view.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         
-        #custom-splash { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); z-index: 99999999; display: none; flex-direction: column; justify-content: center; align-items: center; color: white; transition: opacity 0.3s ease-out; }
-        .splash-icon { font-size: 80px; color: #00C9FF; margin-bottom: 15px; animation: pulseSplash 1s infinite; filter: drop-shadow(0 0 15px rgba(0,201,255,0.6)); }
+        /* ================= SPLASH SCREEN & LOGIN LOADER ================= */
+        #custom-splash { 
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); 
+            z-index: 99999999; display: none; flex-direction: column; 
+            justify-content: center; align-items: center; color: white; transition: opacity 0.3s ease-out; 
+        }
+        .splash-icon { font-size: 80px; color: var(--accent-blue); margin-bottom: 15px; animation: pulseSplash 1s infinite; filter: drop-shadow(0 0 15px rgba(0,201,255,0.6)); }
         @keyframes pulseSplash { 0% { transform: scale(0.9); } 50% { transform: scale(1.1); } 100% { transform: scale(0.9); } }
         .splash-title { font-size: 32px; font-weight: 800; letter-spacing: 2px; margin: 0; }
         .splash-sub { font-size: 14px; color: #aaa; margin-top: 5px; font-weight: 600; }
         .loading-line { width: 250px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-top: 30px; position: relative;}
-        .loading-progress { width: 0%; height: 100%; background: linear-gradient(90deg, #FF0076, #00C9FF); box-shadow: 0 0 10px #FF0076; transition: width 0.1s linear;}
-        .loading-percentage { margin-top: 10px; font-size: 16px; font-weight: bold; color: #00C9FF; }
+        .loading-progress { width: 0%; height: 100%; background: linear-gradient(90deg, var(--accent-pink), var(--accent-blue)); box-shadow: 0 0 10px var(--accent-pink); transition: width 0.1s linear;}
+        .loading-percentage { margin-top: 10px; font-size: 16px; font-weight: bold; color: var(--accent-blue); }
 
+        /* ================= UI COMPONENTS ================= */
         .glass-card { background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--card-border); border-radius: 20px; padding: 20px; box-shadow: var(--box-shadow); margin-bottom: 15px;}
         .input-glass { width: 100%; padding: 15px; background: rgba(255, 255, 255, 0.9); border: none; border-radius: 12px; color: #333; font-size: 14px; margin-bottom: 15px; outline: none; font-weight: 600;}
         .btn-main { width: 100%; padding: 15px; border: none; border-radius: 14px; font-weight: 700; font-size: 15px; background: linear-gradient(135deg, var(--accent-pink), var(--accent-blue)); color: white; cursor: pointer; box-shadow: 0 8px 20px rgba(255, 0, 118, 0.4); display: flex; justify-content: center; align-items: center; gap: 10px;}
+        
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; margin-top: 5px; }
-        .icon-btn { width: 40px; height: 40px; border-radius: 12px; background: rgba(150,150,150,0.2); display: flex; justify-content: center; align-items: center; font-size: 18px; cursor: pointer; backdrop-filter: blur(10px); color: var(--text-main);}
+        .icon-btn { width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; font-size: 18px; cursor: pointer; backdrop-filter: blur(10px); color: var(--text-main);}
         
         .neon-box { position: relative; background: var(--neon-bg); border-radius: 18px; padding: 15px; z-index: 1; cursor: pointer; overflow: hidden; margin-bottom: 12px; box-shadow: var(--box-shadow); display: flex; align-items: center; gap: 15px;}
         .neon-box::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: conic-gradient(transparent, transparent, transparent, var(--accent-blue), var(--accent-pink), var(--accent-blue)); animation: rotateRGB 3s linear infinite; z-index: -1; }
         .neon-box::after { content: ''; position: absolute; inset: 3px; background: var(--neon-bg); border-radius: 15px; z-index: -1;}
         @keyframes rotateRGB { 100% { transform: rotate(360deg); } }
         
-        .subj-badge { position: absolute; top: -5px; right: 10px; background: var(--accent-pink); padding: 3px 10px; border-radius: 10px; font-size: 10px; font-weight: bold; color: white; width: 110px; text-align: center; display: none; overflow: hidden; white-space: nowrap; z-index: 5; box-shadow: 0 4px 10px rgba(255,0,118,0.4); }
-
-        .subject-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; } .subj-icon { font-size: 30px; margin-bottom: 8px; }
+        .subject-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; } 
+        .subj-icon { font-size: 30px; margin-bottom: 8px; }
+        
         .progress-box { display: flex; justify-content: space-between; align-items: center; }
-        .circ-chart { position: relative; width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(var(--accent-pink) var(--prog), rgba(150,150,150,0.2) 0deg); display: flex; justify-content: center; align-items: center; }
+        .circ-chart { position: relative; width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(var(--accent-pink) var(--prog), rgba(255,255,255,0.1) 0deg); display: flex; justify-content: center; align-items: center; }
         .circ-chart::after { content: ''; position: absolute; width: 64px; height: 64px; background: var(--neon-bg); border-radius: 50%; }
         .circ-val { position: relative; z-index: 1; font-weight: bold; font-size: 16px; color: var(--text-main); }
         
@@ -74,41 +97,46 @@
         .pulse-dot { width: 10px; height: 10px; background: var(--accent-pink); border-radius: 50%; animation: pulse 1s infinite; margin-right: 10px;}
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,0,118,0.7); } 70% { box-shadow: 0 0 0 10px rgba(255,0,118,0); } 100% { box-shadow: 0 0 0 0 rgba(255,0,118,0); } }
         
+        /* === FILE LIST ITEMS === */
         .file-item { background: var(--card-bg); border-radius: 16px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; border: 1px solid var(--card-border); position: relative;}
-        .file-icon-box { width: 45px; height: 45px; border-radius: 12px; background: rgba(150,150,150,0.2); display: flex; justify-content: center; align-items: center; font-size: 22px; cursor: pointer; }
+        .file-icon-box { width: 45px; height: 45px; border-radius: 12px; background: rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; font-size: 22px; cursor: pointer; }
         .file-info { flex-grow: 1; overflow: hidden; cursor: pointer; }
         .file-info h4 { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main); margin-bottom: 2px;}
         .file-info p { font-size: 11px; color: var(--text-sub); }
-        .act-btn { width: 32px; height: 32px; border-radius: 8px; display: flex; justify-content: center; align-items: center; background: rgba(150,150,150,0.2); cursor: pointer; font-size: 14px; color: var(--text-main);}
-        .lock-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; gap: 10px; color: #fff; font-weight: bold; font-size: 13px; z-index: 2; border-radius: 16px;}
+        .act-btn { width: 32px; height: 32px; border-radius: 8px; display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.15); cursor: pointer; font-size: 14px; color: var(--text-main);}
+        .lock-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; gap: 10px; color: #fff; font-weight: bold; font-size: 13px; z-index: 2;}
         
+        /* === PHOTO GALLERY STYLE FOR PDFs & GUIDES === */
         .photo-gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .photo-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: var(--box-shadow); transition: transform 0.2s;}
         .photo-card:active { transform: scale(0.95); }
         .photo-thumb { height: 120px; background: linear-gradient(135deg, var(--bg-mid), var(--bg-dark)); display: flex; justify-content: center; align-items: center; font-size: 50px; color: rgba(255,255,255,0.8); cursor: pointer; position: relative;}
         .photo-thumb::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.2); }
         .photo-details { padding: 12px; }
-        .photo-details h4 { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px; color: var(--text-main); }
-        .photo-actions { display: flex; justify-content: space-between; margin-top: 10px; border-top: 1px solid rgba(150,150,150,0.2); padding-top: 10px;}
+        .photo-details h4 { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 5px; }
+        .photo-actions { display: flex; justify-content: space-between; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;}
         .photo-btn { font-size: 18px; color: var(--text-sub); cursor: pointer; padding: 5px; }
         .photo-btn:active { color: var(--accent-blue); }
 
+        /* === NAVIGATION & SIDEBAR === */
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--nav-bg); backdrop-filter: blur(20px); padding: 15px 30px; border-radius: 25px 25px 0 0; display: flex; justify-content: space-between; border-top: 1px solid var(--card-border); z-index: 100;}
         .nav-icon { font-size: 22px; color: var(--text-sub); cursor: pointer; transition: 0.3s; }
         .nav-icon.active { color: var(--accent-blue); transform: translateY(-4px); }
         
         #sidebar { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--nav-bg); backdrop-filter: blur(20px); z-index: 10000; transition: 0.3s ease; padding: 30px 20px; border-right: 1px solid var(--card-border); box-shadow: 10px 0 30px rgba(0,0,0,0.5);}
         #sidebar.open { left: 0; } 
-        .sb-item { padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; cursor: pointer; background: rgba(150,150,150,0.1); color: var(--text-main); }
+        .sb-item { padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; cursor: pointer; background: rgba(255,255,255,0.05); }
         .sb-overlay { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.5); z-index: 9999; display: none;}
         
+        /* === CROPPER MODAL === */
         #cropModal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.9); z-index: 1000000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
         .crop-container { width: 100%; max-width: 400px; height: 400px; background: #333; margin-bottom: 20px; border-radius: 12px; overflow: hidden; }
         .crop-btn-row { display: flex; gap: 15px; width: 100%; max-width: 400px; }
 
-        #fullscreenViewer { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; z-index: 99999; display: none; flex-direction: column;}
-        .viewer-head { padding: 15px; background: var(--bg-mid); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff;}
-        #viewerRefreshBtn { display: none; font-size: 20px; color: #fff; cursor: pointer; margin-right: 15px; }
+        /* === VIEWER OVERLAYS === */
+        #fullscreenViewer { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-dark); z-index: 99999; display: none; flex-direction: column;}
+        .viewer-head { padding: 15px; background: var(--bg-mid); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); color: var(--text-main);}
+        #viewerRefreshBtn { display: none; font-size: 20px; color: var(--accent-blue); cursor: pointer; margin-right: 15px; }
         #pdfNativeContainer { display: none; flex-direction: column; height: 100%; background: #e0e5ec; } 
         .pdf-canvas-wrapper { flex-grow: 1; overflow: auto; display: flex; justify-content: center; padding: 10px; background: #525659; } 
         #pdfCanvas { max-width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); background: white; border-radius: 5px; }
@@ -116,28 +144,33 @@
         #testTimerBanner { background: var(--accent-pink); color: white; text-align: center; padding: 10px; font-weight: bold; font-size: 14px; display: none; }
         #viewerLoading { display:none; flex-direction:column; justify-content:center; align-items:center; height:100%; color:var(--accent-blue); gap:10px; position: absolute; width: 100%; background: var(--bg-dark); z-index: 5; }
         
+        /* === 10-SECOND LOCKDOWN MODAL === */
         #lockdownModal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 12, 41, 0.98); z-index: 1000000; display: none; flex-direction: column; justify-content: center; align-items: center; text-align: center; backdrop-filter: blur(15px); }
         .lock-circle { width: 180px; height: 180px; border-radius: 50%; border: 8px solid var(--accent-pink); display: flex; justify-content: center; align-items: center; font-size: 60px; font-weight: 800; color: #fff; box-shadow: 0 0 40px rgba(255,0,118,0.6); margin-bottom: 20px; animation: pulseLock 1s infinite; }
         @keyframes pulseLock { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
         
+        /* === TOASTS & CONTROLS === */
         #toast { visibility: hidden; min-width: 250px; background: #fff; color: #333; text-align: center; border-radius: 20px; padding: 15px; position: fixed; z-index: 10000000; left: 50%; bottom: 90px; transform: translateX(-50%); font-weight: bold; font-size: 13px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         #toast.show { visibility: visible; animation: fadein 0.3s, fadeout 0.3s 2.5s; }
-        @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 90px; opacity: 1; } } @keyframes fadeout { from { bottom: 90px; opacity: 1; } to { bottom: 0; opacity: 0; } }
-        .switch { position: relative; display: inline-block; width: 40px; height: 22px; } .switch input { opacity: 0; width: 0; height: 0; } .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(150,150,150,0.3); transition: .4s; border-radius: 34px; } .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; } input:checked + .slider { background-color: var(--accent-blue); } input:checked + .slider:before { transform: translateX(18px); }
+        @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 90px; opacity: 1; } } 
+        @keyframes fadeout { from { bottom: 90px; opacity: 1; } to { bottom: 0; opacity: 0; } }
+        
+        .switch { position: relative; display: inline-block; width: 40px; height: 22px; } 
+        .switch input { opacity: 0; width: 0; height: 0; } 
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.3); transition: .4s; border-radius: 34px; } 
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; } 
+        input:checked + .slider { background-color: var(--accent-blue); } 
+        input:checked + .slider:before { transform: translateX(18px); }
 
+        /* BRIGHTNESS OVERLAY */
         #brightnessOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0); pointer-events: none; z-index: 999999999; transition: background 0.3s; }
         input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: var(--accent-blue); cursor: pointer; margin-top: -6px; }
-        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: rgba(150,150,150,0.4); border-radius: 5px; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: rgba(255,255,255,0.2); border-radius: 5px; }
 
     </style>
 </head>
-<body id="appBody" class="theme-light">
-
-    <script>
-        const isStudent = localStorage.getItem('isStudentLoggedIn') === 'true';
-        const isAdmin = localStorage.getItem('isAdminLoggedIn') === 'true';
-    </script>
+<body id="appBody">
 
     <div id="brightnessOverlay"></div>
 
@@ -159,7 +192,7 @@
     <div id="cropModal">
         <h2 style="color: #fff; margin-bottom: 20px;">Crop Profile Picture</h2>
         <div class="crop-container"><img id="cropImage" src="" style="max-width: 100%;"></div>
-        <div style="display:flex; gap:15px; width: 100%; max-width: 400px;">
+        <div class="crop-btn-row">
             <button class="btn-main" style="background: #333;" onclick="closeCrop()">Cancel</button>
             <button class="btn-main" style="background: #2ed573;" onclick="applyCrop()">Crop & Save</button>
         </div>
@@ -198,34 +231,39 @@
         <iframe id="htmlViewerFrame" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
         
         <button id="submitTestBtn" onclick="forceSubmitTest()" style="position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: #2ed573; color: white; border: none; padding: 15px 30px; border-radius: 25px; font-weight: bold; font-size: 16px; box-shadow: 0 10px 20px rgba(46, 213, 115, 0.4); display: none; z-index: 10000; cursor: pointer;"><i class="fas fa-check-circle"></i> Force Submit & Save</button>
+        
+        <div id="pdfNativeContainer">
+            <div style="padding: 10px 15px; background: #fff; display: flex; justify-content: space-between; align-items: center; color: #333;">
+                <button style="background: var(--accent-pink); color: white; border: none; padding: 6px 15px; border-radius: 8px;" onclick="prevPage()"><i class="fas fa-chevron-left"></i></button>
+                <span style="font-weight: bold; font-size: 14px;">Pg <span id="pageNum">1</span> / <span id="pageCount">?</span></span>
+                <button style="background: var(--accent-pink); color: white; border: none; padding: 6px 15px; border-radius: 8px;" onclick="nextPage()"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="pdf-canvas-wrapper"><canvas id="pdfCanvas"></canvas></div>
+        </div>
     </div>
 
     <div class="app-container">
         
-        <div id="view-login" class="view active">
+        <div id="view-login" class="view">
             <div style="text-align: center; margin: 60px 0 40px 0;">
                 <i class="fas fa-graduation-cap" style="font-size: 60px; color: var(--accent-blue); margin-bottom: 15px; filter: drop-shadow(0 0 10px rgba(0,201,255,0.5));"></i>
-                <h1 style="font-size: 32px; font-weight: 800; color: var(--text-main);">Priyanka Study</h1>
+                <h1 style="font-size: 32px; font-weight: 800;">Priyanka Study</h1>
                 <p style="color: var(--text-sub); font-size: 14px;">Premium Exam Portal</p>
             </div>
-            
             <div class="glass-card" id="loginCardContainer">
-                <h2 style="font-size: 18px; margin-bottom: 20px; color: var(--text-main);">Sign In to Continue</h2>
-                
+                <h2 style="font-size: 18px; margin-bottom: 20px;">Sign In to Continue</h2>
                 <div id="loginStudentMode">
                     <input type="text" id="userId" class="input-glass" placeholder="User ID">
                     <input type="password" id="userPass" class="input-glass" placeholder="Password">
-                    <button class="btn-main" id="stuLoginBtn" onclick="executeLogin('student')">Secure Login <i class="fas fa-sign-in-alt"></i></button>
-                    <p style="text-align:center; margin-top:20px; font-size:14px; font-weight:600; color:var(--accent-blue); cursor:pointer;" onclick="toggleLoginMode('admin')">🔑 Login as Admin</p>
                 </div>
-                
                 <div id="loginAdminMode" style="display: none;">
                     <input type="password" id="adminKey" class="input-glass" placeholder="Enter Master Key (Admin)">
-                    <button class="btn-main" style="background: var(--accent-pink);" onclick="executeLogin('admin')">Admin Login <i class="fas fa-user-shield"></i></button>
-                    <p style="text-align:center; margin-top:20px; font-size:14px; font-weight:600; color:var(--text-sub); cursor:pointer;" onclick="toggleLoginMode('student')">🔙 Back to Student Login</p>
                 </div>
-                
-                <p id="savedLoginText" style="display:none; font-size:12px; color:#2ed573; text-align:center; margin-top:15px;">Saved credentials found. Click Login.</p>
+                <div style="display: flex; align-items: center; margin-bottom: 20px; gap: 10px;">
+                    <label class="switch"><input type="checkbox" id="adminToggle" onchange="toggleLoginMode()"><span class="slider"></span></label>
+                    <span style="font-size: 13px; color: var(--text-sub);">Login as Admin</span>
+                </div>
+                <button class="btn-main" onclick="executeLogin()">Secure Login <i class="fas fa-sign-in-alt"></i></button>
             </div>
         </div>
 
@@ -239,108 +277,74 @@
             <div class="glass-card" style="padding: 25px 20px;">
                 <div class="progress-box">
                     <div>
-                        <h3 style="font-size: 16px; margin-bottom: 5px; color: var(--text-main);">Score Board</h3>
+                        <h3 style="font-size: 16px; margin-bottom: 5px;">Score Board</h3>
                         <p style="font-size: 12px; color: var(--accent-blue); font-weight: bold; margin-bottom: 5px;">Total Points: <span id="dashPoints">0</span></p>
-                        <p style="font-size: 11px; color: var(--text-main);"><i class="fas fa-check-circle" style="color: #2ed573;"></i> <span id="dashCorrect">0</span> Correct (+1)</p>
-                        <p style="font-size: 11px; color: var(--text-main);"><i class="fas fa-times-circle" style="color: var(--accent-pink);"></i> <span id="dashWrong">0</span> Wrong (-1)</p>
+                        <p style="font-size: 11px;"><i class="fas fa-check-circle" style="color: #2ed573;"></i> <span id="dashCorrect">0</span> Correct (+1)</p>
+                        <p style="font-size: 11px;"><i class="fas fa-times-circle" style="color: var(--accent-pink);"></i> <span id="dashWrong">0</span> Wrong (-1)</p>
                     </div>
                     <div class="circ-chart" id="dashRing" style="--prog: 0%;"><div class="circ-val" id="dashPercent">0%</div></div>
                 </div>
-                <div style="display: flex; justify-content: space-between; margin-top: 15px; border-top: 1px solid rgba(150,150,150,0.2); padding-top: 15px;">
-                    <div style="text-align: center;"><p style="font-size: 11px; color: var(--text-sub);">Total Exams</p><h4 id="dashTotalTests" style="color: var(--accent-blue);">0</h4></div>
-                    <div style="text-align: center;"><p style="font-size: 11px; color: var(--text-sub);">Given</p><h4 id="testsGiven" style="color: #2ed573;">0</h4></div>
-                    <div style="text-align: center;"><p style="font-size: 11px; color: var(--text-sub);">Missed</p><h4 id="dashMissed" style="color: #f39c12;">0</h4></div>
+                <div style="display: flex; justify-content: space-between; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px;">
+                    <div style="text-align: center;"><p style="font-size: 11px; color: var(--text-sub);">Tests Given</p><h4 id="testsGiven">0</h4></div>
                     <div style="text-align: center;"><p style="font-size: 11px; color: var(--text-sub);">Pending</p><h4 id="testsPending" style="color: var(--accent-pink);">0</h4></div>
                 </div>
             </div>
             
             <div class="live-marquee" onclick="checkUpcomingTests(true)">
-                <div class="pulse-dot"></div><div><h4 style="color:var(--text-main);">Live Mock Test</h4><p id="homeTestStatus" style="color:var(--text-sub); font-size:12px;">Checking for upcoming tests...</p></div>
+                <div class="pulse-dot"></div><div><h4>Live Mock Test</h4><p id="homeTestStatus">Checking for upcoming tests...</p></div>
             </div>
 
-            <h3 style="font-size: 16px; margin-bottom: 15px; color: var(--text-main);">Subjects Folders</h3>
+            <h3 style="font-size: 16px; margin-bottom: 15px;">Subjects Folders</h3>
             <div class="subject-grid">
-                <div class="neon-box" style="display: block; text-align: center;" onclick="openSubject('Education')">
-                    <div id="badge-Education" class="subj-badge"></div>
-                    <i class="fas fa-book-open subj-icon" style="color: var(--accent-pink);"></i><h3 style="color:var(--text-main); font-size:14px;">Education</h3>
-                </div>
-                <div class="neon-box" style="display: block; text-align: center;" onclick="openSubject('Philosophy')">
-                    <div id="badge-Philosophy" class="subj-badge"></div>
-                    <i class="fas fa-brain subj-icon" style="color: var(--accent-blue);"></i><h3 style="color:var(--text-main); font-size:14px;">Philosophy</h3>
-                </div>
-                <div class="neon-box" style="display: block; text-align: center;" onclick="openSubject('Geography')">
-                    <div id="badge-Geography" class="subj-badge"></div>
-                    <i class="fas fa-globe-asia subj-icon" style="color: #2ed573;"></i><h3 style="color:var(--text-main); font-size:14px;">Geography</h3>
-                </div>
-                <div class="neon-box" style="display: block; text-align: center;" onclick="openSubject('Bengali')">
-                    <div id="badge-Bengali" class="subj-badge"></div>
-                    <i class="fas fa-pen-nib subj-icon" style="color: #f6d365;"></i><h3 style="color:var(--text-main); font-size:14px;">Bengali</h3>
-                </div>
-                <div class="neon-box" style="display: block; text-align: center; grid-column: span 2;" onclick="openSubject('Env. Science')">
-                    <div id="badge-EnvScience" class="subj-badge"></div>
-                    <i class="fas fa-leaf subj-icon" style="color: #00b09b;"></i><h3 style="color:var(--text-main); font-size:14px;">Env. Science</h3>
-                </div>
+                <div class="neon-box" style="display: block; text-align: center;" onclick="openSubject('Education')"><i class="fas fa-book-open subj-icon" style="color: var(--accent-pink);"></i><h3>Education</h3></div>
+                <div class="neon-box" style="display: block; text-align: center;" onclick="openSubject('Philosophy')"><i class="fas fa-brain subj-icon" style="color: var(--accent-blue);"></i><h3>Philosophy</h3></div>
+                <div class="neon-box" style="display: block; text-align: center;" onclick="openSubject('Geography')"><i class="fas fa-globe-asia subj-icon" style="color: #2ed573;"></i><h3>Geography</h3></div>
+                <div class="neon-box" style="display: block; text-align: center;" onclick="openSubject('Bengali')"><i class="fas fa-pen-nib subj-icon" style="color: #f6d365;"></i><h3>Bengali</h3></div>
+                <div class="neon-box" style="display: block; text-align: center; grid-column: span 2;" onclick="openSubject('Env. Science')"><i class="fas fa-leaf subj-icon" style="color: #00b09b;"></i><h3>Env. Science</h3></div>
             </div>
         </div>
 
         <div id="view-subfolders" class="view">
-            <div class="header">
-                <div class="icon-btn" onclick="goTo('view-home')"><i class="fas fa-chevron-left"></i></div>
-                <h2 id="folderTitle" style="font-size: 18px; color:var(--text-main);">Subject</h2><div style="width: 40px;"></div>
-            </div>
+            <div class="header"><div class="icon-btn" onclick="goTo('view-home')"><i class="fas fa-chevron-left"></i></div><h2 id="folderTitle" style="font-size: 18px;">Subject</h2><div style="width: 40px;"></div></div>
             <div style="margin-top: 20px;">
-                <div class="neon-box" onclick="loadFiles('live_mock')"><div style="width: 50px; height: 50px; background: rgba(255, 0, 118, 0.2); border-radius: 14px; display:flex; justify-content:center; align-items:center; font-size:24px; color:var(--accent-pink);"><i class="fas fa-laptop-code"></i></div><div><h3 style="font-size: 15px; color:var(--text-main);">Live Mock Tests</h3><p style="font-size: 11px; color: var(--text-sub);">Time locked pending tests</p></div></div>
-                <div class="neon-box" onclick="loadFiles('mock_results')"><div style="width: 50px; height: 50px; background: rgba(0, 201, 255, 0.2); border-radius: 14px; display:flex; justify-content:center; align-items:center; font-size:24px; color:var(--accent-blue);"><i class="fas fa-poll-h"></i></div><div><h3 style="font-size: 15px; color:var(--text-main);">Live Test Results</h3><p style="font-size: 11px; color: var(--text-sub);">Cloud saved hard-copies</p></div></div>
-                <div class="neon-box" onclick="loadFiles('saved_mock')"><div style="width: 50px; height: 50px; background: rgba(155, 89, 182, 0.2); border-radius: 14px; display:flex; justify-content:center; align-items:center; font-size:24px; color:#9b59b6;"><i class="fas fa-redo-alt"></i></div><div><h3 style="font-size: 15px; color:var(--text-main);">Practice Mock Tests</h3><p style="font-size: 11px; color: var(--text-sub);">Scores will not save to cloud</p></div></div>
+                <div class="neon-box" onclick="loadFiles('live_mock')"><div style="width: 50px; height: 50px; background: rgba(255, 0, 118, 0.2); border-radius: 14px; display:flex; justify-content:center; align-items:center; font-size:24px; color:var(--accent-pink);"><i class="fas fa-laptop-code"></i></div><div><h3 style="font-size: 15px;">Live Mock Tests</h3><p style="font-size: 11px; color: var(--text-sub);">Time locked tests</p></div></div>
+                <div class="neon-box" onclick="loadFiles('mock_results')"><div style="width: 50px; height: 50px; background: rgba(0, 201, 255, 0.2); border-radius: 14px; display:flex; justify-content:center; align-items:center; font-size:24px; color:var(--accent-blue);"><i class="fas fa-poll-h"></i></div><div><h3 style="font-size: 15px;">Live Test Results</h3><p style="font-size: 11px; color: var(--text-sub);">Cloud saved copies</p></div></div>
+                <div class="neon-box" onclick="loadFiles('saved_mock')"><div style="width: 50px; height: 50px; background: rgba(155, 89, 182, 0.2); border-radius: 14px; display:flex; justify-content:center; align-items:center; font-size:24px; color:#9b59b6;"><i class="fas fa-redo-alt"></i></div><div><h3 style="font-size: 15px;">Practice Mock Tests</h3><p style="font-size: 11px; color: var(--text-sub);">Scores not saved to cloud</p></div></div>
             </div>
         </div>
 
         <div id="view-files" class="view">
-            <div class="header">
-                <div class="icon-btn" onclick="goTo('view-subfolders')"><i class="fas fa-chevron-left"></i></div>
-                <h2 id="listTitle" style="font-size: 16px; color:var(--text-main);">Files</h2><div style="width: 40px;"></div>
-            </div>
+            <div class="header"><div class="icon-btn" onclick="goTo('view-subfolders')"><i class="fas fa-chevron-left"></i></div><h2 id="listTitle" style="font-size: 16px;">Files</h2><div style="width: 40px;"></div></div>
             <div id="filesContainer" style="margin-top: 15px;"></div>
         </div>
 
         <div id="view-gallery-subjects" class="view">
-            <div class="header">
-                <div style="width: 40px;"></div><h2 style="font-size: 18px; color:var(--text-main);">Library Gallery</h2><div style="width: 40px;"></div>
-            </div>
+            <div class="header"><div style="width: 40px;"></div><h2 style="font-size: 18px;">Library Gallery</h2><div style="width: 40px;"></div></div>
             <h3 style="font-size: 14px; margin-bottom: 15px; color: var(--text-sub); text-align:center;">Select a subject to view gallery</h3>
             <div class="subject-grid">
-                <div class="glass-card" style="text-align: center; padding: 15px; cursor:pointer;" onclick="openGalleryFolders('Education')"><i class="fas fa-book-open subj-icon" style="color: var(--accent-pink);"></i><h3 style="font-size:14px; color:var(--text-main);">Education</h3></div>
-                <div class="glass-card" style="text-align: center; padding: 15px; cursor:pointer;" onclick="openGalleryFolders('Philosophy')"><i class="fas fa-brain subj-icon" style="color: var(--accent-blue);"></i><h3 style="font-size:14px; color:var(--text-main);">Philosophy</h3></div>
-                <div class="glass-card" style="text-align: center; padding: 15px; cursor:pointer;" onclick="openGalleryFolders('Geography')"><i class="fas fa-globe-asia subj-icon" style="color: #2ed573;"></i><h3 style="font-size:14px; color:var(--text-main);">Geography</h3></div>
-                <div class="glass-card" style="text-align: center; padding: 15px; cursor:pointer;" onclick="openGalleryFolders('Bengali')"><i class="fas fa-pen-nib subj-icon" style="color: #f6d365;"></i><h3 style="font-size:14px; color:var(--text-main);">Bengali</h3></div>
-                <div class="glass-card" style="text-align: center; padding: 15px; cursor:pointer; grid-column: span 2;" onclick="openGalleryFolders('Env. Science')"><i class="fas fa-leaf subj-icon" style="color: #00b09b;"></i><h3 style="font-size:14px; color:var(--text-main);">Env. Science</h3></div>
+                <div class="glass-card" style="text-align: center; padding: 15px; cursor:pointer;" onclick="openGalleryFolders('Education')"><i class="fas fa-book-open subj-icon" style="color: var(--accent-pink);"></i><h3 style="font-size:14px;">Education</h3></div>
+                <div class="glass-card" style="text-align: center; padding: 15px; cursor:pointer;" onclick="openGalleryFolders('Philosophy')"><i class="fas fa-brain subj-icon" style="color: var(--accent-blue);"></i><h3 style="font-size:14px;">Philosophy</h3></div>
+                <div class="glass-card" style="text-align: center; padding: 15px; cursor:pointer;" onclick="openGalleryFolders('Geography')"><i class="fas fa-globe-asia subj-icon" style="color: #2ed573;"></i><h3 style="font-size:14px;">Geography</h3></div>
+                <div class="glass-card" style="text-align: center; padding: 15px; cursor:pointer;" onclick="openGalleryFolders('Bengali')"><i class="fas fa-pen-nib subj-icon" style="color: #f6d365;"></i><h3 style="font-size:14px;">Bengali</h3></div>
+                <div class="glass-card" style="text-align: center; padding: 15px; cursor:pointer; grid-column: span 2;" onclick="openGalleryFolders('Env. Science')"><i class="fas fa-leaf subj-icon" style="color: #00b09b;"></i><h3 style="font-size:14px;">Env. Science</h3></div>
             </div>
         </div>
 
         <div id="view-gallery-folders" class="view">
-            <div class="header">
-                <div class="icon-btn" onclick="goTo('view-gallery-subjects')"><i class="fas fa-chevron-left"></i></div>
-                <h2 id="gallerySubjTitle" style="font-size: 18px; color:var(--text-main);">Subject</h2><div style="width: 40px;"></div>
-            </div>
+            <div class="header"><div class="icon-btn" onclick="goTo('view-gallery-subjects')"><i class="fas fa-chevron-left"></i></div><h2 id="gallerySubjTitle" style="font-size: 16px;">Subject</h2><div style="width: 40px;"></div></div>
             <div style="margin-top: 20px;">
-                <div class="glass-card" onclick="loadGalleryGrid('pdf')" style="cursor:pointer; display:flex; align-items:center; gap:15px;"><i class="fas fa-file-pdf" style="font-size:30px; color:#FF0076;"></i><div><h3 style="font-size:15px; color:var(--text-main);">PDF Gallery</h3><p style="font-size:11px; color:var(--text-sub);">Read & Download</p></div></div>
-                <div class="glass-card" onclick="loadGalleryGrid('guide')" style="cursor:pointer; display:flex; align-items:center; gap:15px;"><i class="fas fa-book-reader" style="font-size:30px; color:#2ed573;"></i><div><h3 style="font-size:15px; color:var(--text-main);">Guide Gallery</h3><p style="font-size:11px; color:var(--text-sub);">Read & Download</p></div></div>
+                <div class="glass-card" onclick="loadGalleryGrid('pdf')" style="cursor:pointer; display:flex; align-items:center; gap:15px;"><i class="fas fa-file-pdf" style="font-size:30px; color:#FF0076;"></i><div><h3 style="font-size:15px;">PDF Gallery</h3><p style="font-size:11px; color:var(--text-sub);">Read & Download</p></div></div>
+                <div class="glass-card" onclick="loadGalleryGrid('guide')" style="cursor:pointer; display:flex; align-items:center; gap:15px;"><i class="fas fa-book-reader" style="font-size:30px; color:#2ed573;"></i><div><h3 style="font-size:15px;">Guide Gallery</h3><p style="font-size:11px; color:var(--text-sub);">Read & Download</p></div></div>
             </div>
         </div>
 
         <div id="view-gallery-grid" class="view">
-            <div class="header">
-                <div class="icon-btn" onclick="goTo('view-gallery-folders')"><i class="fas fa-chevron-left"></i></div>
-                <h2 id="galleryGridTitle" style="font-size: 15px; color:var(--text-main);">Gallery</h2><div style="width: 40px;"></div>
-            </div>
+            <div class="header"><div class="icon-btn" onclick="goTo('view-gallery-folders')"><i class="fas fa-chevron-left"></i></div><h2 id="galleryGridTitle" style="font-size: 15px;">Gallery</h2><div style="width: 40px;"></div></div>
             <div id="galleryGridContainer" class="photo-gallery-grid"></div>
         </div>
 
         <div id="view-settings" class="view">
-            <div class="header">
-                <div class="icon-btn" onclick="goTo('view-home')"><i class="fas fa-arrow-left"></i></div>
-                <h2 style="color:var(--text-main);">Settings</h2><div style="width:40px;"></div>
-            </div>
+            <div class="header"><div class="icon-btn" onclick="goTo('view-home')"><i class="fas fa-arrow-left"></i></div><h2>Settings</h2><div style="width:40px;"></div></div>
             
             <div class="glass-card" style="text-align: center;">
                 <div style="position: relative; display: inline-block;">
@@ -348,16 +352,16 @@
                     <div style="position: absolute; bottom: 0; right: 0; background: var(--accent-blue); width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="document.getElementById('picInput').click()"><i class="fas fa-camera" style="color: #fff; font-size: 12px;"></i></div>
                 </div>
                 <input type="file" id="picInput" accept="image/*" style="display: none;" onchange="openCropper(event)">
-                <h3 style="margin-top: 10px; font-size:15px; color:var(--text-main);">Student Profile</h3>
+                <h3 style="margin-top: 10px; font-size:15px;">Student Profile</h3>
                 <p style="font-size: 11px; color: var(--text-sub);">Saved to Cloud Database</p>
             </div>
             
             <div class="glass-card">
                 <div style="margin-bottom: 20px; border-bottom: 1px solid var(--card-border); padding-bottom: 15px;">
-                    <span style="display:block; margin-bottom:10px; color:var(--text-main);"><i class="fas fa-palette" style="color: var(--accent-blue); margin-right: 10px;"></i> App Theme</span>
+                    <span style="display:block; margin-bottom:10px;"><i class="fas fa-palette" style="color: var(--accent-blue); margin-right: 10px;"></i> App Theme</span>
                     <select id="themeSelect" class="input-glass" style="padding: 10px; margin:0;" onchange="changeTheme()">
-                        <option value="light" style="color:black;">Light Mode (Default)</option>
-                        <option value="dark" style="color:black;">Dark Mode</option>
+                        <option value="default" style="color:black;">Default Dark</option>
+                        <option value="light" style="color:black;">Light Mode</option>
                         <option value="purple" style="color:black;">Purple Glow</option>
                         <option value="teal" style="color:black;">Teal Ocean</option>
                         <option value="green" style="color:black;">Green Nature</option>
@@ -365,19 +369,19 @@
                 </div>
 
                 <div style="margin-bottom: 20px; border-bottom: 1px solid var(--card-border); padding-bottom: 15px;">
-                    <span style="display:block; margin-bottom:10px; color:var(--text-main);"><i class="fas fa-sun" style="color: #f6d365; margin-right: 10px;"></i> Brightness</span>
+                    <span style="display:block; margin-bottom:10px;"><i class="fas fa-sun" style="color: #f6d365; margin-right: 10px;"></i> Brightness</span>
                     <input type="range" id="brightnessSlider" min="0.2" max="1" step="0.1" value="1" oninput="changeBrightness(this.value)">
                 </div>
 
                 <div style="margin-bottom: 20px; border-bottom: 1px solid var(--card-border); padding-bottom: 15px;">
-                    <span style="display:block; margin-bottom:10px; color:var(--text-main);"><i class="fas fa-volume-up" style="color: #2ed573; margin-right: 10px;"></i> Sound Volume</span>
+                    <span style="display:block; margin-bottom:10px;"><i class="fas fa-volume-up" style="color: #2ed573; margin-right: 10px;"></i> Sound Volume</span>
                     <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1" oninput="changeVolume(this.value)">
                 </div>
 
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--card-border); padding-bottom: 15px;">
-                    <div><span style="display:block; color:var(--text-main);"><i class="fas fa-music" style="color: var(--accent-pink); margin-right: 10px;"></i> Alarm Tune</span><span style="font-size: 10px; color: var(--text-sub);">For exam warnings</span></div>
+                    <div><span style="display:block;"><i class="fas fa-music" style="color: var(--accent-pink); margin-right: 10px;"></i> Alarm Tune</span><span style="font-size: 10px; color: var(--text-sub);">For exam warnings</span></div>
                     <div style="display: flex; gap: 10px; align-items: center;">
-                        <select id="alarmTuneSelect" class="input-glass" style="padding: 8px; margin:0; width: auto; font-size: 12px; background: rgba(255,255,255,0.8); color: #333;" onchange="saveSettings()">
+                        <select id="alarmTuneSelect" class="input-glass" style="padding: 8px; margin:0; width: auto; font-size: 12px; background: rgba(255,255,255,0.2); color: var(--text-main);" onchange="saveSettings()">
                             <option value="1" style="color:black;">1. Classic Beep</option><option value="2" style="color:black;">2. Digital Watch</option>
                             <option value="3" style="color:black;">3. Loud Buzzer</option><option value="4" style="color:black;">4. High Trill</option>
                         </select>
@@ -386,30 +390,20 @@
                 </div>
 
                 <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding-top: 15px;" onclick="clearDataConfirm()">
-                    <span style="color:var(--text-main);"><i class="fas fa-trash" style="color: var(--accent-pink); margin-right: 10px;"></i> Clear App Data</span><i class="fas fa-chevron-right" style="color: var(--text-sub);"></i>
+                    <span><i class="fas fa-trash" style="color: var(--accent-pink); margin-right: 10px;"></i> Clear App Data</span><i class="fas fa-chevron-right" style="color: var(--text-sub);"></i>
                 </div>
             </div>
             <button class="btn-main" style="background: transparent; border: 2px solid var(--accent-pink); color: var(--accent-pink); box-shadow: none;" onclick="logoutConfirm()">Logout Securely</button>
         </div>
 
         <div id="view-admin" class="view">
-            <div class="header">
-                <div class="icon-btn" style="color: var(--accent-pink);" onclick="logoutConfirm()"><i class="fas fa-power-off"></i></div>
-                <h2 style="font-size: 18px; color:var(--text-main);">Admin Panel</h2><div style="width:40px;"></div>
-            </div>
+            <div class="header"><div class="icon-btn" style="color: var(--accent-pink);" onclick="logoutConfirm()"><i class="fas fa-power-off"></i></div><h2 style="font-size: 18px;">Admin Panel</h2><div style="width:40px;"></div></div>
             
             <div class="glass-card">
-                <h3 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-blue);">1. Manage Student Login</h3>
-                
-                <div style="background: rgba(0,0,0,0.05); padding: 12px; border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(150,150,150,0.2);">
-                    <p style="font-size: 11px; color: var(--text-sub); margin-bottom: 5px;"><i class="fas fa-info-circle"></i> Current Active Login:</p>
-                    <p style="font-size: 14px; font-weight: bold; color: #2ed573;">User ID: <span id="currIdDisp">Loading...</span></p>
-                    <p style="font-size: 14px; font-weight: bold; color: var(--accent-pink);">Password: <span id="currPassDisp">Loading...</span></p>
-                </div>
-
-                <input type="text" id="adSetId" class="input-glass" placeholder="Set New Student ID">
-                <input type="text" id="adSetPass" class="input-glass" placeholder="Set New Password">
-                <button class="btn-main" style="padding: 10px;" onclick="saveStudentCredentials()">Save New Credentials</button>
+                <h3 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-blue);">1. Set Student Login</h3>
+                <input type="text" id="adSetId" class="input-glass" placeholder="Set Student ID (e.g. Priyanka)">
+                <input type="text" id="adSetPass" class="input-glass" placeholder="Set Password (e.g. 12345)">
+                <button class="btn-main" style="padding: 10px;" onclick="saveStudentCredentials()">Save Credentials</button>
             </div>
 
             <div class="glass-card">
@@ -426,16 +420,14 @@
             <div class="glass-card">
                 <h3 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-pink);">3. File Upload (Telegram/Firebase)</h3>
                 <select id="adSubj" class="input-glass" style="padding:10px;"><option value="Education">Education</option><option value="Philosophy">Philosophy</option><option value="Bengali">Bengali</option><option value="Geography">Geography</option><option value="Env. Science">Env. Science</option></select>
-                <select id="adType" class="input-glass" style="padding:10px;" onchange="toggleTimerFields()"><option value="live_mock">Live Mock Test (HTML)</option><option value="pdf">PDF Note</option><option value="guide">Study Guide</option></select>
-                <input type="text" id="adName" class="input-glass" placeholder="File Name (e.g. Chapter 1)">
+                <select id="adType" class="input-glass" style="padding:10px;" onchange="toggleTimerFields()"><option value="live_mock">Live Mock Test</option><option value="pdf">PDF Note</option><option value="guide">Study Guide</option></select>
+                <input type="text" id="adName" class="input-glass" placeholder="File Name" style="padding:10px;">
                 <input type="file" id="adFileInput" class="input-glass" accept="*/*" style="padding: 8px; background: rgba(255,255,255,0.8);">
-                <div id="timerFields" style="background: rgba(0,0,0,0.05); padding: 10px; border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(150,150,150,0.2);">
-                    <label style="font-size: 11px; color: var(--accent-blue);">Start Time (Auto Open):</label>
-                    <input type="datetime-local" id="adStartTime" class="input-glass" style="margin-bottom: 10px; padding: 10px;">
-                    <label style="font-size: 11px; color: var(--accent-pink);">End Time (Auto Submit):</label>
-                    <input type="datetime-local" id="adEndTime" class="input-glass" style="margin-bottom: 0; padding: 10px;">
+                <div id="timerFields" style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px; margin-bottom: 10px;">
+                    <label style="font-size: 10px; color: var(--accent-blue);">Start Time:</label><input type="datetime-local" id="adStartTime" class="input-glass" style="padding:8px; margin-bottom:5px;">
+                    <label style="font-size: 10px; color: var(--accent-pink);">End Time:</label><input type="datetime-local" id="adEndTime" class="input-glass" style="padding:8px; margin-bottom:0;">
                 </div>
-                <button class="btn-main" id="adBtn" onclick="processAdminUpload()"><i class="fas fa-upload"></i> Upload Directly</button>
+                <button class="btn-main" id="adBtn" onclick="processAdminUpload()">Upload Directly</button>
             </div>
         </div>
     </div>
@@ -447,30 +439,23 @@
     </div>
 
     <script>
-        // === 1. SAFE LOCALSTORAGE & CRASH PREVENTION ===
-        function sGet(k) { try { return localStorage.getItem(k); } catch(e) { return null; } }
-        function sSet(k, v) { try { localStorage.setItem(k, v); } catch(e) {} }
-        function sRem(k) { try { localStorage.removeItem(k); } catch(e) {} }
-
-        const isStudent = sGet('isStudentLoggedIn') === 'true';
-        const isAdmin = sGet('isAdminLoggedIn') === 'true';
+        // === 0. INSTANT BOOT LOGIC (NO LOADING SCREEN) ===
+        const isStudent = localStorage.getItem('isStudentLoggedIn') === 'true';
+        const isAdmin = localStorage.getItem('isAdminLoggedIn') === 'true';
         
         document.addEventListener('DOMContentLoaded', () => {
-            try {
-                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-                if(isStudent) { 
-                    document.getElementById('view-home').classList.add('active'); 
-                    document.getElementById('bottomNav').style.display = 'flex';
-                } else if (isAdmin) { 
-                    document.getElementById('view-admin').classList.add('active'); 
-                    loadCurrentCredentials();
-                } else { 
-                    document.getElementById('view-login').classList.add('active'); 
-                }
-            } catch(e) { console.log("Init Error"); }
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            if(isStudent) { 
+                document.getElementById('view-home').classList.add('active'); 
+                document.getElementById('bottomNav').style.display = 'flex';
+            } else if (isAdmin) { 
+                document.getElementById('view-admin').classList.add('active'); 
+            } else { 
+                document.getElementById('view-login').classList.add('active'); 
+            }
         });
 
-        // === 2. FIREBASE INIT ===
+        // === 1. FIREBASE INIT ===
         const firebaseConfig = { apiKey: "AIzaSyAY97_iFryUusBSTrJsBzSIFRnIovcA4LY", authDomain: "my-photo-301f2.firebaseapp.com", projectId: "my-photo-301f2" };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.firestore();
@@ -482,21 +467,9 @@
         const pdfjsLib = window['pdfjs-dist/build/pdf'];
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-        // 🔴 3. CORDOVA PLUGINS SETUP (BACKGROUND & NOTIFICATIONS) 🔴
+        // === 2. NATIVE DEVICE SECURITY & SPLASH FIX ===
         document.addEventListener("deviceready", function() {
             if(navigator.splashscreen) { navigator.splashscreen.hide(); }
-
-            // Enable Background Mode so timer runs when app is minimized
-            if(window.cordova && cordova.plugins && cordova.plugins.backgroundMode) {
-                cordova.plugins.backgroundMode.enable();
-                cordova.plugins.backgroundMode.overrideBackButton();
-                cordova.plugins.backgroundMode.setDefaults({
-                    title: 'Priyanka Study is Active',
-                    text: 'Waiting for upcoming live tests...',
-                    resume: true,
-                    hidden: false
-                });
-            }
 
             document.addEventListener("backbutton", function(e){
                 if(isExamRunning) {
@@ -520,109 +493,93 @@
             else { if(document.exitFullscreen) { document.exitFullscreen(); } }
         }
 
+        // === 3. LOAD DATA ON BOOT ===
         window.addEventListener('DOMContentLoaded', () => {
             loadSettings(); 
             if(isStudent) { 
-                document.getElementById('dispUserName').innerText = sGet('savedUserId') || "Student";
+                document.getElementById('dispUserName').innerText = localStorage.getItem('savedUserId') || "Student";
                 loadFirebaseProfilePic(); loadDashboardStats(); fetchUpcomingTests();
                 setInterval(fetchUpcomingTests, 60000); setInterval(checkTimerLogic, 1000); 
             }
         });
 
         // === 4. SUPERFAST REAL-TIME LOGIN ===
-        function toggleLoginMode(mode) { 
-            try {
-                if(mode === 'admin') {
-                    document.getElementById('loginStudentMode').style.display = 'none';
-                    document.getElementById('loginAdminMode').style.display = 'block';
-                } else {
-                    document.getElementById('loginStudentMode').style.display = 'block';
-                    document.getElementById('loginAdminMode').style.display = 'none';
-                }
-            } catch(e) { console.log(e); }
+        function toggleLoginMode() { 
+            let isAd = document.getElementById('adminToggle').checked; 
+            document.getElementById('loginStudentMode').style.display = isAd ? 'none' : 'block'; 
+            document.getElementById('loginAdminMode').style.display = isAd ? 'block' : 'none'; 
         }
         
-        function executeLogin(type) {
-            try {
-                if(type === 'admin') {
-                    if(document.getElementById('adminKey').value === MASTER_KEY) { 
-                        sSet('isAdminLoggedIn', 'true'); 
-                        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-                        document.getElementById('view-admin').classList.add('active');
-                        loadCurrentCredentials();
-                        showToast("✅ Admin Logged In");
-                    } else { showToast("❌ Invalid Key"); }
-                } else {
-                    let uId = document.getElementById('userId').value.trim();
-                    let uPass = document.getElementById('userPass').value.trim();
+        function executeLogin() {
+            if(document.getElementById('adminToggle').checked) {
+                if(document.getElementById('adminKey').value === MASTER_KEY) { 
+                    localStorage.setItem('isAdminLoggedIn', 'true'); 
+                    goTo('view-admin'); 
+                } else { showToast("❌ Invalid Key"); }
+            } else {
+                let uId = document.getElementById('userId').value.trim();
+                let uPass = document.getElementById('userPass').value.trim();
+                
+                if(uId !== "" && uPass !== "") { 
+                    let validId = "Priyanka"; let validPass = "12345"; 
                     
-                    if(uId !== "" && uPass !== "") { 
-                        let btn = document.getElementById('stuLoginBtn');
-                        let originalText = btn.innerHTML;
-                        btn.innerText = "Checking...";
+                    db.collection("admin_settings").doc("student_credentials").get().then((doc) => {
+                        if(doc.exists && doc.data().userId) { validId = doc.data().userId; validPass = doc.data().password; }
+                        processStudentLogin(uId, uPass, validId, validPass);
+                    }).catch(()=> { 
+                        processStudentLogin(uId, uPass, validId, validPass); 
+                    });
+                } else { showToast("Enter ID and Password"); }
+            }
+        }
+
+        function processStudentLogin(uId, uPass, validId, validPass) {
+            if(uId === validId && uPass === validPass) {
+                document.getElementById('custom-splash').style.display = 'flex';
+                document.getElementById('custom-splash').style.opacity = '1';
+                
+                let progress = 0; let textArr = ["Connecting...", "Verifying...", "Fetching Data...", "Success!"];
+                let bar = document.getElementById('splashProgressBar'); let perc = document.getElementById('splashPercentage'); let txt = document.getElementById('splashStatusText');
+                
+                let loginInterval = setInterval(() => {
+                    progress += 10;
+                    bar.style.width = progress + '%'; perc.innerText = progress + '%';
+                    if(progress === 30) txt.innerText = textArr[1];
+                    if(progress === 60) txt.innerText = textArr[2];
+                    if(progress === 90) txt.innerText = textArr[3];
+                    
+                    if(progress >= 100) {
+                        clearInterval(loginInterval);
+                        localStorage.setItem('savedUserId', uId); localStorage.setItem('savedUserPass', uPass); localStorage.setItem('isStudentLoggedIn', 'true'); 
                         
-                        db.collection("admin_settings").doc("student_credentials").get().then((doc) => {
-                            let validId = "Priyanka"; let validPass = "12345"; 
-                            if(doc.exists && doc.data().userId) { validId = doc.data().userId; validPass = doc.data().password; }
-                            
-                            if(uId === validId && uPass === validPass) {
-                                btn.innerHTML = originalText;
-                                document.getElementById('custom-splash').style.display = 'flex';
-                                document.getElementById('custom-splash').style.opacity = '1';
-                                
-                                let progress = 0; let textArr = ["Connecting...", "Verifying...", "Fetching Data...", "Success!"];
-                                let bar = document.getElementById('splashProgressBar'); let perc = document.getElementById('splashPercentage'); let txt = document.getElementById('splashStatusText');
-                                
-                                let loginInterval = setInterval(() => {
-                                    progress += 10;
-                                    bar.style.width = progress + '%'; perc.innerText = progress + '%';
-                                    if(progress === 30) txt.innerText = textArr[1];
-                                    if(progress === 60) txt.innerText = textArr[2];
-                                    if(progress === 90) txt.innerText = textArr[3];
-                                    
-                                    if(progress >= 100) {
-                                        clearInterval(loginInterval);
-                                        sSet('savedUserId', uId); sSet('savedUserPass', uPass); sSet('isStudentLoggedIn', 'true'); 
-                                        
-                                        document.getElementById('dispUserName').innerText = uId;
-                                        loadFirebaseProfilePic(); loadDashboardStats(); fetchUpcomingTests();
-                                        setInterval(fetchUpcomingTests, 60000); setInterval(checkTimerLogic, 1000);
-                                        
-                                        setTimeout(() => {
-                                            document.getElementById('custom-splash').style.opacity = '0';
-                                            setTimeout(() => { 
-                                                document.getElementById('custom-splash').style.display = 'none'; 
-                                                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-                                                document.getElementById('view-home').classList.add('active');
-                                                document.getElementById('bottomNav').style.display = 'flex';
-                                            }, 300);
-                                        }, 300);
-                                    }
-                                }, 100); 
-                            } else { 
-                                btn.innerHTML = originalText;
-                                showToast("❌ Wrong ID or Password!"); 
-                            }
-                        }).catch(()=> { 
-                            btn.innerHTML = originalText;
-                            showToast("Network Error! Try Again."); 
-                        });
-                    } else { showToast("Enter ID and Password"); }
-                }
-            } catch (error) { showToast("An error occurred during login."); }
+                        document.getElementById('dispUserName').innerText = uId;
+                        loadFirebaseProfilePic(); loadDashboardStats(); fetchUpcomingTests();
+                        setInterval(fetchUpcomingTests, 60000); setInterval(checkTimerLogic, 1000);
+                        
+                        setTimeout(() => {
+                            document.getElementById('custom-splash').style.opacity = '0';
+                            setTimeout(() => { document.getElementById('custom-splash').style.display = 'none'; goTo('view-home'); }, 300);
+                        }, 300);
+                    }
+                }, 100); 
+            } else { showToast("❌ Wrong ID or Password!"); }
         }
         
+        // 🔴 LOGOUT FIX 🔴
         function logoutConfirm() { 
             if(confirm("আপনি কি লগআউট করতে চান?")) { 
-                sRem('isStudentLoggedIn'); sRem('isAdminLoggedIn');
+                localStorage.removeItem('isStudentLoggedIn');
+                localStorage.removeItem('isAdminLoggedIn');
+                
                 document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
                 document.getElementById('view-login').classList.add('active');
                 document.getElementById('bottomNav').style.display = 'none';
-                document.getElementById('userId').value = ''; document.getElementById('userPass').value = ''; document.getElementById('adminKey').value = '';
+                
                 showToast("Logged out successfully!");
             } 
         }
 
+        // === 5. CROPPER (Firebase DP) ===
         function openCropper(event) {
             let file = event.target.files[0];
             if(file) {
@@ -638,16 +595,17 @@
             if(imageCropper) {
                 let canvas = imageCropper.getCroppedCanvas({ width: 250, height: 250 }); let base64DP = canvas.toDataURL();
                 document.getElementById('setProfilePic').src = base64DP; document.getElementById('cropModal').style.display = 'none';
-                let uId = sGet('savedUserId') || "guest";
+                let uId = localStorage.getItem('savedUserId') || "guest";
                 db.collection("users").doc(uId).set({ profilePic: base64DP }, { merge: true }).then(() => { showToast("✅ DP Saved!"); });
             }
         }
         function closeCrop() { document.getElementById('cropModal').style.display = 'none'; }
         function loadFirebaseProfilePic() {
-            let uId = sGet('savedUserId');
+            let uId = localStorage.getItem('savedUserId');
             if(uId) { db.collection("users").doc(uId).get().then(doc => { if(doc.exists && doc.data().profilePic) { document.getElementById('setProfilePic').src = doc.data().profilePic; } }); }
         }
 
+        // === 6. AUDIO ALARM ===
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playTone(freq, type, startTime, duration) {
             if(audioCtx.state === 'suspended') audioCtx.resume();
@@ -657,7 +615,7 @@
             osc.start(startTime); osc.stop(startTime + duration);
         }
         function playSelectedAlarm(durationMs) {
-            let tune = parseInt(sGet('alarmTune')) || 1; let loops = durationMs / 1000; let t = audioCtx.currentTime;
+            let tune = parseInt(localStorage.getItem('alarmTune')) || 1; let loops = durationMs / 1000; let t = audioCtx.currentTime;
             for(let i=0; i<loops; i++) {
                 let start = t + i;
                 if(tune===1) { playTone(800, 'sine', start, 0.5); playTone(1000, 'sine', start+0.5, 0.5); } 
@@ -670,27 +628,29 @@
         function playBeep() { if(globalVolume > 0) { playTone(800, 'sine', audioCtx.currentTime, 0.2); if(navigator.vibrate) navigator.vibrate(200); } }
         function testAlarmTune() { saveSettings(); showToast("Playing preview..."); playSelectedAlarm(2000); }
 
+        // === 7. SETTINGS CONTROLS ===
         function loadSettings() {
-            let savedId = sGet('savedUserId'); let savedPass = sGet('savedUserPass');
+            let savedId = localStorage.getItem('savedUserId'); let savedPass = localStorage.getItem('savedUserPass');
             if(savedId) document.getElementById('userId').value = savedId;
             if(savedPass) document.getElementById('userPass').value = savedPass;
             
-            let th = sGet('appTheme') || 'light'; document.getElementById('themeSelect').value = th; changeTheme();
-            let br = sGet('appBrightness') || '1'; document.getElementById('brightnessSlider').value = br; changeBrightness(br);
-            let vol = sGet('appVolume') || '1'; document.getElementById('volumeSlider').value = vol; changeVolume(vol);
+            let th = localStorage.getItem('appTheme') || 'default'; document.getElementById('themeSelect').value = th; changeTheme();
+            let br = localStorage.getItem('appBrightness') || '1'; document.getElementById('brightnessSlider').value = br; changeBrightness(br);
+            let vol = localStorage.getItem('appVolume') || '1'; document.getElementById('volumeSlider').value = vol; changeVolume(vol);
         }
-        function saveSettings() { sSet('alarmTune', document.getElementById('alarmTuneSelect').value); showToast("Settings Saved!"); }
-        function changeTheme() { let th = document.getElementById('themeSelect').value; sSet('appTheme', th); document.body.className = ''; if(th !== 'default') { document.body.classList.add('theme-' + th); } }
-        function changeBrightness(val) { sSet('appBrightness', val); let darkness = 1 - parseFloat(val); document.getElementById('brightnessOverlay').style.backgroundColor = `rgba(0,0,0,${darkness})`; }
-        function changeVolume(val) { sSet('appVolume', val); globalVolume = parseFloat(val); }
+        function saveSettings() { localStorage.setItem('alarmTune', document.getElementById('alarmTuneSelect').value); showToast("Settings Saved!"); }
+        function changeTheme() { let th = document.getElementById('themeSelect').value; localStorage.setItem('appTheme', th); document.body.className = ''; if(th !== 'default') { document.body.classList.add('theme-' + th); } }
+        function changeBrightness(val) { localStorage.setItem('appBrightness', val); let darkness = 1 - parseFloat(val); document.getElementById('brightnessOverlay').style.backgroundColor = `rgba(0,0,0,${darkness})`; }
+        function changeVolume(val) { localStorage.setItem('appVolume', val); globalVolume = parseFloat(val); }
         function clearDataConfirm() { if(confirm("Clear App Data?")) { localStorage.clear(); location.reload(); } }
 
+        // === 8. NAVIGATION ===
         function showToast(msg) { let t = document.getElementById("toast"); t.innerText = msg; t.className = "show"; setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000); }
         function goTo(viewId) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById(viewId).classList.add('active'); document.getElementById('bottomNav').style.display = (viewId === 'view-home' || viewId === 'view-settings' || viewId === 'view-subfolders' || viewId === 'view-gallery-subjects' || viewId === 'view-gallery-folders' || viewId === 'view-gallery-grid') ? 'flex' : 'none'; }
         function updateNav(el) { document.querySelectorAll('.nav-icon').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
         function toggleSidebar() { let sb = document.getElementById('sidebar'); let ov = document.getElementById('sbOverlay'); if(sb.classList.contains('open')) { sb.classList.remove('open'); ov.style.display = 'none'; } else { sb.classList.add('open'); ov.style.display = 'block'; } }
 
-        // 🔴 5. SCOREBOARD STATS WITH PERCENTAGE 🔴
+        // === 9. SCOREBOARD CALCULATION ===
         function loadDashboardStats() {
             db.collection("user_settings").doc("dashboard_stats").get().then((doc) => {
                 if(doc.exists) { 
@@ -708,95 +668,32 @@
                     }
                 }
             });
-            let comp = JSON.parse(sGet('completedTests') || '[]'); 
-            document.getElementById('testsGiven').innerText = comp.length;
+            let comp = JSON.parse(localStorage.getItem('completedTests') || '[]'); document.getElementById('testsGiven').innerText = comp.length;
         }
 
-        // 🔴 6. UPCOMING MARQUEE & STATS 🔴
+        // === 10. LIVE EXAM COUNTDOWN & LOCKDOWN ===
         function fetchUpcomingTests() {
             db.collection("study_materials").where("type", "==", "live_mock").get().then((snap) => {
-                globalTests = []; 
-                let comp = JSON.parse(sGet('completedTests') || '[]'); 
-                let pendingCount = 0; let missedCount = 0; let totalTests = 0;
-                let now = new Date().getTime();
-
-                document.querySelectorAll('.subj-badge').forEach(b => { b.style.display = 'none'; b.innerHTML = ''; });
-
-                snap.forEach(doc => { 
-                    let d = doc.data(); d.id = doc.id; totalTests++;
-                    if(d.startTime && d.endTime) { 
-                        let st = new Date(d.startTime).getTime(); let en = new Date(d.endTime).getTime(); 
-                        if(!comp.includes(d.id)) {
-                            if(now > en) { missedCount++; } 
-                            else {
-                                globalTests.push(d); pendingCount++; 
-                                let safeSubj = d.subject.replace(/[^a-zA-Z]/g, ''); let badgeId = 'badge-' + safeSubj;
-                                let badgeEl = document.getElementById(badgeId);
-                                if(badgeEl) {
-                                    badgeEl.style.display = 'block';
-                                    let dtStr = new Date(st).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                                    badgeEl.innerHTML = `<marquee scrollamount="2" style="width:100%;">Upcoming: ${dtStr}</marquee>`;
-                                }
-                            }
-                        }
-                    } 
-                });
-                
-                document.getElementById('testsPending').innerText = pendingCount; 
-                document.getElementById('dashMissed').innerText = missedCount;
-                document.getElementById('dashTotalTests').innerText = totalTests;
-
-                globalTests.sort((a,b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+                globalTests = []; let comp = JSON.parse(localStorage.getItem('completedTests') || '[]'); let pendingCount = 0; let now = new Date().getTime();
+                snap.forEach(doc => { let d = doc.data(); d.id = doc.id; if(!comp.includes(d.id) && d.startTime) { let en = new Date(d.endTime).getTime(); if(now < en) { globalTests.push(d); pendingCount++; } } });
+                document.getElementById('testsPending').innerText = pendingCount; globalTests.sort((a,b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
                 let el = document.getElementById('homeTestStatus');
-                if(globalTests.length > 0) { 
-                    let next = globalTests[0]; 
-                    el.innerHTML = `${next.subject} - ${next.filename} <br> <span style="color:#fff;">Starts: ${new Date(next.startTime).toLocaleString()}</span>`; 
-                } else { el.innerHTML = "No pending live tests."; }
+                if(globalTests.length > 0) { let next = globalTests[0]; el.innerHTML = `${next.subject} - ${next.filename} <br> <span style="color:#fff;">Starts: ${new Date(next.startTime).toLocaleString()}</span>`; } else { el.innerHTML = "No pending live tests."; }
             });
         }
 
-        // 🔴 7. EXAM LOCKDOWN & AUTO-WAKE BACKGROUND ALARM 🔴
         let countdownInt = null;
-        let bgAlarmLoop = null;
-
         function checkTimerLogic() {
-            if(globalTests.length === 0) return; let now = new Date().getTime(); let compArr = JSON.parse(sGet('completedTests') || '[]');
+            if(globalTests.length === 0) return; let now = new Date().getTime(); let compArr = JSON.parse(localStorage.getItem('completedTests') || '[]');
             
             for(let i=0; i<globalTests.length; i++) {
                 let test = globalTests[i]; if(compArr.includes(test.id)) continue; 
                 let st = new Date(test.startTime).getTime(); let en = new Date(test.endTime).getTime(); let dist = st - now;
                 
-                // 25s Before: Background Alarm & Notification
-                if(dist <= 25000 && dist > 10000 && !test.preAlarmPlayed) { 
-                    test.preAlarmPlayed = true; 
-                    
-                    bgAlarmLoop = setInterval(() => { if(!isExamRunning) playSelectedAlarm(2000); }, 2500);
-
-                    // Send Local Notification & Wake up Screen
-                    if(window.cordova && cordova.plugins) {
-                        if(cordova.plugins.notification && cordova.plugins.notification.local) {
-                            cordova.plugins.notification.local.schedule({
-                                id: 1, title: 'Live Mock Test Starting!',
-                                text: 'Unlock your phone now. Exam starts in 25 seconds.',
-                                foreground: true, wakeup: true, priority: 2
-                            });
-                        }
-                        if(cordova.plugins.backgroundMode) {
-                            cordova.plugins.backgroundMode.wakeUp(); // Turns on screen
-                        }
-                    }
-                }
+                if(dist <= 20000 && dist > 10000 && !test.preAlarmPlayed) { playSelectedAlarm(10000); test.preAlarmPlayed = true; }
                 
-                // 10s Before: Force Foreground & Start Lockdown
                 if(dist <= 10000 && dist > 0 && !test.lockdownStarted) { 
                     test.lockdownStarted = true;
-                    
-                    // Force App to open if minimized
-                    if(window.cordova && cordova.plugins && cordova.plugins.backgroundMode) {
-                        cordova.plugins.backgroundMode.unlock();
-                        cordova.plugins.backgroundMode.moveToForeground();
-                    }
-
                     window.currentFilesMap[test.id] = test; 
                     openViewer(test.id, 'live_mock'); 
                     
@@ -808,45 +705,21 @@
                 
                 if(dist <= 0 && document.getElementById('lockdownModal').style.display === 'flex') { 
                     clearInterval(countdownInt); 
-                    clearInterval(bgAlarmLoop); // Stop the background ring
                     document.getElementById('lockdownModal').style.display = 'none'; 
-                    isExamRunning = true; 
-                    enterFullscreen(); 
+                    isExamRunning = true; // Blocks Back Button
+                    enterFullscreen(); // Full Screen Mode
                     showToast("⚠️ Exam Started! Device Locked.");
                 }
             }
         }
 
-        // === 8. DOWNLOAD & SHARE ===
+        // === 11. DOWNLOAD & SHARE ===
         function processDownload(url, filename) {
             if(!url) { showToast("❌ Link not found."); return; }
             if(confirm(`আপনি কি '${filename}' ডাউনলোড করতে চান?`)) {
-                let toastEl = document.getElementById("toast");
-                toastEl.className = "show"; toastEl.innerText = "⏳ Downloading... 0%";
-                let xhr = new XMLHttpRequest(); xhr.open('GET', url, true); xhr.responseType = 'blob';
-                xhr.onprogress = function(event) { if (event.lengthComputable) { let pct = Math.round((event.loaded / event.total) * 100); toastEl.innerText = `⏳ Downloading... ${pct}%`; } };
-                xhr.onload = function() {
-                    if (this.status === 200) {
-                        let blob = this.response;
-                        if (window.cordova && cordova.file) {
-                            toastEl.innerText = "💾 Saving to File Manager...";
-                            window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory + "Download/", function(dirEntry) {
-                                dirEntry.getFile(filename, { create: true, exclusive: false }, function(fileEntry) {
-                                    fileEntry.createWriter(function(fileWriter) {
-                                        fileWriter.onwriteend = function() { toastEl.innerText = "✅ Download Successful! Saved in Downloads."; setTimeout(() => { toastEl.className = toastEl.className.replace("show", ""); }, 4000); };
-                                        fileWriter.onerror = function() { fallbackDownload(blob, filename, toastEl, url); }; fileWriter.write(blob);
-                                    });
-                                }, function() { fallbackDownload(blob, filename, toastEl, url); });
-                            }, function() { fallbackDownload(blob, filename, toastEl, url); });
-                        } else { fallbackDownload(blob, filename, toastEl, url); }
-                    } else { toastEl.innerText = "⚠️ Trying external browser..."; window.open(url, '_system'); setTimeout(() => { toastEl.className = toastEl.className.replace("show", ""); }, 3000); }
-                };
-                xhr.onerror = function() { toastEl.innerText = "⚠️ Trying external browser..."; window.open(url, '_system'); setTimeout(() => { toastEl.className = toastEl.className.replace("show", ""); }, 3000); };
-                xhr.send();
+                showToast("Downloading...");
+                window.open(url, '_system'); 
             }
-        }
-        function fallbackDownload(blob, filename, toastEl, originalUrl) {
-            try { let blobUrl = window.URL.createObjectURL(blob); let a = document.createElement('a'); a.style.display = 'none'; a.href = blobUrl; a.download = filename; document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(() => { window.URL.revokeObjectURL(blobUrl); }, 5000); toastEl.innerText = "✅ Download Successful!"; setTimeout(() => { toastEl.className = toastEl.className.replace("show", ""); }, 3000); } catch(e) { window.open(originalUrl, '_system'); }
         }
 
         function processShare(url, filename) {
@@ -855,6 +728,7 @@
             window.open('https://api.whatsapp.com/send?text=' + shareText, '_system');
         }
 
+        // === 12. STANDARD FILE LISTS ===
         function openSubject(name) { activeSubject = name; document.getElementById('folderTitle').innerText = name; goTo('view-subfolders'); }
 
         function loadFiles(listType) {
@@ -874,7 +748,7 @@
                         let st = new Date(f.startTime).getTime(); let en = new Date(f.endTime).getTime();
                         if(now < st) { isLocked = true; lockText = "Starts: " + new Date(st).toLocaleString(); } else if(now > en) { isEnded = true; }
                     }
-                    let compArr = JSON.parse(sGet('completedTests') || '[]'); let manuallyEnded = compArr.includes(f.id); let finalIsEnded = (isEnded || manuallyEnded);
+                    let compArr = JSON.parse(localStorage.getItem('completedTests') || '[]'); let manuallyEnded = compArr.includes(f.id); let finalIsEnded = (isEnded || manuallyEnded);
 
                     if(listType === 'live_mock' && finalIsEnded) return; 
                     if((listType === 'mock_results' || listType === 'saved_mock') && !finalIsEnded) return; 
@@ -886,39 +760,58 @@
                         box.innerHTML += `<div class="file-item"><div class="lock-overlay"><i class="fas fa-lock"></i> ${lockText}</div><div class="file-icon-box" style="color:${iconColor};"><i class="${iconClass}"></i></div><div class="file-info"><h4>${f.filename}</h4><p>Locked</p></div></div>`;
                     } else {
                         let subTxt = "Interactive File"; if(listType === 'mock_results') subTxt = "View answers"; if(listType === 'saved_mock') subTxt = "Practice Mode";
+                        
                         let actionBtn = "";
                         if(f.type === 'pdf' || f.type === 'guide') {
                             actionBtn = `<div class="act-btn" style="color:var(--accent-blue);" onclick="processDownload('${f.url}', '${f.filename}')"><i class="fas fa-download"></i></div>`;
                         } else {
                             actionBtn = `<div class="act-btn" style="color:var(--accent-blue);" onclick="openViewer('${f.id}', '${listType}')"><i class="fas fa-play"></i></div>`;
                         }
-                        box.innerHTML += `<div class="file-item"><div class="file-icon-box" style="color:${iconColor};" onclick="openViewer('${f.id}', '${listType}')"><i class="${iconClass}"></i></div><div class="file-info" onclick="openViewer('${f.id}', '${listType}')"><h4>${f.filename}</h4><p>${subTxt}</p></div><div class="action-row" style="display:flex; gap:10px;">${actionBtn}<div class="act-btn" style="color:var(--accent-pink);" onclick="delFile('${f.id}', '${listType}')"><i class="fas fa-trash-alt"></i></div></div></div>`;
+                        
+                        box.innerHTML += `<div class="file-item"><div class="file-icon-box" style="color:${iconColor};" onclick="openViewer('${f.id}', '${listType}')"><i class="${iconClass}"></i></div><div class="file-info" onclick="openViewer('${f.id}', '${listType}')"><h4>${f.filename}</h4><p>${subTxt}</p></div><div class="action-row">${actionBtn}<div class="act-btn" style="color:var(--accent-pink);" onclick="delFile('${f.id}', '${listType}')"><i class="fas fa-trash-alt"></i></div></div></div>`;
                     }
                 });
                 if(count === 0) { box.innerHTML = "<div class='glass-card' style='text-align:center;'><p>No files here.</p></div>"; }
             });
         }
 
-        function openGalleryFolders(subj) { activeSubject = subj; document.getElementById('gallerySubjTitle').innerText = subj + " Gallery"; goTo('view-gallery-folders'); }
+        // === 13. GALLERY VIEW SYSTEM (PDF & GUIDES) ===
+        function openGalleryFolders(subj) {
+            activeSubject = subj;
+            document.getElementById('gallerySubjTitle').innerText = subj + " Gallery";
+            goTo('view-gallery-folders');
+        }
+
         function loadGalleryGrid(type) {
-            let title = type === 'pdf' ? "PDF Gallery" : "Study Guides"; document.getElementById('galleryGridTitle').innerText = title; goTo('view-gallery-grid');
-            const box = document.getElementById('galleryGridContainer'); box.innerHTML = "<div style='grid-column: span 2; text-align:center; padding:40px;'><i class='fas fa-circle-notch fa-spin' style='font-size:40px; color:var(--accent-pink);'></i></div>";
+            let title = type === 'pdf' ? "PDF Gallery" : "Study Guides";
+            document.getElementById('galleryGridTitle').innerText = title;
+            goTo('view-gallery-grid');
+            
+            const box = document.getElementById('galleryGridContainer');
+            box.innerHTML = "<div style='grid-column: span 2; text-align:center; padding:40px;'><i class='fas fa-circle-notch fa-spin' style='font-size:40px; color:var(--accent-pink);'></i></div>";
 
             db.collection("study_materials").where("subject", "==", activeSubject).where("type", "==", type).get().then((snap) => {
                 box.innerHTML = ""; let files = []; snap.forEach(doc => { let d = doc.data(); d.id = doc.id; files.push(d); });
                 files.sort((a, b) => { let ta = a.timestamp?a.timestamp.toMillis():0; let tb = b.timestamp?b.timestamp.toMillis():0; return tb - ta; }); 
+                
                 window.currentFilesMap = {}; let count = 0;
 
                 files.forEach((f) => {
                     count++; window.currentFilesMap[f.id] = f; 
-                    let icon = type === 'pdf' ? 'fas fa-file-pdf' : 'fas fa-book-reader'; let iconColor = type === 'pdf' ? 'var(--accent-pink)' : '#2ed573';
-                    let dnAction = `processDownload('${f.url}', '${f.filename}')`; let shAction = `processShare('${f.url}', '${f.filename}')`;
+                    let icon = type === 'pdf' ? 'fas fa-file-pdf' : 'fas fa-book-reader';
+                    let iconColor = type === 'pdf' ? '#FF0076' : '#2ed573';
+                    
+                    let dnAction = `processDownload('${f.url}', '${f.filename}')`;
+                    let shAction = `window.open('whatsapp://send?text=Download ${f.filename}: ${f.url}')`;
 
+                    // 🔴 GALLERY DELETE FIX 🔴
                     box.innerHTML += `
                         <div class="photo-card">
-                            <div class="photo-thumb" onclick="${dnAction}"><i class="${icon}" style="color: ${iconColor};"></i></div>
+                            <div class="photo-thumb" onclick="openViewer('${f.id}', '${type}')">
+                                <i class="${icon}" style="color: ${iconColor};"></i>
+                            </div>
                             <div class="photo-details">
-                                <h4 onclick="${dnAction}">${f.filename}</h4>
+                                <h4 onclick="openViewer('${f.id}', '${type}')">${f.filename}</h4>
                                 <div class="photo-actions">
                                     <i class="fas fa-download photo-btn" title="Download" onclick="${dnAction}"></i>
                                     <i class="fab fa-whatsapp photo-btn" title="Share" style="color:#25D366;" onclick="${shAction}"></i>
@@ -937,158 +830,336 @@
             if(key === MASTER_KEY) { 
                 db.collection("study_materials").doc(id).delete().then(() => { 
                     showToast("✅ Deleted Successfully!"); 
-                    if(listType === 'pdf' || listType === 'guide') { loadGalleryGrid(listType); } else { loadFiles(listType); }
+                    if(listType === 'pdf' || listType === 'guide') {
+                        loadGalleryGrid(listType); 
+                    } else {
+                        loadFiles(listType); 
+                    }
                 }); 
-            } else if(key !== null && key !== "") { showToast("❌ Wrong Admin Key!"); } 
+            } else if(key !== null && key !== "") { 
+                showToast("❌ Wrong Admin Key!"); 
+            } 
         }
 
-        function toggleTimerFields() { let type = document.getElementById('adType').value; document.getElementById('timerFields').style.display = (type === 'live_mock') ? 'block' : 'none'; }
+        // === 14. ADMIN UPLOAD & SCORE OVERRIDE ===
+        function toggleTimerFields() { 
+            let type = document.getElementById('adType').value; 
+            document.getElementById('timerFields').style.display = (type === 'live_mock') ? 'block' : 'none'; 
+        }
         
         function updateAdminStats() {
-            let pts = document.getElementById('adPts').value; let pct = document.getElementById('adPct').value; let cor = document.getElementById('adCor').value; let wr = document.getElementById('adWr').value;
-            db.collection("user_settings").doc("dashboard_stats").set({ points: parseInt(pts), percent: parseInt(pct), correct: parseInt(cor), wrong: parseInt(wr) }, {merge: true}).then(() => { showToast("✅ Stats Force Updated!"); loadDashboardStats(); });
-        }
-
-        function loadCurrentCredentials() {
-            db.collection("admin_settings").doc("student_credentials").get().then((doc) => {
-                if(doc.exists && doc.data().userId) {
-                    document.getElementById('currIdDisp').innerText = doc.data().userId; document.getElementById('currPassDisp').innerText = doc.data().password;
-                } else {
-                    document.getElementById('currIdDisp').innerText = "Priyanka"; document.getElementById('currPassDisp').innerText = "12345";
-                }
-            }).catch(() => { document.getElementById('currIdDisp').innerText = "Error"; document.getElementById('currPassDisp').innerText = "Error"; });
+            let pts = document.getElementById('adPts').value;
+            let pct = document.getElementById('adPct').value;
+            let cor = document.getElementById('adCor').value;
+            let wr = document.getElementById('adWr').value;
+            
+            db.collection("user_settings").doc("dashboard_stats").set({
+                points: parseInt(pts), percent: parseInt(pct), correct: parseInt(cor), wrong: parseInt(wr)
+            }, {merge: true}).then(() => { 
+                showToast("✅ Stats Force Updated!"); 
+                loadDashboardStats(); 
+            });
         }
 
         function saveStudentCredentials() {
             let nId = document.getElementById('adSetId').value.trim(); let nPass = document.getElementById('adSetPass').value.trim();
-            if(nId && nPass) { db.collection("admin_settings").doc("student_credentials").set({ userId: nId, password: nPass }, {merge:true}).then(()=>{ showToast("✅ Credentials Updated!"); loadCurrentCredentials(); document.getElementById('adSetId').value=''; document.getElementById('adSetPass').value=''; }); } else { showToast("Enter ID and Pass"); }
+            if(nId && nPass) { db.collection("admin_settings").doc("student_credentials").set({ userId: nId, password: nPass }, {merge:true}).then(()=>{ showToast("✅ Credentials Updated!"); }); } else { showToast("Enter ID and Pass"); }
         }
 
         async function processAdminUpload() {
-            const file = document.getElementById('adFileInput').files[0]; const title = document.getElementById('adName').value; const type = document.getElementById('adType').value;
+            const file = document.getElementById('adFileInput').files[0]; 
+            const title = document.getElementById('adName').value; 
+            const type = document.getElementById('adType').value;
+            
             if (!file || !title) { showToast("Select file and enter name!"); return; }
             if (type === 'live_mock' && (!document.getElementById('adStartTime').value || !document.getElementById('adEndTime').value)) { showToast("Set Start/End Time!"); return; }
             
-            document.getElementById('adBtn').innerText = "Uploading..."; document.getElementById('adBtn').disabled = true;
+            document.getElementById('adBtn').innerText = "Uploading..."; 
+            document.getElementById('adBtn').disabled = true;
 
             try {
                 if(file.name.toLowerCase().endsWith('.html') || file.name.toLowerCase().endsWith('.htm')) {
                     const reader = new FileReader();
                     reader.onload = async function(e) {
-                        await db.collection("study_materials").add({ subject: document.getElementById('adSubj').value, type: type, filename: title, htmlContent: e.target.result, startTime: document.getElementById('adStartTime').value, endTime: document.getElementById('adEndTime').value, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); 
-                        showToast("✅ HTML Uploaded!"); document.getElementById('adName').value = ''; document.getElementById('adFileInput').value = ''; resetAdminBtn();
-                    }; reader.readAsText(file);
-                } else {
-                    const botToken = '8491153047:AAFuRywcM4w0JkQcl1A5TI1KOAUNptObE5g'; const chatId = '-1003798466600';     
-                    const formData = new FormData(); formData.append('chat_id', chatId); formData.append('document', file);
+                        await db.collection("study_materials").add({ 
+                            subject: document.getElementById('adSubj').value, 
+                            type: type, 
+                            filename: title, 
+                            htmlContent: e.target.result, 
+                            startTime: document.getElementById('adStartTime').value, 
+                            endTime: document.getElementById('adEndTime').value, 
+                            timestamp: firebase.firestore.FieldValue.serverTimestamp() 
+                        }); 
+                        showToast("✅ Exam Uploaded!"); 
+                        document.getElementById('adName').value = ''; 
+                        document.getElementById('adFileInput').value = ''; 
+                        resetAdminBtn();
+                    }; 
+                    reader.readAsText(file);
+                } 
+                else {
+                    const botToken = '8491153047:AAFuRywcM4w0JkQcl1A5TI1KOAUNptObE5g'; 
+                    const chatId = '-1003798466600';     
 
-                    const tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendDocument`, { method: 'POST', body: formData }); const tgData = await tgRes.json();
+                    const formData = new FormData();
+                    formData.append('chat_id', chatId);
+                    formData.append('document', file);
+
+                    const tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendDocument`, { method: 'POST', body: formData });
+                    const tgData = await tgRes.json();
 
                     if(tgData.ok) {
-                        const fileId = tgData.result.document.file_id; const pathRes = await fetch(`https://api.telegram.org/bot${botToken}/getFile?file_id=${fileId}`); const pathData = await pathRes.json();
+                        const fileId = tgData.result.document.file_id;
+                        const pathRes = await fetch(`https://api.telegram.org/bot${botToken}/getFile?file_id=${fileId}`);
+                        const pathData = await pathRes.json();
+
                         if(pathData.ok) {
                             const downloadUrl = `https://api.telegram.org/file/bot${botToken}/${pathData.result.file_path}`;
                             await db.collection("study_materials").add({ subject: document.getElementById('adSubj').value, type: type, filename: title, url: downloadUrl, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); 
-                            showToast("✅ Uploaded via Telegram!"); document.getElementById('adName').value = ''; document.getElementById('adFileInput').value = ''; resetAdminBtn();
+                            showToast("✅ Uploaded via Telegram!"); 
+                            document.getElementById('adName').value = ''; document.getElementById('adFileInput').value = ''; resetAdminBtn();
                         } else { showToast("❌ Telegram Path Error"); resetAdminBtn(); }
                     } else { showToast("❌ Telegram Upload Failed"); resetAdminBtn(); }
                 }
-            } catch (e) { showToast("❌ Upload Error."); resetAdminBtn(); }
+            } catch (e) { 
+                showToast("❌ Upload Error."); 
+                resetAdminBtn(); 
+            }
         }
-        function resetAdminBtn() { document.getElementById('adBtn').innerHTML = "Upload Directly"; document.getElementById('adBtn').disabled = false; }
+        
+        function resetAdminBtn() { 
+            document.getElementById('adBtn').innerHTML = "<i class='fas fa-upload'></i> Upload Directly"; 
+            document.getElementById('adBtn').disabled = false; 
+        }
 
-        let pdfDoc = null, pageNum = 1, pageRendering = false, pageNumPending = null; const canvas = document.getElementById('pdfCanvas'); const ctx = canvas.getContext('2d');
+        // === 15. VIEWER & PRACTICE REFRESH ===
+        let pdfDoc = null, pageNum = 1, pageRendering = false, pageNumPending = null; 
+        const canvas = document.getElementById('pdfCanvas'); 
+        const ctx = canvas.getContext('2d');
 
         async function openViewer(fileId, listType) {
-            let f = window.currentFilesMap[fileId]; if(!f) return;
-            let title = f.filename; let url = f.url || ""; let htmlContent = f.htmlContent || ""; let endTime = f.endTime || "";
+            let f = window.currentFilesMap[fileId]; 
+            if(!f) return;
+            
+            let title = f.filename; 
+            let url = f.url || ""; 
+            let htmlContent = f.htmlContent || ""; 
+            let endTime = f.endTime || "";
+
             currentTestMode = listType; 
 
-            document.getElementById('viewerTitle').innerText = title; document.getElementById('fullscreenViewer').style.display = 'flex'; document.getElementById('viewerLoading').style.display = 'flex'; document.getElementById('pdfNativeContainer').style.display = 'none'; document.getElementById('htmlViewerFrame').style.display = 'none'; document.getElementById('testTimerBanner').style.display = 'none'; document.getElementById('submitTestBtn').style.display = 'none';
-            if(listType === 'saved_mock') { document.getElementById('viewerRefreshBtn').style.display = 'block'; } else { document.getElementById('viewerRefreshBtn').style.display = 'none'; }
+            document.getElementById('viewerTitle').innerText = title; 
+            document.getElementById('fullscreenViewer').style.display = 'flex'; 
+            document.getElementById('viewerLoading').style.display = 'flex'; 
+            document.getElementById('pdfNativeContainer').style.display = 'none'; 
+            document.getElementById('htmlViewerFrame').style.display = 'none'; 
+            document.getElementById('testTimerBanner').style.display = 'none';
+            document.getElementById('submitTestBtn').style.display = 'none';
+            
+            if(listType === 'saved_mock') { 
+                document.getElementById('viewerRefreshBtn').style.display = 'block'; 
+            } else { 
+                document.getElementById('viewerRefreshBtn').style.display = 'none'; 
+            }
 
-            currentFileViewerId = fileId; alarmPlayed20s = false;
+            currentFileViewerId = fileId; 
+            alarmPlayed20s = false;
 
             if(title.toLowerCase().includes('.pdf')) {
-                document.getElementById('pdfNativeContainer').style.display = 'flex';
-                try { pdfDoc = await pdfjsLib.getDocument(url).promise; document.getElementById('pageCount').innerText = pdfDoc.numPages; pageNum = 1; renderPage(pageNum); document.getElementById('viewerLoading').style.display = 'none'; } catch (e) { document.getElementById('viewerLoading').innerHTML = `<p style="color:var(--accent-pink);">Error loading PDF</p>`; }
-            } else {
+                document.getElementById('pdfNativeContainer').style.display = 'flex'; 
+                document.getElementById('loadingText').innerText = "Loading PDF...";
+                try { 
+                    pdfDoc = await pdfjsLib.getDocument(url).promise; 
+                    document.getElementById('pageCount').innerText = pdfDoc.numPages; 
+                    pageNum = 1; 
+                    renderPage(pageNum); 
+                    document.getElementById('viewerLoading').style.display = 'none'; 
+                } catch (e) { 
+                    document.getElementById('viewerLoading').innerHTML = `<p style="color:var(--accent-pink);">Error loading PDF</p>`; 
+                }
+            } 
+            else {
                 document.getElementById('htmlViewerFrame').style.display = 'block';
+                
                 if(listType === 'mock_results') {
-                    let userId = sGet('savedUserId') || "guest";
+                    document.getElementById('loadingText').innerText = "Fetching Cloud Data...";
+                    let userId = localStorage.getItem('savedUserId') || "guest";
+                    
                     db.collection("exam_results").doc(userId + "_" + fileId).get().then((docSnap) => {
                         if(docSnap.exists) {
-                            try { let encodedHtml = btoa(unescape(encodeURIComponent(docSnap.data().htmlData))); document.getElementById('htmlViewerFrame').src = "data:text/html;base64," + encodedHtml; } 
-                            catch(e) { document.getElementById('htmlViewerFrame').srcdoc = docSnap.data().htmlData; }
-                        } else { document.getElementById('htmlViewerFrame').srcdoc = "<div style='text-align:center; padding:50px; font-family:sans-serif;'><h2>No Result Found!</h2></div>"; }
+                            let savedResult = docSnap.data().htmlData;
+                            try { 
+                                let encodedHtml = btoa(unescape(encodeURIComponent(savedResult))); 
+                                document.getElementById('htmlViewerFrame').src = "data:text/html;base64," + encodedHtml; 
+                            } catch(e) { 
+                                document.getElementById('htmlViewerFrame').srcdoc = savedResult; 
+                            }
+                        } else { 
+                            document.getElementById('htmlViewerFrame').srcdoc = "<div style='text-align:center; padding:50px; font-family:sans-serif;'><h2>No Result Found in Cloud!</h2><p>Exam was not submitted properly.</p></div>"; 
+                        }
                         document.getElementById('viewerLoading').style.display = 'none';
-                    }).catch(err => { document.getElementById('viewerLoading').style.display = 'none'; });
+                    }).catch(err => { 
+                        document.getElementById('viewerLoading').style.display = 'none'; 
+                        document.getElementById('htmlViewerFrame').srcdoc = "<h2>Cloud Error</h2>"; 
+                    });
                     return; 
                 }
 
                 setTimeout(() => { document.getElementById('viewerLoading').style.display = 'none'; }, 500);
-                if(htmlContent) { try { let encodedHtml = btoa(unescape(encodeURIComponent(htmlContent))); document.getElementById('htmlViewerFrame').src = "data:text/html;base64," + encodedHtml; } catch(e) { document.getElementById('htmlViewerFrame').srcdoc = htmlContent; } } else if(url) { document.getElementById('htmlViewerFrame').src = url; }
-                if(listType === 'live_mock' && endTime) { document.getElementById('testTimerBanner').style.display = 'block'; startTestTimer(endTime); }
+                
+                if(htmlContent) {
+                    try { 
+                        let encodedHtml = btoa(unescape(encodeURIComponent(htmlContent))); 
+                        document.getElementById('htmlViewerFrame').src = "data:text/html;base64," + encodedHtml; 
+                    } catch(e) { 
+                        document.getElementById('htmlViewerFrame').srcdoc = htmlContent; 
+                    }
+                } else if(url) { 
+                    document.getElementById('htmlViewerFrame').src = url; 
+                }
+
+                if(listType === 'live_mock' && endTime) { 
+                    document.getElementById('testTimerBanner').style.display = 'block'; 
+                    startTestTimer(endTime); 
+                }
             }
         }
 
-        function refreshViewer() { if(currentTestMode === 'saved_mock' && currentFileViewerId) { openViewer(currentFileViewerId, currentTestMode); } }
+        function refreshViewer() { 
+            if(currentTestMode === 'saved_mock' && currentFileViewerId) { 
+                openViewer(currentFileViewerId, currentTestMode); 
+            } 
+        }
 
         function startTestTimer(endTimeStr) {
-            clearInterval(testInterval); let endTarget = new Date(endTimeStr).getTime();
+            clearInterval(testInterval); 
+            let endTarget = new Date(endTimeStr).getTime();
+            
             testInterval = setInterval(function() {
                 let distance = endTarget - new Date().getTime();
                 if (distance < 0) {
-                    clearInterval(testInterval); document.getElementById('testTimeLeft').innerHTML = "EXPIRED"; showToast("⚠️ Auto Submitting...");
+                    clearInterval(testInterval); 
+                    document.getElementById('testTimeLeft').innerHTML = "EXPIRED"; 
+                    showToast("⚠️ Auto Submitting...");
                     try { document.getElementById('htmlViewerFrame').contentWindow.postMessage("SUBMIT_NOW", "*"); } catch(e) {} 
-                    setTimeout(() => { forceSubmitTest(); }, 2000); return;
+                    setTimeout(() => { forceSubmitTest(); }, 2000); 
+                    return;
                 }
+                
                 let totalSeconds = Math.floor(distance / 1000);
-                if (totalSeconds === 20 && !alarmPlayed20s) { showToast("⚠️ 20 Seconds Remaining!"); playSelectedAlarm(5000); alarmPlayed20s = true; }
-                let h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); let m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)); let s = Math.floor((distance % (1000 * 60)) / 1000);
+                if (totalSeconds === 20 && !alarmPlayed20s) { 
+                    showToast("⚠️ 20 Seconds Remaining!"); 
+                    playSelectedAlarm(5000); 
+                    alarmPlayed20s = true; 
+                }
+                
+                let h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); 
+                let m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)); 
+                let s = Math.floor((distance % (1000 * 60)) / 1000);
+                
                 document.getElementById('testTimeLeft').innerHTML = h + "h " + m + "m " + s + "s ";
             }, 1000);
         }
 
         function forceSubmitTest() {
-            let testId = currentFileViewerId; let compArr = JSON.parse(sGet('completedTests') || '[]');
-            if(!compArr.includes(testId)) { compArr.push(testId); sSet('completedTests', JSON.stringify(compArr)); }
-            clearInterval(bgAlarmLoop);
-            closeViewer(); goTo('view-subfolders');
+            let testId = currentFileViewerId; 
+            let compArr = JSON.parse(localStorage.getItem('completedTests') || '[]');
+            if(!compArr.includes(testId)) { 
+                compArr.push(testId); 
+                localStorage.setItem('completedTests', JSON.stringify(compArr)); 
+            }
+            closeViewer(); 
+            goTo('view-subfolders');
         }
 
-        function renderPage(num) { pageRendering = true; pdfDoc.getPage(num).then(function(page) { const viewport = page.getViewport({scale: (window.innerWidth - 20) / page.getViewport({scale: 1}).width}); canvas.height = viewport.height; canvas.width = viewport.width; page.render({ canvasContext: ctx, viewport: viewport }).promise.then(function() { pageRendering = false; if (pageNumPending !== null) { renderPage(pageNumPending); pageNumPending = null; } }); }); document.getElementById('pageNum').innerText = num; }
+        function renderPage(num) { 
+            pageRendering = true; 
+            pdfDoc.getPage(num).then(function(page) { 
+                const viewport = page.getViewport({scale: (window.innerWidth - 20) / page.getViewport({scale: 1}).width}); 
+                canvas.height = viewport.height; 
+                canvas.width = viewport.width; 
+                page.render({ canvasContext: ctx, viewport: viewport }).promise.then(function() { 
+                    pageRendering = false; 
+                    if (pageNumPending !== null) { 
+                        renderPage(pageNumPending); 
+                        pageNumPending = null; 
+                    } 
+                }); 
+            }); 
+            document.getElementById('pageNum').innerText = num; 
+        }
+        
         function queueRenderPage(num) { if (pageRendering) { pageNumPending = num; } else { renderPage(num); } }
         function prevPage() { if (pageNum <= 1) return; pageNum--; queueRenderPage(pageNum); }
         function nextPage() { if (pageNum >= pdfDoc.numPages) return; pageNum++; queueRenderPage(pageNum); }
         
         function closeViewer() { 
-            clearInterval(testInterval); document.getElementById('fullscreenViewer').style.display = 'none'; document.getElementById('htmlViewerFrame').src = ""; currentFileViewerId = null; 
-            isExamRunning = false; exitFullscreen(); 
+            clearInterval(testInterval); 
+            document.getElementById('fullscreenViewer').style.display = 'none'; 
+            document.getElementById('htmlViewerFrame').src = ""; 
+            currentFileViewerId = null; 
+            
+            isExamRunning = false;
+            exitFullscreen();
         }
 
+        // === 16. PRACTICE FREEZE & SCORING LOGIC ===
         window.addEventListener('message', function(event) {
             if (event.data && event.data.action === 'TEST_SUBMITTED') {
-                let testId = currentFileViewerId; let userId = sGet('savedUserId') || "guest"; let compArr = JSON.parse(sGet('completedTests') || '[]');
+                let testId = currentFileViewerId; 
+                let userId = localStorage.getItem('savedUserId') || "guest"; 
+                let compArr = JSON.parse(localStorage.getItem('completedTests') || '[]');
 
-                if(currentTestMode === 'saved_mock') { showToast("Practice Test Checked!"); return; }
-
-                if(event.data.htmlData && currentTestMode === 'live_mock') {
-                    db.collection("exam_results").doc(userId + "_" + testId).set({ userId: userId, testId: testId, htmlData: event.data.htmlData, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).catch(err => { console.log("Cloud Save Error"); });
+                if(currentTestMode === 'saved_mock') { 
+                    showToast("Practice Test Checked! Scroll to see answers."); 
+                    return; 
                 }
 
-                if(compArr.includes(testId)) { showToast("Test Finished!"); setTimeout(() => { closeViewer(); loadFiles('mock_results'); }, 2000); return; }
+                if(event.data.htmlData && currentTestMode === 'live_mock') {
+                    showToast("Saving result to Cloud...");
+                    db.collection("exam_results").doc(userId + "_" + testId).set({ 
+                        userId: userId, 
+                        testId: testId, 
+                        htmlData: event.data.htmlData, 
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp() 
+                    }).catch(err => { console.log("Cloud Save Error"); });
+                }
 
-                compArr.push(testId); sSet('completedTests', JSON.stringify(compArr));
+                if(compArr.includes(testId)) { 
+                    showToast("Test Finished!"); 
+                    setTimeout(() => { closeViewer(); loadFiles('mock_results'); }, 2000); 
+                    return; 
+                }
+
+                compArr.push(testId); 
+                localStorage.setItem('completedTests', JSON.stringify(compArr));
                 
-                let newCorrect = parseInt(event.data.correct) || 0; let newWrong = parseInt(event.data.wrong) || 0; let newPoints = newCorrect - newWrong; 
+                let newCorrect = parseInt(event.data.correct) || 0; 
+                let newWrong = parseInt(event.data.wrong) || 0; 
+                let newPoints = newCorrect - newWrong; 
 
                 db.collection("user_settings").doc("dashboard_stats").get().then((doc) => {
-                    let cPts = 0, cCor = 0, cWr = 0; if(doc.exists) { let d = doc.data(); cPts = parseInt(d.points)||0; cCor = parseInt(d.correct)||0; cWr = parseInt(d.wrong)||0; }
-                    let tPts = cPts + newPoints; let tCor = cCor + newCorrect; let tWr = cWr + newWrong; let totalAttempted = tCor + tWr; let pct = totalAttempted > 0 ? Math.round((tCor / totalAttempted) * 100) : 0;
+                    let cPts = 0, cCor = 0, cWr = 0; 
+                    if(doc.exists) { 
+                        let d = doc.data(); 
+                        cPts = parseInt(d.points)||0; 
+                        cCor = parseInt(d.correct)||0; 
+                        cWr = parseInt(d.wrong)||0; 
+                    }
+                    
+                    let tPts = cPts + newPoints; 
+                    let tCor = cCor + newCorrect; 
+                    let tWr = cWr + newWrong; 
+                    let totalAttempted = tCor + tWr; 
+                    let pct = totalAttempted > 0 ? Math.round((tCor / totalAttempted) * 100) : 0;
 
-                    db.collection("user_settings").doc("dashboard_stats").set({ points: tPts, correct: tCor, wrong: tWr, percent: pct }, {merge: true}).then(() => {
-                        loadDashboardStats(); fetchUpcomingTests(); showToast("🏆 Exam Submitted & Cloud Saved!"); setTimeout(() => { closeViewer(); loadFiles('mock_results'); }, 2500);
+                    db.collection("user_settings").doc("dashboard_stats").set({ 
+                        points: tPts, correct: tCor, wrong: tWr, percent: pct 
+                    }, {merge: true}).then(() => {
+                        loadDashboardStats(); 
+                        fetchUpcomingTests(); 
+                        showToast("🏆 Exam Submitted & Cloud Saved!"); 
+                        setTimeout(() => { closeViewer(); loadFiles('mock_results'); }, 2500);
                     });
                 });
             }
