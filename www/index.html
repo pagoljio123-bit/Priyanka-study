@@ -131,13 +131,7 @@
         #toast { visibility: hidden; min-width: 250px; background: #fff; color: #333; text-align: center; border-radius: 20px; padding: 15px; position: fixed; z-index: 10000000; left: 50%; bottom: 90px; transform: translateX(-50%); font-weight: bold; font-size: 13px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         #toast.show { visibility: visible; animation: fadein 0.3s, fadeout 0.3s 2.5s; }
         @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 90px; opacity: 1; } } @keyframes fadeout { from { bottom: 90px; opacity: 1; } to { bottom: 0; opacity: 0; } }
-        
-        .switch { position: relative; display: inline-block; width: 40px; height: 22px; } 
-        .switch input { opacity: 0; width: 0; height: 0; } 
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.3); transition: .4s; border-radius: 34px; } 
-        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; } 
-        input:checked + .slider { background-color: var(--accent-blue); } 
-        input:checked + .slider:before { transform: translateX(18px); }
+        .switch { position: relative; display: inline-block; width: 40px; height: 22px; } .switch input { opacity: 0; width: 0; height: 0; } .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.3); transition: .4s; border-radius: 34px; } .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; } input:checked + .slider { background-color: var(--accent-blue); } input:checked + .slider:before { transform: translateX(18px); }
 
         /* BRIGHTNESS OVERLAY */
         #brightnessOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0); pointer-events: none; z-index: 999999999; transition: background 0.3s; }
@@ -148,11 +142,6 @@
     </style>
 </head>
 <body id="appBody">
-
-    <script>
-        const isStudent = localStorage.getItem('isStudentLoggedIn') === 'true';
-        const isAdmin = localStorage.getItem('isAdminLoggedIn') === 'true';
-    </script>
 
     <div id="brightnessOverlay"></div>
 
@@ -403,10 +392,17 @@
             </div>
             
             <div class="glass-card">
-                <h3 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-blue);">1. Set Student Login</h3>
-                <input type="text" id="adSetId" class="input-glass" placeholder="Set Student ID (e.g. Priyanka)">
-                <input type="text" id="adSetPass" class="input-glass" placeholder="Set Password (e.g. 12345)">
-                <button class="btn-main" style="padding: 10px;" onclick="saveStudentCredentials()">Save Credentials</button>
+                <h3 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-blue);">1. Manage Student Login</h3>
+                
+                <div style="background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1);">
+                    <p style="font-size: 11px; color: var(--text-sub); margin-bottom: 5px;"><i class="fas fa-info-circle"></i> Current Active Login:</p>
+                    <p style="font-size: 14px; font-weight: bold; color: #2ed573;">User ID: <span id="currIdDisp">Loading...</span></p>
+                    <p style="font-size: 14px; font-weight: bold; color: var(--accent-pink);">Password: <span id="currPassDisp">Loading...</span></p>
+                </div>
+
+                <input type="text" id="adSetId" class="input-glass" placeholder="Set New Student ID">
+                <input type="text" id="adSetPass" class="input-glass" placeholder="Set New Password">
+                <button class="btn-main" style="padding: 10px;" onclick="saveStudentCredentials()">Save New Credentials</button>
             </div>
 
             <div class="glass-card">
@@ -421,7 +417,7 @@
             </div>
 
             <div class="glass-card">
-                <h3 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-pink);">3. File Upload (Telegram Secure API)</h3>
+                <h3 style="font-size: 14px; margin-bottom: 10px; color: var(--accent-pink);">3. File Upload (Telegram/Firebase)</h3>
                 <select id="adSubj" class="input-glass" style="padding:10px;"><option value="Education">Education</option><option value="Philosophy">Philosophy</option><option value="Bengali">Bengali</option><option value="Geography">Geography</option><option value="Env. Science">Env. Science</option></select>
                 <select id="adType" class="input-glass" style="padding:10px;" onchange="toggleTimerFields()"><option value="live_mock">Live Mock Test (HTML)</option><option value="pdf">PDF Note</option><option value="guide">Study Guide</option></select>
                 <input type="text" id="adName" class="input-glass" placeholder="File Name (e.g. Chapter 1)">
@@ -440,19 +436,31 @@
     <div class="bottom-nav" id="bottomNav" style="display: none;">
         <i class="fas fa-home nav-icon active" onclick="goTo('view-home'); updateNav(this)"></i>
         <i class="fas fa-folder-open nav-icon" onclick="goTo('view-gallery-subjects'); updateNav(this)"></i>
-        <i class="fas fa-cog nav-icon" onclick="goTo('view-settings'); updateNav(this)"></i>
+        <i class="fas fa-user nav-icon" onclick="goTo('view-settings'); updateNav(this)"></i>
     </div>
 
     <script>
-        // === 1. ERROR HANDLER (PREVENTS WHITE SCREEN ON DIRECT FILE OPEN) ===
-        window.onerror = function(msg, url, line) {
-            console.log("Error caught: " + msg);
-            // Fallback UI to prevent blank screen if run outside server
-            document.getElementById('view-login').style.display = 'block';
-            return true;
-        };
+        // === 🔴 SAFE LOCALSTORAGE WRAPPERS (CRASH FIX) 🔴 ===
+        function sGet(k) { try { return localStorage.getItem(k); } catch(e) { return null; } }
+        function sSet(k, v) { try { localStorage.setItem(k, v); } catch(e) {} }
+        function sRem(k) { try { localStorage.removeItem(k); } catch(e) {} }
 
-        // === 2. FIREBASE INIT ===
+        const isStudent = sGet('isStudentLoggedIn') === 'true';
+        const isAdmin = sGet('isAdminLoggedIn') === 'true';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            if(isStudent) { 
+                document.getElementById('view-home').classList.add('active'); 
+                document.getElementById('bottomNav').style.display = 'flex';
+            } else if (isAdmin) { 
+                document.getElementById('view-admin').classList.add('active'); 
+                loadCurrentCredentials(); // Fetch current ID/Pass for Admin
+            } else { 
+                document.getElementById('view-login').classList.add('active'); 
+            }
+        });
+
         const firebaseConfig = { apiKey: "AIzaSyAY97_iFryUusBSTrJsBzSIFRnIovcA4LY", authDomain: "my-photo-301f2.firebaseapp.com", projectId: "my-photo-301f2" };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.firestore();
@@ -464,15 +472,12 @@
         const pdfjsLib = window['pdfjs-dist/build/pdf'];
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-        // === 3. NATIVE DEVICE SECURITY & SPLASH FIX ===
         document.addEventListener("deviceready", function() {
-            // 🔴 Hide Cordova Robot Splash Screen instantly
             if(navigator.splashscreen) { navigator.splashscreen.hide(); }
 
-            // 🔴 Block Back Button during Exams
             document.addEventListener("backbutton", function(e){
                 if(isExamRunning) {
-                    e.preventDefault(); showToast("⚠️ পরীক্ষা চলাকালীন ব্যাক করা বা এক্সিট করা নিষেধ!");
+                    e.preventDefault(); showToast("⚠️ পরীক্ষা চলাকালীন ব্যাক করা নিষেধ!");
                 } else if(document.getElementById('view-home').classList.contains('active')) {
                     e.preventDefault(); if(confirm("আপনি কি অ্যাপ থেকে বের হতে চান?")) { navigator.app.exitApp(); }
                 } else { goTo('view-home'); }
@@ -492,39 +497,15 @@
             else { if(document.exitFullscreen) { document.exitFullscreen(); } }
         }
 
-        // === 4. SAFE BOOT LOGIC (NO LOADING SCREEN IF LOGGED IN) ===
-        function safeGetItem(key) { try { return localStorage.getItem(key); } catch(e) { return null; } }
-        function safeSetItem(key, val) { try { localStorage.setItem(key, val); } catch(e) { console.log("Storage Blocked"); } }
-
-        window.onload = () => {
-            try {
-                loadSettings(); 
-                if(safeGetItem('isStudentLoggedIn') === 'true') { 
-                    // Already Logged in - Go direct to Home instantly
-                    document.getElementById('custom-splash').style.display = 'none';
-                    let savedId = safeGetItem('savedUserId');
-                    if(savedId) document.getElementById('dispUserName').innerText = savedId;
-                    
-                    loadFirebaseProfilePic(); loadDashboardStats(); fetchUpcomingTests();
-                    setInterval(fetchUpcomingTests, 60000); setInterval(checkTimerLogic, 1000); 
-                    goTo('view-home'); 
-                } else if (safeGetItem('isAdminLoggedIn') === 'true') { 
-                    document.getElementById('custom-splash').style.display = 'none';
-                    goTo('view-admin'); 
-                } else { 
-                    // Not Logged in - Show Login Screen
-                    document.getElementById('custom-splash').style.display = 'none';
-                    goTo('view-login'); 
-                }
-            } catch(e) {
-                // If localStorage is blocked by content:// protocol, show login anyway
-                document.getElementById('custom-splash').style.display = 'none';
-                goTo('view-login');
-                showToast("Note: Running outside App/Server environment.");
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSettings(); 
+            if(isStudent) { 
+                document.getElementById('dispUserName').innerText = sGet('savedUserId') || "Student";
+                loadFirebaseProfilePic(); loadDashboardStats(); fetchUpcomingTests();
+                setInterval(fetchUpcomingTests, 60000); setInterval(checkTimerLogic, 1000); 
             }
-        };
+        });
 
-        // === 5. REAL-TIME LOGIN (NO RELOAD) ===
         function toggleLoginMode() { 
             let isAd = document.getElementById('adminToggle').checked; 
             document.getElementById('loginStudentMode').style.display = isAd ? 'none' : 'block'; 
@@ -534,21 +515,22 @@
         function executeLogin() {
             if(document.getElementById('adminToggle').checked) {
                 if(document.getElementById('adminKey').value === MASTER_KEY) { 
-                    safeSetItem('isAdminLoggedIn', 'true'); 
-                    goTo('view-admin'); // No reload
+                    sSet('isAdminLoggedIn', 'true'); 
+                    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                    document.getElementById('view-admin').classList.add('active');
+                    loadCurrentCredentials();
+                    showToast("✅ Admin Logged In");
                 } else { showToast("❌ Invalid Key"); }
             } else {
                 let uId = document.getElementById('userId').value.trim();
                 let uPass = document.getElementById('userPass').value.trim();
                 
                 if(uId !== "" && uPass !== "") { 
-                    // Fetch from Firebase first
                     db.collection("admin_settings").doc("student_credentials").get().then((doc) => {
                         let validId = "Priyanka"; let validPass = "12345"; 
                         if(doc.exists && doc.data().userId) { validId = doc.data().userId; validPass = doc.data().password; }
                         
                         if(uId === validId && uPass === validPass) {
-                            // Trigger Splash Animation
                             document.getElementById('custom-splash').style.display = 'flex';
                             document.getElementById('custom-splash').style.opacity = '1';
                             
@@ -564,13 +546,12 @@
                                 
                                 if(progress >= 100) {
                                     clearInterval(loginInterval);
+                                    sSet('savedUserId', uId); sSet('savedUserPass', uPass); sSet('isStudentLoggedIn', 'true'); 
                                     
-                                    safeSetItem('savedUserId', uId); safeSetItem('savedUserPass', uPass); safeSetItem('isStudentLoggedIn', 'true'); 
                                     document.getElementById('dispUserName').innerText = uId;
                                     loadFirebaseProfilePic(); loadDashboardStats(); fetchUpcomingTests();
                                     setInterval(fetchUpcomingTests, 60000); setInterval(checkTimerLogic, 1000);
                                     
-                                    // Remove Splash, show Home directly
                                     setTimeout(() => {
                                         document.getElementById('custom-splash').style.opacity = '0';
                                         setTimeout(() => { document.getElementById('custom-splash').style.display = 'none'; goTo('view-home'); }, 300);
@@ -578,16 +559,15 @@
                                 }
                             }, 100); 
                         } else { showToast("❌ Wrong ID or Password!"); }
-                    }).catch(()=> { showToast("Network Error"); });
+                    }).catch(()=> { showToast("Network Error! Try Again."); });
                 } else { showToast("Enter ID and Password"); }
             }
         }
         
-        // 🔴 1. LOGOUT FIX (No location.reload, instant clear) 🔴
         function logoutConfirm() { 
             if(confirm("আপনি কি লগআউট করতে চান?")) { 
-                localStorage.removeItem('isStudentLoggedIn');
-                localStorage.removeItem('isAdminLoggedIn');
+                sRem('isStudentLoggedIn');
+                sRem('isAdminLoggedIn');
                 
                 document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
                 document.getElementById('view-login').classList.add('active');
@@ -597,7 +577,6 @@
             } 
         }
 
-        // === 6. CROPPER (Firebase DP) ===
         function openCropper(event) {
             let file = event.target.files[0];
             if(file) {
@@ -613,17 +592,16 @@
             if(imageCropper) {
                 let canvas = imageCropper.getCroppedCanvas({ width: 250, height: 250 }); let base64DP = canvas.toDataURL();
                 document.getElementById('setProfilePic').src = base64DP; document.getElementById('cropModal').style.display = 'none';
-                let uId = safeGetItem('savedUserId') || "guest";
+                let uId = sGet('savedUserId') || "guest";
                 db.collection("users").doc(uId).set({ profilePic: base64DP }, { merge: true }).then(() => { showToast("✅ DP Saved!"); });
             }
         }
         function closeCrop() { document.getElementById('cropModal').style.display = 'none'; }
         function loadFirebaseProfilePic() {
-            let uId = safeGetItem('savedUserId');
+            let uId = sGet('savedUserId');
             if(uId) { db.collection("users").doc(uId).get().then(doc => { if(doc.exists && doc.data().profilePic) { document.getElementById('setProfilePic').src = doc.data().profilePic; } }); }
         }
 
-        // === 7. AUDIO ALARM ===
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playTone(freq, type, startTime, duration) {
             if(audioCtx.state === 'suspended') audioCtx.resume();
@@ -633,7 +611,7 @@
             osc.start(startTime); osc.stop(startTime + duration);
         }
         function playSelectedAlarm(durationMs) {
-            let tune = parseInt(safeGetItem('alarmTune')) || 1; let loops = durationMs / 1000; let t = audioCtx.currentTime;
+            let tune = parseInt(sGet('alarmTune')) || 1; let loops = durationMs / 1000; let t = audioCtx.currentTime;
             for(let i=0; i<loops; i++) {
                 let start = t + i;
                 if(tune===1) { playTone(800, 'sine', start, 0.5); playTone(1000, 'sine', start+0.5, 0.5); } 
@@ -644,27 +622,28 @@
             if(navigator.vibrate && globalVolume > 0) navigator.vibrate(durationMs);
         }
         function playBeep() { if(globalVolume > 0) { playTone(800, 'sine', audioCtx.currentTime, 0.2); if(navigator.vibrate) navigator.vibrate(200); } }
-        function testAlarmTune() { saveSettings(); playSelectedAlarm(2000); }
+        function testAlarmTune() { saveSettings(); showToast("Playing preview..."); playSelectedAlarm(2000); }
 
-        // === 8. SETTINGS ===
         function loadSettings() {
-            let th = safeGetItem('appTheme') || 'default'; document.getElementById('themeSelect').value = th; changeTheme();
-            let br = safeGetItem('appBrightness') || '1'; document.getElementById('brightnessSlider').value = br; changeBrightness(br);
-            let vol = safeGetItem('appVolume') || '1'; document.getElementById('volumeSlider').value = vol; changeVolume(vol);
+            let savedId = sGet('savedUserId'); let savedPass = sGet('savedUserPass');
+            if(savedId) document.getElementById('userId').value = savedId;
+            if(savedPass) document.getElementById('userPass').value = savedPass;
+            
+            let th = sGet('appTheme') || 'default'; document.getElementById('themeSelect').value = th; changeTheme();
+            let br = sGet('appBrightness') || '1'; document.getElementById('brightnessSlider').value = br; changeBrightness(br);
+            let vol = sGet('appVolume') || '1'; document.getElementById('volumeSlider').value = vol; changeVolume(vol);
         }
-        function saveSettings() { safeSetItem('alarmTune', document.getElementById('alarmTuneSelect').value); showToast("Settings Saved!"); }
-        function changeTheme() { let th = document.getElementById('themeSelect').value; safeSetItem('appTheme', th); document.body.className = ''; if(th !== 'default') { document.body.classList.add('theme-' + th); } }
-        function changeBrightness(val) { safeSetItem('appBrightness', val); let darkness = 1 - parseFloat(val); document.getElementById('brightnessOverlay').style.backgroundColor = `rgba(0,0,0,${darkness})`; }
-        function changeVolume(val) { safeSetItem('appVolume', val); globalVolume = parseFloat(val); }
+        function saveSettings() { sSet('alarmTune', document.getElementById('alarmTuneSelect').value); showToast("Settings Saved!"); }
+        function changeTheme() { let th = document.getElementById('themeSelect').value; sSet('appTheme', th); document.body.className = ''; if(th !== 'default') { document.body.classList.add('theme-' + th); } }
+        function changeBrightness(val) { sSet('appBrightness', val); let darkness = 1 - parseFloat(val); document.getElementById('brightnessOverlay').style.backgroundColor = `rgba(0,0,0,${darkness})`; }
+        function changeVolume(val) { sSet('appVolume', val); globalVolume = parseFloat(val); }
         function clearDataConfirm() { if(confirm("Clear App Data?")) { localStorage.clear(); location.reload(); } }
 
-        // === 9. NAVIGATION ===
         function showToast(msg) { let t = document.getElementById("toast"); t.innerText = msg; t.className = "show"; setTimeout(() => { t.className = t.className.replace("show", ""); }, 3000); }
         function goTo(viewId) { document.querySelectorAll('.view').forEach(v => v.classList.remove('active')); document.getElementById(viewId).classList.add('active'); document.getElementById('bottomNav').style.display = (viewId === 'view-home' || viewId === 'view-settings' || viewId === 'view-subfolders' || viewId === 'view-gallery-subjects' || viewId === 'view-gallery-folders' || viewId === 'view-gallery-grid') ? 'flex' : 'none'; }
         function updateNav(el) { document.querySelectorAll('.nav-icon').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
         function toggleSidebar() { let sb = document.getElementById('sidebar'); let ov = document.getElementById('sbOverlay'); if(sb.classList.contains('open')) { sb.classList.remove('open'); ov.style.display = 'none'; } else { sb.classList.add('open'); ov.style.display = 'block'; } }
 
-        // === 10. SCOREBOARD (+1 / -1) ===
         function loadDashboardStats() {
             db.collection("user_settings").doc("dashboard_stats").get().then((doc) => {
                 if(doc.exists) { 
@@ -675,18 +654,19 @@
                     document.getElementById('dashRing').style.setProperty('--prog', (d.percent || 0) + '%'); 
                     document.getElementById('dashPercent').innerText = (d.percent || 0) + '%'; 
                     if(document.getElementById('adPts')) {
-                        document.getElementById('adPts').value = d.points || 0; document.getElementById('adPct').value = d.percent || 0;
-                        document.getElementById('adCor').value = d.correct || 0; document.getElementById('adWr').value = d.wrong || 0;
+                        document.getElementById('adPts').value = d.points || 0;
+                        document.getElementById('adPct').value = d.percent || 0;
+                        document.getElementById('adCor').value = d.correct || 0;
+                        document.getElementById('adWr').value = d.wrong || 0;
                     }
                 }
             });
-            let comp = JSON.parse(safeGetItem('completedTests') || '[]'); document.getElementById('testsGiven').innerText = comp.length;
+            let comp = JSON.parse(sGet('completedTests') || '[]'); document.getElementById('testsGiven').innerText = comp.length;
         }
 
-        // === 11. LIVE EXAM LOCKDOWN ===
         function fetchUpcomingTests() {
             db.collection("study_materials").where("type", "==", "live_mock").get().then((snap) => {
-                globalTests = []; let comp = JSON.parse(safeGetItem('completedTests') || '[]'); let pendingCount = 0; let now = new Date().getTime();
+                globalTests = []; let comp = JSON.parse(sGet('completedTests') || '[]'); let pendingCount = 0; let now = new Date().getTime();
                 snap.forEach(doc => { let d = doc.data(); d.id = doc.id; if(!comp.includes(d.id) && d.startTime) { let en = new Date(d.endTime).getTime(); if(now < en) { globalTests.push(d); pendingCount++; } } });
                 document.getElementById('testsPending').innerText = pendingCount; globalTests.sort((a,b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
                 let el = document.getElementById('homeTestStatus');
@@ -696,7 +676,8 @@
 
         let countdownInt = null;
         function checkTimerLogic() {
-            if(globalTests.length === 0) return; let now = new Date().getTime(); let compArr = JSON.parse(safeGetItem('completedTests') || '[]');
+            if(globalTests.length === 0) return; let now = new Date().getTime(); let compArr = JSON.parse(sGet('completedTests') || '[]');
+            
             for(let i=0; i<globalTests.length; i++) {
                 let test = globalTests[i]; if(compArr.includes(test.id)) continue; 
                 let st = new Date(test.startTime).getTime(); let en = new Date(test.endTime).getTime(); let dist = st - now;
@@ -716,44 +697,20 @@
             }
         }
 
-        // === 12. DOWNLOAD & WHATSAPP SHARE SYSTEM ===
         function processDownload(url, filename) {
             if(!url) { showToast("❌ Link not found."); return; }
             if(confirm(`আপনি কি '${filename}' ডাউনলোড করতে চান?`)) {
                 showToast("Downloading...");
-                
-                // 🔴 Cordova / Android App Download Method (Priyanka Galaxy Style)
-                if (typeof cordova !== 'undefined' && cordova.InAppBrowser) {
-                    cordova.InAppBrowser.open(url, '_system', 'location=no');
-                } else if (window.cordova) {
-                    window.open(url, '_system');
-                } 
-                // 🔴 Chrome / Web Browser Method
-                else {
-                    var a = document.createElement("a");
-                    a.href = url;
-                    a.setAttribute("download", filename);
-                    a.setAttribute("target", "_blank");
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                }
+                window.open(url, '_system'); 
             }
         }
 
         function processShare(url, filename) {
             if(!url) { showToast("❌ Link not found."); return; }
             let shareText = encodeURIComponent(`Study Material: ${filename}\nLink: ${url}`);
-            let waUrl = 'https://api.whatsapp.com/send?text=' + shareText;
-            
-            if (typeof cordova !== 'undefined' && cordova.InAppBrowser) {
-                cordova.InAppBrowser.open(waUrl, '_system', 'location=no');
-            } else {
-                window.open(waUrl, '_system');
-            }
+            window.open('https://api.whatsapp.com/send?text=' + shareText, '_system');
         }
 
-        // === 13. STANDARD FILE LISTS ===
         function openSubject(name) { activeSubject = name; document.getElementById('folderTitle').innerText = name; goTo('view-subfolders'); }
 
         function loadFiles(listType) {
@@ -773,7 +730,7 @@
                         let st = new Date(f.startTime).getTime(); let en = new Date(f.endTime).getTime();
                         if(now < st) { isLocked = true; lockText = "Starts: " + new Date(st).toLocaleString(); } else if(now > en) { isEnded = true; }
                     }
-                    let compArr = JSON.parse(safeGetItem('completedTests') || '[]'); let manuallyEnded = compArr.includes(f.id); let finalIsEnded = (isEnded || manuallyEnded);
+                    let compArr = JSON.parse(sGet('completedTests') || '[]'); let manuallyEnded = compArr.includes(f.id); let finalIsEnded = (isEnded || manuallyEnded);
 
                     if(listType === 'live_mock' && finalIsEnded) return; 
                     if((listType === 'mock_results' || listType === 'saved_mock') && !finalIsEnded) return; 
@@ -800,7 +757,6 @@
             });
         }
 
-        // === 14. GALLERY VIEW (WITH DELETE FIX) ===
         function openGalleryFolders(subj) { activeSubject = subj; document.getElementById('gallerySubjTitle').innerText = subj + " Gallery"; goTo('view-gallery-folders'); }
         function loadGalleryGrid(type) {
             let title = type === 'pdf' ? "PDF Gallery" : "Study Guides"; document.getElementById('galleryGridTitle').innerText = title; goTo('view-gallery-grid');
@@ -818,7 +774,6 @@
                     let dnAction = `processDownload('${f.url}', '${f.filename}')`;
                     let shAction = `processShare('${f.url}', '${f.filename}')`;
 
-                    // 🔴 2. GALLERY DELETE FIX 🔴
                     box.innerHTML += `
                         <div class="photo-card">
                             <div class="photo-thumb" onclick="openViewer('${f.id}', '${type}')">
@@ -840,10 +795,10 @@
         }
 
         function delFile(id, listType) { 
-            let key = prompt("Enter Master Key to delete:"); 
+            let key = prompt("ফাইলটি ডিলিট করতে অ্যাডমিন পিন (Master Key) দিন:"); 
             if(key === MASTER_KEY) { 
                 db.collection("study_materials").doc(id).delete().then(() => { 
-                    showToast("✅ Deleted!"); 
+                    showToast("✅ Deleted Successfully!"); 
                     if(listType === 'pdf' || listType === 'guide') {
                         loadGalleryGrid(listType); 
                     } else {
@@ -855,17 +810,41 @@
             } 
         }
 
-        // === 15. ADMIN UPLOAD API ===
-        function saveStudentCredentials() {
-            let nId = document.getElementById('adSetId').value.trim(); let nPass = document.getElementById('adSetPass').value.trim();
-            if(nId && nPass) { db.collection("admin_settings").doc("student_credentials").set({ userId: nId, password: nPass }, {merge:true}).then(()=>{ showToast("✅ Credentials Updated!"); }); } else { showToast("Enter ID and Pass"); }
-        }
+        function toggleTimerFields() { let type = document.getElementById('adType').value; document.getElementById('timerFields').style.display = (type === 'live_mock') ? 'block' : 'none'; }
+        
         function updateAdminStats() {
             let pts = document.getElementById('adPts').value; let pct = document.getElementById('adPct').value; let cor = document.getElementById('adCor').value; let wr = document.getElementById('adWr').value;
             db.collection("user_settings").doc("dashboard_stats").set({ points: parseInt(pts), percent: parseInt(pct), correct: parseInt(cor), wrong: parseInt(wr) }, {merge: true}).then(() => { showToast("✅ Stats Force Updated!"); loadDashboardStats(); });
         }
-        function toggleTimerFields() { let type = document.getElementById('adType').value; document.getElementById('timerFields').style.display = (type === 'live_mock') ? 'block' : 'none'; }
-        
+
+        // 🔴 ADMIN CREDENTIALS FETCH FIX 🔴
+        function loadCurrentCredentials() {
+            db.collection("admin_settings").doc("student_credentials").get().then((doc) => {
+                if(doc.exists && doc.data().userId) {
+                    document.getElementById('currIdDisp').innerText = doc.data().userId;
+                    document.getElementById('currPassDisp').innerText = doc.data().password;
+                } else {
+                    document.getElementById('currIdDisp').innerText = "Priyanka";
+                    document.getElementById('currPassDisp').innerText = "12345";
+                }
+            }).catch(() => {
+                document.getElementById('currIdDisp').innerText = "Error";
+                document.getElementById('currPassDisp').innerText = "Error";
+            });
+        }
+
+        function saveStudentCredentials() {
+            let nId = document.getElementById('adSetId').value.trim(); let nPass = document.getElementById('adSetPass').value.trim();
+            if(nId && nPass) { 
+                db.collection("admin_settings").doc("student_credentials").set({ userId: nId, password: nPass }, {merge:true}).then(()=>{ 
+                    showToast("✅ Credentials Updated!"); 
+                    loadCurrentCredentials(); 
+                    document.getElementById('adSetId').value = '';
+                    document.getElementById('adSetPass').value = '';
+                }); 
+            } else { showToast("Enter ID and Pass"); }
+        }
+
         async function processAdminUpload() {
             const file = document.getElementById('adFileInput').files[0]; 
             const title = document.getElementById('adName').value; 
@@ -874,8 +853,7 @@
             if (!file || !title) { showToast("Select file and enter name!"); return; }
             if (type === 'live_mock' && (!document.getElementById('adStartTime').value || !document.getElementById('adEndTime').value)) { showToast("Set Start/End Time!"); return; }
             
-            document.getElementById('adBtn').innerText = "Uploading..."; 
-            document.getElementById('adBtn').disabled = true;
+            document.getElementById('adBtn').innerText = "Uploading..."; document.getElementById('adBtn').disabled = true;
 
             try {
                 if(file.name.toLowerCase().endsWith('.html') || file.name.toLowerCase().endsWith('.htm')) {
@@ -904,8 +882,7 @@
                         if(pathData.ok) {
                             const downloadUrl = `https://api.telegram.org/file/bot${botToken}/${pathData.result.file_path}`;
                             await db.collection("study_materials").add({ subject: document.getElementById('adSubj').value, type: type, filename: title, url: downloadUrl, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); 
-                            showToast("✅ Uploaded via Telegram!"); 
-                            document.getElementById('adName').value = ''; document.getElementById('adFileInput').value = ''; resetAdminBtn();
+                            showToast("✅ Uploaded via Telegram!"); document.getElementById('adName').value = ''; document.getElementById('adFileInput').value = ''; resetAdminBtn();
                         } else { showToast("❌ Telegram Path Error"); resetAdminBtn(); }
                     } else { showToast("❌ Telegram Upload Failed"); resetAdminBtn(); }
                 }
@@ -914,7 +891,6 @@
         
         function resetAdminBtn() { document.getElementById('adBtn').innerHTML = "Upload Directly"; document.getElementById('adBtn').disabled = false; }
 
-        // === 16. VIEWER ===
         let pdfDoc = null, pageNum = 1, pageRendering = false, pageNumPending = null; const canvas = document.getElementById('pdfCanvas'); const ctx = canvas.getContext('2d');
 
         async function openViewer(fileId, listType) {
@@ -934,14 +910,14 @@
             else {
                 document.getElementById('htmlViewerFrame').style.display = 'block';
                 if(listType === 'mock_results') {
-                    let userId = safeGetItem('savedUserId') || "guest";
+                    let userId = sGet('savedUserId') || "guest";
                     db.collection("exam_results").doc(userId + "_" + fileId).get().then((docSnap) => {
                         if(docSnap.exists) {
                             try { let encodedHtml = btoa(unescape(encodeURIComponent(docSnap.data().htmlData))); document.getElementById('htmlViewerFrame').src = "data:text/html;base64," + encodedHtml; } 
                             catch(e) { document.getElementById('htmlViewerFrame').srcdoc = docSnap.data().htmlData; }
-                        } else { document.getElementById('htmlViewerFrame').srcdoc = "<h2 style='text-align:center; padding:50px;'>No Result Found in Cloud!</h2>"; }
+                        } else { document.getElementById('htmlViewerFrame').srcdoc = "<div style='text-align:center; padding:50px; font-family:sans-serif;'><h2>No Result Found in Cloud!</h2><p>Exam was not submitted properly.</p></div>"; }
                         document.getElementById('viewerLoading').style.display = 'none';
-                    }).catch(err => { document.getElementById('viewerLoading').style.display = 'none'; });
+                    }).catch(err => { document.getElementById('viewerLoading').style.display = 'none'; document.getElementById('htmlViewerFrame').srcdoc = "<h2>Cloud Error</h2>"; });
                     return; 
                 }
 
@@ -970,8 +946,8 @@
         }
 
         function forceSubmitTest() {
-            let testId = currentFileViewerId; let compArr = JSON.parse(safeGetItem('completedTests') || '[]');
-            if(!compArr.includes(testId)) { compArr.push(testId); safeSetItem('completedTests', JSON.stringify(compArr)); }
+            let testId = currentFileViewerId; let compArr = JSON.parse(sGet('completedTests') || '[]');
+            if(!compArr.includes(testId)) { compArr.push(testId); sSet('completedTests', JSON.stringify(compArr)); }
             closeViewer(); goTo('view-subfolders');
         }
 
@@ -985,20 +961,20 @@
             isExamRunning = false; exitFullscreen(); 
         }
 
-        // === 17. SCORING & CLOUD SAVE ===
         window.addEventListener('message', function(event) {
             if (event.data && event.data.action === 'TEST_SUBMITTED') {
-                let testId = currentFileViewerId; let userId = safeGetItem('savedUserId') || "guest"; let compArr = JSON.parse(safeGetItem('completedTests') || '[]');
+                let testId = currentFileViewerId; let userId = sGet('savedUserId') || "guest"; let compArr = JSON.parse(sGet('completedTests') || '[]');
 
                 if(currentTestMode === 'saved_mock') { showToast("Practice Test Checked! Scroll to see answers."); return; }
 
                 if(event.data.htmlData && currentTestMode === 'live_mock') {
+                    showToast("Saving result to Cloud...");
                     db.collection("exam_results").doc(userId + "_" + testId).set({ userId: userId, testId: testId, htmlData: event.data.htmlData, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).catch(err => { console.log("Cloud Save Error"); });
                 }
 
                 if(compArr.includes(testId)) { showToast("Test Finished!"); setTimeout(() => { closeViewer(); loadFiles('mock_results'); }, 2000); return; }
 
-                compArr.push(testId); safeSetItem('completedTests', JSON.stringify(compArr));
+                compArr.push(testId); sSet('completedTests', JSON.stringify(compArr));
                 
                 let newCorrect = parseInt(event.data.correct) || 0; let newWrong = parseInt(event.data.wrong) || 0; let newPoints = newCorrect - newWrong; 
 
