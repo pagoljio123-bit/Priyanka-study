@@ -124,7 +124,7 @@
         #toast { visibility: hidden; min-width: 250px; background: #fff; color: #333; text-align: center; border-radius: 20px; padding: 15px; position: fixed; z-index: 10000000; left: 50%; bottom: 90px; transform: translateX(-50%); font-weight: bold; font-size: 13px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         #toast.show { visibility: visible; animation: fadein 0.3s, fadeout 0.3s 2.5s; }
         @keyframes fadein { from { bottom: 0; opacity: 0; } to { bottom: 90px; opacity: 1; } } @keyframes fadeout { from { bottom: 90px; opacity: 1; } to { bottom: 0; opacity: 0; } }
-        
+
         #brightnessOverlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0); pointer-events: none; z-index: 999999999; transition: background 0.3s; }
         input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
         input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 16px; width: 16px; border-radius: 50%; background: var(--accent-blue); cursor: pointer; margin-top: -6px; }
@@ -679,6 +679,19 @@
         function playBeep() { if(globalVolume > 0) { playTone(800, 'sine', audioCtx.currentTime, 0.2); if(navigator.vibrate) navigator.vibrate(200); } }
         function testAlarmTune() { saveSettings(); showToast("Playing preview..."); playSelectedAlarm(2000); }
 
+        // 🔴 SPEECH SYNTHESIS ENGINE (Missile Voice) 🔴
+        const numberWords = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"];
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // Stop current speech
+                let msg = new SpeechSynthesisUtterance(text);
+                msg.lang = 'en-US';
+                msg.rate = 1.0;
+                msg.volume = globalVolume;
+                window.speechSynthesis.speak(msg);
+            }
+        }
+
         function loadSettings() {
             let savedId = sGet('savedUserId'); let savedPass = sGet('savedUserPass');
             if(savedId) document.getElementById('userId').value = savedId;
@@ -764,7 +777,7 @@
             });
         }
 
-        // 🔴 7. EXAM LOCKDOWN & AUTO-WAKE BACKGROUND ALARM 🔴
+        // 🔴 7. EXAM LOCKDOWN & AUTO-WAKE ALARM & VOICE COUNTDOWN 🔴
         let countdownInt = null;
         let bgAlarmLoop = null;
 
@@ -775,29 +788,33 @@
                 let test = globalTests[i]; if(compArr.includes(test.id)) continue; 
                 let st = new Date(test.startTime).getTime(); let en = new Date(test.endTime).getTime(); let dist = st - now;
                 
-                // 25s Before: Background Alarm & Notification
-                if(dist <= 25000 && dist > 10000 && !test.preAlarmPlayed) { 
+                // 🔴 T-Minus 20s: Wake Up & Strict 10-Second Ringing Alarm 🔴
+                if(dist <= 20000 && dist > 10000 && !test.preAlarmPlayed) { 
                     test.preAlarmPlayed = true; 
                     
-                    bgAlarmLoop = setInterval(() => { if(!isExamRunning) playSelectedAlarm(2000); }, 2500);
-
                     if(window.cordova && cordova.plugins) {
                         if(cordova.plugins.notification && cordova.plugins.notification.local) {
-                            cordova.plugins.notification.local.schedule({
-                                id: 1, title: 'Live Mock Test Starting!',
-                                text: 'Unlock your phone now. Exam starts in 25 seconds.',
-                                foreground: true, wakeup: true, priority: 2
-                            });
+                            cordova.plugins.notification.local.schedule({ id: 1, title: 'Live Mock Test Starting!', text: 'Exam starts in 20 seconds.', foreground: true, wakeup: true, priority: 2 });
                         }
-                        if(cordova.plugins.backgroundMode) {
-                            cordova.plugins.backgroundMode.wakeUp();
-                        }
+                        if(cordova.plugins.backgroundMode) { cordova.plugins.backgroundMode.wakeUp(); }
                     }
+
+                    // Strict Ringing loop for 10 seconds only (4 rings)
+                    let ringCount = 0;
+                    bgAlarmLoop = setInterval(() => {
+                        if(!isExamRunning && ringCount < 4) {
+                            playSelectedAlarm(2000);
+                            ringCount++;
+                        } else {
+                            clearInterval(bgAlarmLoop); // Stops exactly after 10 seconds
+                        }
+                    }, 2500);
                 }
                 
-                // 10s Before: Force Foreground & Start Lockdown
+                // 🔴 T-Minus 10s: Force Foreground & Missile Voice Countdown 🔴
                 if(dist <= 10000 && dist > 0 && !test.lockdownStarted) { 
                     test.lockdownStarted = true;
+                    clearInterval(bgAlarmLoop); // Ensure ringing is dead
                     
                     if(window.cordova && cordova.plugins && cordova.plugins.backgroundMode) {
                         cordova.plugins.backgroundMode.unlock();
@@ -810,12 +827,25 @@
                     document.getElementById('lockdownModal').style.display = 'flex';
                     let cdVal = 10; document.getElementById('lockdownTimer').innerText = cdVal;
                     
-                    countdownInt = setInterval(() => { cdVal--; document.getElementById('lockdownTimer').innerText = cdVal; playBeep(); if(cdVal <= 0) clearInterval(countdownInt); }, 1000);
+                    // Voice: "Ten"
+                    speakText("Ten");
+                    
+                    countdownInt = setInterval(() => { 
+                        cdVal--; 
+                        document.getElementById('lockdownTimer').innerText = cdVal; 
+                        
+                        if(cdVal > 0) {
+                            speakText(numberWords[cdVal]); // "Nine", "Eight"...
+                        } else if(cdVal === 0) {
+                            speakText("Zero");
+                            clearInterval(countdownInt);
+                        }
+                    }, 1000);
                 }
                 
                 if(dist <= 0 && document.getElementById('lockdownModal').style.display === 'flex') { 
                     clearInterval(countdownInt); 
-                    clearInterval(bgAlarmLoop); // Stop the background ring
+                    clearInterval(bgAlarmLoop);
                     document.getElementById('lockdownModal').style.display = 'none'; 
                     isExamRunning = true; 
                     enterFullscreen(); 
@@ -824,12 +854,12 @@
             }
         }
 
-        // 🔴 8. EXTERNAL CHROME DOWNLOAD (GUARANTEED FILE MANAGER SAVE) 🔴
+        // 🔴 8. EXTERNAL CHROME DOWNLOAD (GUARANTEED NO BUGS) 🔴
         function processDownload(url, filename) {
             if(!url) { showToast("❌ Link not found."); return; }
             if(confirm(`আপনি কি '${filename}' ডাউনলোড করতে চান?`)) {
                 showToast("⏳ Opening System Browser for Download...");
-                // Forces the app to open the URL in Chrome / Default System Browser
+                // Forces the app to pass the URL to Chrome/System Browser
                 window.open(url, '_system'); 
             }
         }
@@ -1025,8 +1055,14 @@
 
         function refreshViewer() { if(currentTestMode === 'saved_mock' && currentFileViewerId) { openViewer(currentFileViewerId, currentTestMode); } }
 
+        // 🔴 9. EXAM TIMER WITH VOICE ALERTS (30s & 15s) 🔴
+        let voice30Played = false;
+        let voice15Played = false;
+
         function startTestTimer(endTimeStr) {
             clearInterval(testInterval); let endTarget = new Date(endTimeStr).getTime();
+            voice30Played = false; voice15Played = false;
+            
             testInterval = setInterval(function() {
                 let distance = endTarget - new Date().getTime();
                 if (distance < 0) {
@@ -1034,8 +1070,20 @@
                     try { document.getElementById('htmlViewerFrame').contentWindow.postMessage("SUBMIT_NOW", "*"); } catch(e) {} 
                     setTimeout(() => { forceSubmitTest(); }, 2000); return;
                 }
+                
                 let totalSeconds = Math.floor(distance / 1000);
-                if (totalSeconds === 20 && !alarmPlayed20s) { showToast("⚠️ 20 Seconds Remaining!"); playSelectedAlarm(5000); alarmPlayed20s = true; }
+                
+                // Voice at 30s
+                if (totalSeconds === 30 && !voice30Played) { 
+                    speakText("Only thirty seconds remaining."); 
+                    voice30Played = true; 
+                }
+                // Voice at 15s
+                if (totalSeconds === 15 && !voice15Played) { 
+                    speakText("Fifteen seconds left. Please submit your test."); 
+                    voice15Played = true; 
+                }
+                
                 let h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); let m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)); let s = Math.floor((distance % (1000 * 60)) / 1000);
                 document.getElementById('testTimeLeft').innerHTML = h + "h " + m + "m " + s + "s ";
             }, 1000);
@@ -1044,7 +1092,10 @@
         function forceSubmitTest() {
             let testId = currentFileViewerId; let compArr = JSON.parse(sGet('completedTests') || '[]');
             if(!compArr.includes(testId)) { compArr.push(testId); sSet('completedTests', JSON.stringify(compArr)); }
+            
             clearInterval(bgAlarmLoop);
+            if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); } // Force stop any voice
+            
             closeViewer(); goTo('view-subfolders');
         }
 
@@ -1054,7 +1105,9 @@
         function nextPage() { if (pageNum >= pdfDoc.numPages) return; pageNum++; queueRenderPage(pageNum); }
         
         function closeViewer() { 
-            clearInterval(testInterval); document.getElementById('fullscreenViewer').style.display = 'none'; document.getElementById('htmlViewerFrame').src = ""; currentFileViewerId = null; 
+            clearInterval(testInterval); 
+            if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); } // Clean up voices
+            document.getElementById('fullscreenViewer').style.display = 'none'; document.getElementById('htmlViewerFrame').src = ""; currentFileViewerId = null; 
             isExamRunning = false; exitFullscreen(); 
         }
 
