@@ -57,5 +57,5 @@
     <plugin name="cordova-plugin-file" spec="^8.0.0" />
     <plugin name="cordova-plugin-file-transfer" spec="^2.0.0" />
     <plugin name="cordova-plugin-background-mode" spec="^0.7.3" />
-    <plugin name="cordova-plugin-local-notification" spec="git+https://github.com/katzer/cordova-plugin-local-notifications.git#androidX" />
+    <plugin name="cordova-plugin-local-notification-12" spec="^0.1.4" />
 </widget>
