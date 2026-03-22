@@ -708,7 +708,6 @@
         function updateNav(el) { document.querySelectorAll('.nav-icon').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
         function toggleSidebar() { let sb = document.getElementById('sidebar'); let ov = document.getElementById('sbOverlay'); if(sb.classList.contains('open')) { sb.classList.remove('open'); ov.style.display = 'none'; } else { sb.classList.add('open'); ov.style.display = 'block'; } }
 
-        // 🔴 5. SCOREBOARD STATS WITH PERCENTAGE 🔴
         function loadDashboardStats() {
             db.collection("user_settings").doc("dashboard_stats").get().then((doc) => {
                 if(doc.exists) { 
@@ -730,7 +729,6 @@
             document.getElementById('testsGiven').innerText = comp.length;
         }
 
-        // 🔴 6. UPCOMING MARQUEE & STATS 🔴
         function fetchUpcomingTests() {
             db.collection("study_materials").where("type", "==", "live_mock").get().then((snap) => {
                 globalTests = []; 
@@ -773,7 +771,6 @@
             });
         }
 
-        // 🔴 7. EXAM LOCKDOWN & VOICE COUNTDOWN (T-20s & T-10s) 🔴
         let countdownInt = null;
         let bgAlarmLoop = null;
 
@@ -848,24 +845,34 @@
             }
         }
 
-        // 🔴 8. DIRECT CHROME DOWNLOAD (PDF ONLY RULE) 🔴
+        // 🔴 8. DIRECT CHROME DOWNLOAD FIX (USING IN-APP-BROWSER CALL) 🔴
         function processDownload(url, filename) {
-            if(!url || url === "undefined") { showToast("❌ Link not found or invalid."); return; }
+            // "undefined" string check
+            if(!url || url === "undefined" || url === "null") { 
+                showToast("❌ Download Link not found or invalid."); 
+                return; 
+            }
             if(confirm(`আপনি কি '${filename}' ডাউনলোড করতে চান?`)) {
-                showToast("⏳ Opening System Browser for Download...");
-                window.open(url, '_system'); 
+                showToast("⏳ Opening Chrome for Download...");
+                
+                // 🔴 THE MAGIC LINE TO OPEN SYSTEM BROWSER 🔴
+                if (window.cordova && cordova.InAppBrowser) {
+                    cordova.InAppBrowser.open(url, '_system', 'location=yes');
+                } else {
+                    window.open(url, '_system'); 
+                }
             }
         }
 
         function processShare(url, filename) {
-            if(!url || url === "undefined") { showToast("❌ Link not found."); return; }
+            if(!url || url === "undefined" || url === "null") { showToast("❌ Link not found."); return; }
             let shareText = encodeURIComponent(`Study Material: ${filename}\nLink: ${url}`);
             window.open('https://api.whatsapp.com/send?text=' + shareText, '_system');
         }
 
         function openSubject(name) { activeSubject = name; document.getElementById('folderTitle').innerText = name; goTo('view-subfolders'); }
 
-        // 🔴 9. FILE LOADING AND RENDER LOGIC (UNDEFINED BUG FIXED) 🔴
+        // 🔴 9. SEPARATE LOGIC FOR PDF vs GUIDE 🔴
         function loadFiles(listType) {
             let title = ""; if(listType === 'guide') title = "Study Guide (Q&A)"; else if(listType === 'pdf') title = "PDF Notes"; else if(listType === 'live_mock') title = "Live Mock Tests"; else if(listType === 'mock_results') title = "Live Test Results"; else if(listType === 'saved_mock') title = "Practice Mock Tests";
             document.getElementById('listTitle').innerText = title; goTo('view-files');
@@ -900,18 +907,17 @@
                         let mainClickAction = "";
                         let actionBtn = "";
                         
-                        // 🔴 PDF Rules: Strict Chrome Download only
+                        // 🔴 Strict PDF Rules (Download Only)
                         if(f.type === 'pdf') {
                             mainClickAction = `processDownload('${f.url}', '${f.filename}')`;
                             actionBtn = `<div class="act-btn" style="color:var(--accent-blue);" onclick="${mainClickAction}"><i class="fas fa-download"></i></div>`;
                         } 
-                        // 🔴 Guide (HTML) Rules: Open in app, but Download icon triggers Chrome
+                        // 🔴 Strict Guide Rules (Open inside, Download outside)
                         else if(f.type === 'guide') {
                             mainClickAction = `openViewer('${f.id}', '${listType}')`;
                             let dnAction = `processDownload('${f.url}', '${f.filename}')`;
                             actionBtn = `<div class="act-btn" style="color:var(--accent-blue);" onclick="${dnAction}"><i class="fas fa-download"></i></div>`;
                         } 
-                        // 🔴 Mock Test Rules: Open in app
                         else {
                             mainClickAction = `openViewer('${f.id}', '${listType}')`;
                             actionBtn = `<div class="act-btn" style="color:var(--accent-blue);" onclick="${mainClickAction}"><i class="fas fa-play"></i></div>`;
@@ -925,6 +931,7 @@
         }
 
         function openGalleryFolders(subj) { activeSubject = subj; document.getElementById('gallerySubjTitle').innerText = subj + " Gallery"; goTo('view-gallery-folders'); }
+        
         function loadGalleryGrid(type) {
             let title = type === 'pdf' ? "PDF Gallery" : "Study Guides"; document.getElementById('galleryGridTitle').innerText = title; goTo('view-gallery-grid');
             const box = document.getElementById('galleryGridContainer'); box.innerHTML = "<div style='grid-column: span 2; text-align:center; padding:40px;'><i class='fas fa-circle-notch fa-spin' style='font-size:40px; color:var(--accent-pink);'></i></div>";
@@ -938,6 +945,7 @@
                     count++; window.currentFilesMap[f.id] = f; 
                     let icon = type === 'pdf' ? 'fas fa-file-pdf' : 'fas fa-book-reader'; let iconColor = type === 'pdf' ? 'var(--accent-pink)' : '#2ed573';
                     
+                    // 🔴 Gallery Click Logic
                     let mainClickAction = type === 'pdf' ? `processDownload('${f.url}', '${f.filename}')` : `openViewer('${f.id}', '${type}')`;
                     let dnAction = `processDownload('${f.url}', '${f.filename}')`;
                     let shAction = `processShare('${f.url}', '${f.filename}')`;
@@ -1027,14 +1035,11 @@
         }
         function resetAdminBtn() { document.getElementById('adBtn').innerHTML = "Upload Directly"; document.getElementById('adBtn').disabled = false; }
 
-        let pdfDoc = null, pageNum = 1, pageRendering = false, pageNumPending = null; const canvas = document.getElementById('pdfCanvas'); const ctx = canvas.getContext('2d');
-
-        // 🔴 10. VIEWER: UNDEFINED BUG FIXED 🔴
         async function openViewer(fileId, listType) {
             let f = window.currentFilesMap[fileId]; if(!f) return;
             let title = f.filename; let htmlContent = f.htmlContent || ""; let endTime = f.endTime || "";
             // Ensure URL doesn't become the literal string "undefined"
-            let url = (f.url && f.url !== "undefined") ? f.url : ""; 
+            let url = (f.url && f.url !== "undefined" && f.url !== "null") ? f.url : ""; 
             currentTestMode = listType; 
 
             document.getElementById('viewerTitle').innerText = title; document.getElementById('fullscreenViewer').style.display = 'flex'; document.getElementById('viewerLoading').style.display = 'flex'; document.getElementById('pdfNativeContainer').style.display = 'none'; document.getElementById('htmlViewerFrame').style.display = 'none'; document.getElementById('testTimerBanner').style.display = 'none'; document.getElementById('submitTestBtn').style.display = 'none';
@@ -1057,13 +1062,14 @@
 
             setTimeout(() => { document.getElementById('viewerLoading').style.display = 'none'; }, 500);
             
+            // 🔴 ERROR FIX: If no content exists, show error message inside app instead of crashing
             if(htmlContent) { 
                 try { let encodedHtml = btoa(unescape(encodeURIComponent(htmlContent))); document.getElementById('htmlViewerFrame').src = "data:text/html;base64," + encodedHtml; } 
                 catch(e) { document.getElementById('htmlViewerFrame').srcdoc = htmlContent; } 
             } else if(url) { 
                 document.getElementById('htmlViewerFrame').src = url; 
             } else {
-                document.getElementById('htmlViewerFrame').srcdoc = "<div style='text-align:center; padding:50px; font-family:sans-serif;'><h2>No File Content Available!</h2></div>"; 
+                document.getElementById('htmlViewerFrame').srcdoc = "<div style='text-align:center; padding:50px; font-family:sans-serif; color:#333;'><h2>Error: No File Content!</h2><p>Please re-upload this file from Admin Panel.</p></div>"; 
             }
             
             if(listType === 'live_mock' && endTime) { document.getElementById('testTimerBanner').style.display = 'block'; startTestTimer(endTime); }
@@ -1100,11 +1106,13 @@
         function forceSubmitTest() {
             let testId = currentFileViewerId; let compArr = JSON.parse(sGet('completedTests') || '[]');
             if(!compArr.includes(testId)) { compArr.push(testId); sSet('completedTests', JSON.stringify(compArr)); }
+            
             clearInterval(bgAlarmLoop);
             if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); }
+            
             closeViewer(); goTo('view-subfolders');
         }
-
+        
         function closeViewer() { 
             clearInterval(testInterval); 
             if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); }
