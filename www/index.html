@@ -629,7 +629,6 @@
             } 
         }
 
-        // === CROPPER & PROFILE ===
         function openCropper(event) {
             let file = event.target.files[0];
             if(file) {
@@ -655,7 +654,6 @@
             if(uId) { db.collection("users").doc(uId).get().then(doc => { if(doc.exists && doc.data().profilePic) { document.getElementById('setProfilePic').src = doc.data().profilePic; } }); }
         }
 
-        // 🔴 ALARM AND VOICE ENGINE 🔴
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playTone(freq, type, startTime, duration) {
             if(audioCtx.state === 'suspended') audioCtx.resume();
@@ -690,7 +688,6 @@
             }
         }
 
-        // === SETTINGS & UI ===
         function loadSettings() {
             let savedId = sGet('savedUserId'); let savedPass = sGet('savedUserPass');
             if(savedId) document.getElementById('userId').value = savedId;
@@ -851,25 +848,24 @@
             }
         }
 
-        // 🔴 8. DIRECT CHROME DOWNLOAD (100% RELIABLE) 🔴
+        // 🔴 8. DIRECT CHROME DOWNLOAD (PDF ONLY RULE) 🔴
         function processDownload(url, filename) {
-            if(!url) { showToast("❌ Link not found."); return; }
+            if(!url || url === "undefined") { showToast("❌ Link not found or invalid."); return; }
             if(confirm(`আপনি কি '${filename}' ডাউনলোড করতে চান?`)) {
-                showToast("⏳ Opening Chrome for Download...");
-                // Bypass App WebView -> Open straight in default browser (Chrome)
+                showToast("⏳ Opening System Browser for Download...");
                 window.open(url, '_system'); 
             }
         }
 
         function processShare(url, filename) {
-            if(!url) { showToast("❌ Link not found."); return; }
+            if(!url || url === "undefined") { showToast("❌ Link not found."); return; }
             let shareText = encodeURIComponent(`Study Material: ${filename}\nLink: ${url}`);
             window.open('https://api.whatsapp.com/send?text=' + shareText, '_system');
         }
 
         function openSubject(name) { activeSubject = name; document.getElementById('folderTitle').innerText = name; goTo('view-subfolders'); }
 
-        // 🔴 PDF CLICK = DOWNLOAD | GUIDE CLICK = OPEN IN APP 🔴
+        // 🔴 9. FILE LOADING AND RENDER LOGIC (UNDEFINED BUG FIXED) 🔴
         function loadFiles(listType) {
             let title = ""; if(listType === 'guide') title = "Study Guide (Q&A)"; else if(listType === 'pdf') title = "PDF Notes"; else if(listType === 'live_mock') title = "Live Mock Tests"; else if(listType === 'mock_results') title = "Live Test Results"; else if(listType === 'saved_mock') title = "Practice Mock Tests";
             document.getElementById('listTitle').innerText = title; goTo('view-files');
@@ -901,20 +897,22 @@
                     } else {
                         let subTxt = "Interactive File"; if(listType === 'mock_results') subTxt = "View answers"; if(listType === 'saved_mock') subTxt = "Practice Mode";
                         
-                        // Action for clicking the file info or thumbnail
                         let mainClickAction = "";
                         let actionBtn = "";
                         
+                        // 🔴 PDF Rules: Strict Chrome Download only
                         if(f.type === 'pdf') {
-                            // PDFs strictly download via Chrome
                             mainClickAction = `processDownload('${f.url}', '${f.filename}')`;
                             actionBtn = `<div class="act-btn" style="color:var(--accent-blue);" onclick="${mainClickAction}"><i class="fas fa-download"></i></div>`;
-                        } else if(f.type === 'guide') {
-                            // Guides open inside the app, but have a download button
+                        } 
+                        // 🔴 Guide (HTML) Rules: Open in app, but Download icon triggers Chrome
+                        else if(f.type === 'guide') {
                             mainClickAction = `openViewer('${f.id}', '${listType}')`;
-                            actionBtn = `<div class="act-btn" style="color:var(--accent-blue);" onclick="processDownload('${f.url}', '${f.filename}')"><i class="fas fa-download"></i></div>`;
-                        } else {
-                            // Mock tests open inside the app
+                            let dnAction = `processDownload('${f.url}', '${f.filename}')`;
+                            actionBtn = `<div class="act-btn" style="color:var(--accent-blue);" onclick="${dnAction}"><i class="fas fa-download"></i></div>`;
+                        } 
+                        // 🔴 Mock Test Rules: Open in app
+                        else {
                             mainClickAction = `openViewer('${f.id}', '${listType}')`;
                             actionBtn = `<div class="act-btn" style="color:var(--accent-blue);" onclick="${mainClickAction}"><i class="fas fa-play"></i></div>`;
                         }
@@ -1029,9 +1027,14 @@
         }
         function resetAdminBtn() { document.getElementById('adBtn').innerHTML = "Upload Directly"; document.getElementById('adBtn').disabled = false; }
 
+        let pdfDoc = null, pageNum = 1, pageRendering = false, pageNumPending = null; const canvas = document.getElementById('pdfCanvas'); const ctx = canvas.getContext('2d');
+
+        // 🔴 10. VIEWER: UNDEFINED BUG FIXED 🔴
         async function openViewer(fileId, listType) {
             let f = window.currentFilesMap[fileId]; if(!f) return;
-            let title = f.filename; let url = f.url || ""; let htmlContent = f.htmlContent || ""; let endTime = f.endTime || "";
+            let title = f.filename; let htmlContent = f.htmlContent || ""; let endTime = f.endTime || "";
+            // Ensure URL doesn't become the literal string "undefined"
+            let url = (f.url && f.url !== "undefined") ? f.url : ""; 
             currentTestMode = listType; 
 
             document.getElementById('viewerTitle').innerText = title; document.getElementById('fullscreenViewer').style.display = 'flex'; document.getElementById('viewerLoading').style.display = 'flex'; document.getElementById('pdfNativeContainer').style.display = 'none'; document.getElementById('htmlViewerFrame').style.display = 'none'; document.getElementById('testTimerBanner').style.display = 'none'; document.getElementById('submitTestBtn').style.display = 'none';
@@ -1053,13 +1056,22 @@
             }
 
             setTimeout(() => { document.getElementById('viewerLoading').style.display = 'none'; }, 500);
-            if(htmlContent) { try { let encodedHtml = btoa(unescape(encodeURIComponent(htmlContent))); document.getElementById('htmlViewerFrame').src = "data:text/html;base64," + encodedHtml; } catch(e) { document.getElementById('htmlViewerFrame').srcdoc = htmlContent; } } else if(url) { document.getElementById('htmlViewerFrame').src = url; }
+            
+            if(htmlContent) { 
+                try { let encodedHtml = btoa(unescape(encodeURIComponent(htmlContent))); document.getElementById('htmlViewerFrame').src = "data:text/html;base64," + encodedHtml; } 
+                catch(e) { document.getElementById('htmlViewerFrame').srcdoc = htmlContent; } 
+            } else if(url) { 
+                document.getElementById('htmlViewerFrame').src = url; 
+            } else {
+                document.getElementById('htmlViewerFrame').srcdoc = "<div style='text-align:center; padding:50px; font-family:sans-serif;'><h2>No File Content Available!</h2></div>"; 
+            }
+            
             if(listType === 'live_mock' && endTime) { document.getElementById('testTimerBanner').style.display = 'block'; startTestTimer(endTime); }
         }
 
         function refreshViewer() { if(currentTestMode === 'saved_mock' && currentFileViewerId) { openViewer(currentFileViewerId, currentTestMode); } }
 
-        // 🔴 9. EXAM TIMER WITH VOICE ALERTS (30s & 15s) 🔴
+        // 🔴 11. EXAM TIMER WITH VOICE ALERTS (30s & 15s) 🔴
         let voice30Played = false;
         let voice15Played = false;
 
@@ -1077,16 +1089,8 @@
                 
                 let totalSeconds = Math.floor(distance / 1000);
                 
-                // Voice at 30s
-                if (totalSeconds === 30 && !voice30Played) { 
-                    speakText("Only thirty seconds remaining."); 
-                    voice30Played = true; 
-                }
-                // Voice at 15s
-                if (totalSeconds === 15 && !voice15Played) { 
-                    speakText("Fifteen seconds left. Please submit your test."); 
-                    voice15Played = true; 
-                }
+                if (totalSeconds === 30 && !voice30Played) { speakText("Only thirty seconds remaining."); voice30Played = true; }
+                if (totalSeconds === 15 && !voice15Played) { speakText("Fifteen seconds left. Please submit your test."); voice15Played = true; }
                 
                 let h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); let m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)); let s = Math.floor((distance % (1000 * 60)) / 1000);
                 document.getElementById('testTimeLeft').innerHTML = h + "h " + m + "m " + s + "s ";
@@ -1096,16 +1100,14 @@
         function forceSubmitTest() {
             let testId = currentFileViewerId; let compArr = JSON.parse(sGet('completedTests') || '[]');
             if(!compArr.includes(testId)) { compArr.push(testId); sSet('completedTests', JSON.stringify(compArr)); }
-            
             clearInterval(bgAlarmLoop);
-            if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); } // Force stop any voice
-            
+            if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); }
             closeViewer(); goTo('view-subfolders');
         }
-        
+
         function closeViewer() { 
             clearInterval(testInterval); 
-            if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); } // Clean up voices
+            if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); }
             document.getElementById('fullscreenViewer').style.display = 'none'; document.getElementById('htmlViewerFrame').src = ""; currentFileViewerId = null; 
             isExamRunning = false; exitFullscreen(); 
         }
