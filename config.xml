@@ -24,7 +24,10 @@
         <preference name="android-compileSdkVersion" value="34" />
         
         <icon src="icon.png" />
+        
         <splash src="splash.png" />
+        <preference name="AndroidWindowSplashScreenAnimatedIcon" value="splash.png" />
+        <preference name="AndroidWindowSplashScreenBackground" value="#ffffff" />
         <preference name="SplashScreenDelay" value="3000" />
         <preference name="SplashMaintainAspectRatio" value="true" />
         <preference name="FadeSplashScreenDuration" value="500" />
