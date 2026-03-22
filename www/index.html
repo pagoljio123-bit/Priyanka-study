@@ -16,21 +16,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 
     <style>
-        :root {
-            --bg-dark: #e0c3fc; --bg-mid: #8ec5fc; 
-            --card-bg: rgba(255, 255, 255, 0.6); --card-border: rgba(255, 255, 255, 0.6); 
-            --text-main: #111111; --text-sub: #555555; 
-            --accent-pink: #FF0076; --accent-blue: #00C9FF; 
-            --box-shadow: 0 10px 30px rgba(0,0,0,0.1); --neon-bg: #ffffff; --nav-bg: rgba(255, 255, 255, 0.95);
-        }
-
-        body.theme-dark {
-            --bg-dark: #0f0c29; --bg-mid: #302b63; 
-            --card-bg: rgba(255, 255, 255, 0.08); --card-border: rgba(255, 255, 255, 0.15); 
-            --text-main: #ffffff; --text-sub: rgba(255, 255, 255, 0.6); 
-            --box-shadow: 0 10px 30px rgba(0,0,0,0.3); --neon-bg: #1a1a2e; --nav-bg: rgba(15, 12, 41, 0.95);
-        }
-
+        :root { --bg-dark: #e0c3fc; --bg-mid: #8ec5fc; --card-bg: rgba(255, 255, 255, 0.6); --card-border: rgba(255, 255, 255, 0.6); --text-main: #111111; --text-sub: #555555; --accent-pink: #FF0076; --accent-blue: #00C9FF; --box-shadow: 0 10px 30px rgba(0,0,0,0.1); --neon-bg: #ffffff; --nav-bg: rgba(255, 255, 255, 0.95); }
+        body.theme-dark { --bg-dark: #0f0c29; --bg-mid: #302b63; --card-bg: rgba(255, 255, 255, 0.08); --card-border: rgba(255, 255, 255, 0.15); --text-main: #ffffff; --text-sub: rgba(255, 255, 255, 0.6); --box-shadow: 0 10px 30px rgba(0,0,0,0.3); --neon-bg: #1a1a2e; --nav-bg: rgba(15, 12, 41, 0.95); }
         body.theme-purple { --bg-dark: #2a0845; --bg-mid: #6441A5; --accent-pink: #ff6a00; --accent-blue: #ee0979; --text-main: #fff; --text-sub: rgba(255,255,255,0.6); --card-bg: rgba(255,255,255,0.1); --neon-bg: #1a1a2e; --nav-bg: rgba(20,10,30,0.95);}
         body.theme-teal { --bg-dark: #000000; --bg-mid: #0f9b0f; --accent-pink: #00C9FF; --accent-blue: #92FE9D; --text-main: #fff; --text-sub: rgba(255,255,255,0.6); --card-bg: rgba(255,255,255,0.1); --neon-bg: #111; --nav-bg: rgba(10,20,10,0.95);}
         body.theme-green { --bg-dark: #134E5E; --bg-mid: #71B280; --accent-pink: #F9D423; --accent-blue: #FF4E50; --text-main: #fff; --text-sub: rgba(255,255,255,0.6); --card-bg: rgba(255,255,255,0.1); --neon-bg: #111; --nav-bg: rgba(10,20,10,0.95);}
@@ -334,7 +321,7 @@
             </div>
             <div style="margin-top: 20px;">
                 <div class="glass-card" onclick="loadGalleryGrid('pdf')" style="cursor:pointer; display:flex; align-items:center; gap:15px;"><i class="fas fa-file-pdf" style="font-size:30px; color:#FF0076;"></i><div><h3 style="font-size:15px; color:var(--text-main);">PDF Gallery</h3><p style="font-size:11px; color:var(--text-sub);">Direct Chrome Download</p></div></div>
-                <div class="glass-card" onclick="loadGalleryGrid('guide')" style="cursor:pointer; display:flex; align-items:center; gap:15px;"><i class="fas fa-book-reader" style="font-size:30px; color:#2ed573;"></i><div><h3 style="font-size:15px; color:var(--text-main);">Guide Gallery</h3><p style="font-size:11px; color:var(--text-sub);">Read & Download</p></div></div>
+                <div class="glass-card" onclick="loadGalleryGrid('guide')" style="cursor:pointer; display:flex; align-items:center; gap:15px;"><i class="fas fa-book-reader" style="font-size:30px; color:#2ed573;"></i><div><h3 style="font-size:15px; color:var(--text-main);">Guide Gallery</h3><p style="font-size:11px; color:var(--text-sub);">Read in App & Download</p></div></div>
             </div>
         </div>
 
@@ -457,11 +444,6 @@
     </div>
 
     <script>
-        // === 1. SAFE LOCALSTORAGE & CRASH PREVENTION ===
-        function sGet(k) { try { return localStorage.getItem(k); } catch(e) { return null; } }
-        function sSet(k, v) { try { localStorage.setItem(k, v); } catch(e) {} }
-        function sRem(k) { try { localStorage.removeItem(k); } catch(e) {} }
-
         const isStudent = sGet('isStudentLoggedIn') === 'true';
         const isAdmin = sGet('isAdminLoggedIn') === 'true';
         
@@ -471,6 +453,8 @@
                 if(isStudent) { 
                     document.getElementById('view-home').classList.add('active'); 
                     document.getElementById('bottomNav').style.display = 'flex';
+                    loadDashboardStats(); fetchUpcomingTests();
+                    setInterval(fetchUpcomingTests, 60000); setInterval(checkTimerLogic, 1000);
                 } else if (isAdmin) { 
                     document.getElementById('view-admin').classList.add('active'); 
                     loadCurrentCredentials();
@@ -480,7 +464,7 @@
             } catch(e) { console.log("Init Error"); }
         });
 
-        // === 2. FIREBASE INIT ===
+        // Firebase Setup
         const firebaseConfig = { apiKey: "AIzaSyAY97_iFryUusBSTrJsBzSIFRnIovcA4LY", authDomain: "my-photo-301f2.firebaseapp.com", projectId: "my-photo-301f2" };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.firestore();
@@ -492,25 +476,17 @@
         const pdfjsLib = window['pdfjs-dist/build/pdf'];
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-        // 🔴 3. CORDOVA PLUGINS SETUP (BACKGROUND & NOTIFICATIONS) 🔴
+        // Background Plugin & Fullscreen
         document.addEventListener("deviceready", function() {
             if(navigator.splashscreen) { navigator.splashscreen.hide(); }
-
             if(window.cordova && cordova.plugins && cordova.plugins.backgroundMode) {
                 cordova.plugins.backgroundMode.enable();
                 cordova.plugins.backgroundMode.overrideBackButton();
-                cordova.plugins.backgroundMode.setDefaults({
-                    title: 'Priyanka Study is Active',
-                    text: 'Waiting for upcoming live tests...',
-                    resume: true,
-                    hidden: false
-                });
+                cordova.plugins.backgroundMode.setDefaults({ title: 'Priyanka Study is Active', text: 'Waiting for upcoming live tests...', resume: true, hidden: false });
             }
-
             document.addEventListener("backbutton", function(e){
-                if(isExamRunning) {
-                    e.preventDefault(); showToast("⚠️ পরীক্ষা চলাকালীন ব্যাক করা নিষেধ!");
-                } else if(document.getElementById('view-home').classList.contains('active')) {
+                if(isExamRunning) { e.preventDefault(); showToast("⚠️ পরীক্ষা চলাকালীন ব্যাক করা নিষেধ!"); } 
+                else if(document.getElementById('view-home').classList.contains('active')) {
                     e.preventDefault(); if(confirm("আপনি কি অ্যাপ থেকে বের হতে চান?")) { navigator.app.exitApp(); }
                 } else { goTo('view-home'); }
             }, false);
@@ -533,12 +509,11 @@
             loadSettings(); 
             if(isStudent) { 
                 document.getElementById('dispUserName').innerText = sGet('savedUserId') || "Student";
-                loadFirebaseProfilePic(); loadDashboardStats(); fetchUpcomingTests();
-                setInterval(fetchUpcomingTests, 60000); setInterval(checkTimerLogic, 1000); 
+                loadFirebaseProfilePic(); 
             }
         });
 
-        // 🔴 4. SUPERFAST REAL-TIME LOGIN (100% BUG FREE) 🔴
+        // 🔴 1. LOGIN SYSTEM 🔴
         function toggleLoginMode(mode) { 
             if(mode === 'admin') {
                 document.getElementById('loginStudentMode').style.display = 'none';
@@ -548,7 +523,6 @@
                 document.getElementById('loginAdminMode').style.display = 'none';
             }
         }
-        
         function executeLogin(type) {
             if(type === 'admin') {
                 let key = document.getElementById('adminKey').value;
@@ -562,15 +536,10 @@
             } else {
                 let uId = document.getElementById('userId').value.trim();
                 let uPass = document.getElementById('userPass').value.trim();
-                
-                if(uId === "" || uPass === "") { 
-                    showToast("⚠️ Enter ID and Password");
-                    return;
-                }
+                if(uId === "" || uPass === "") { showToast("⚠️ Enter ID and Password"); return; }
 
                 let btn = document.getElementById('stuLoginBtn');
-                let originalText = btn.innerHTML;
-                btn.innerText = "Checking...";
+                let originalText = btn.innerHTML; btn.innerText = "Checking...";
                 
                 db.collection("admin_settings").doc("student_credentials").get().then((doc) => {
                     let validId = "Priyanka"; let validPass = "12345"; 
@@ -594,7 +563,6 @@
                             if(progress >= 100) {
                                 clearInterval(loginInterval);
                                 sSet('savedUserId', uId); sSet('savedUserPass', uPass); sSet('isStudentLoggedIn', 'true'); 
-                                
                                 document.getElementById('dispUserName').innerText = uId;
                                 loadFirebaseProfilePic(); loadDashboardStats(); fetchUpcomingTests();
                                 setInterval(fetchUpcomingTests, 60000); setInterval(checkTimerLogic, 1000);
@@ -610,17 +578,10 @@
                                 }, 300);
                             }
                         }, 100); 
-                    } else { 
-                        btn.innerHTML = originalText;
-                        showToast("❌ Wrong User ID or Password!"); 
-                    }
-                }).catch(()=> { 
-                    btn.innerHTML = originalText;
-                    showToast("Network Error! Try Again."); 
-                });
+                    } else { btn.innerHTML = originalText; showToast("❌ Wrong User ID or Password!"); }
+                }).catch(()=> { btn.innerHTML = originalText; showToast("Network Error! Try Again."); });
             }
         }
-        
         function logoutConfirm() { 
             if(confirm("আপনি কি লগআউট করতে চান?")) { 
                 sRem('isStudentLoggedIn'); sRem('isAdminLoggedIn');
@@ -632,6 +593,7 @@
             } 
         }
 
+        // Profile Cropper
         function openCropper(event) {
             let file = event.target.files[0];
             if(file) {
@@ -657,6 +619,7 @@
             if(uId) { db.collection("users").doc(uId).get().then(doc => { if(doc.exists && doc.data().profilePic) { document.getElementById('setProfilePic').src = doc.data().profilePic; } }); }
         }
 
+        // Audio & Speech
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playTone(freq, type, startTime, duration) {
             if(audioCtx.state === 'suspended') audioCtx.resume();
@@ -691,6 +654,7 @@
             }
         }
 
+        // Settings
         function loadSettings() {
             let savedId = sGet('savedUserId'); let savedPass = sGet('savedUserPass');
             if(savedId) document.getElementById('userId').value = savedId;
@@ -711,6 +675,7 @@
         function updateNav(el) { document.querySelectorAll('.nav-icon').forEach(i => i.classList.remove('active')); el.classList.add('active'); }
         function toggleSidebar() { let sb = document.getElementById('sidebar'); let ov = document.getElementById('sbOverlay'); if(sb.classList.contains('open')) { sb.classList.remove('open'); ov.style.display = 'none'; } else { sb.classList.add('open'); ov.style.display = 'block'; } }
 
+        // Dashboard Stats
         function loadDashboardStats() {
             db.collection("user_settings").doc("dashboard_stats").get().then((doc) => {
                 if(doc.exists) { 
@@ -774,86 +739,12 @@
             });
         }
 
-        let countdownInt = null;
-        let bgAlarmLoop = null;
-
-        function checkTimerLogic() {
-            if(globalTests.length === 0) return; let now = new Date().getTime(); let compArr = JSON.parse(sGet('completedTests') || '[]');
-            
-            for(let i=0; i<globalTests.length; i++) {
-                let test = globalTests[i]; if(compArr.includes(test.id)) continue; 
-                let st = new Date(test.startTime).getTime(); let en = new Date(test.endTime).getTime(); let dist = st - now;
-                
-                // T-Minus 20s: Wake Up & Strict 10-Second Ringing
-                if(dist <= 20000 && dist > 10000 && !test.preAlarmPlayed) { 
-                    test.preAlarmPlayed = true; 
-                    
-                    if(window.cordova && cordova.plugins) {
-                        if(cordova.plugins.notification && cordova.plugins.notification.local) {
-                            cordova.plugins.notification.local.schedule({ id: 1, title: 'Live Mock Test Starting!', text: 'Exam starts in 20 seconds.', foreground: true, wakeup: true, priority: 2 });
-                        }
-                        if(cordova.plugins.backgroundMode) { cordova.plugins.backgroundMode.wakeUp(); }
-                    }
-
-                    let ringCount = 0;
-                    bgAlarmLoop = setInterval(() => {
-                        if(!isExamRunning && ringCount < 4) {
-                            playSelectedAlarm(2000);
-                            ringCount++;
-                        } else {
-                            clearInterval(bgAlarmLoop);
-                        }
-                    }, 2500);
-                }
-                
-                // T-Minus 10s: Force Foreground & Voice Countdown
-                if(dist <= 10000 && dist > 0 && !test.lockdownStarted) { 
-                    test.lockdownStarted = true;
-                    clearInterval(bgAlarmLoop); // Force stop ringing
-                    
-                    if(window.cordova && cordova.plugins && cordova.plugins.backgroundMode) {
-                        cordova.plugins.backgroundMode.unlock();
-                        cordova.plugins.backgroundMode.moveToForeground();
-                    }
-
-                    window.currentFilesMap[test.id] = test; 
-                    openViewer(test.id, 'live_mock'); 
-                    
-                    document.getElementById('lockdownModal').style.display = 'flex';
-                    let cdVal = 10; document.getElementById('lockdownTimer').innerText = cdVal;
-                    
-                    speakText("Ten");
-                    
-                    countdownInt = setInterval(() => { 
-                        cdVal--; 
-                        document.getElementById('lockdownTimer').innerText = cdVal; 
-                        
-                        if(cdVal > 0) {
-                            speakText(numberWords[cdVal]);
-                        } else if(cdVal === 0) {
-                            speakText("Zero");
-                            clearInterval(countdownInt);
-                        }
-                    }, 1000);
-                }
-                
-                if(dist <= 0 && document.getElementById('lockdownModal').style.display === 'flex') { 
-                    clearInterval(countdownInt); 
-                    clearInterval(bgAlarmLoop);
-                    document.getElementById('lockdownModal').style.display = 'none'; 
-                    isExamRunning = true; 
-                    enterFullscreen(); 
-                    showToast("⚠️ Exam Started! Device Locked.");
-                }
-            }
-        }
-
-        // 🔴 8. WHATSAPP-STYLE DIRECT CHROME DOWNLOAD FIX 🔴
+        // 🔴 2. WHATSAPP-STYLE DIRECT CHROME DOWNLOAD FIX 🔴
         function processDownload(fileId) {
             let f = window.currentFilesMap[fileId];
             if(!f) return;
             
-            let finalUrl = (f.url && f.url !== "undefined" && f.url !== "null") ? f.url : "";
+            let finalUrl = (f.url && f.url !== "undefined" && f.url !== "null" && f.url.trim() !== "") ? f.url : "";
 
             // If no URL exists, we convert HTML content directly into a downloadable URL
             if(!finalUrl && f.htmlContent) {
@@ -880,7 +771,7 @@
 
         function openSubject(name) { activeSubject = name; document.getElementById('folderTitle').innerText = name; goTo('view-subfolders'); }
 
-        // 🔴 9. SEPARATE LOGIC FOR PDF vs GUIDE vs MOCK TEST 🔴
+        // Gallery & Files Loading
         function loadFiles(listType) {
             let title = ""; if(listType === 'guide') title = "Study Guide (Q&A)"; else if(listType === 'pdf') title = "PDF Notes"; else if(listType === 'live_mock') title = "Live Mock Tests"; else if(listType === 'mock_results') title = "Live Test Results"; else if(listType === 'saved_mock') title = "Practice Mock Tests";
             document.getElementById('listTitle').innerText = title; goTo('view-files');
@@ -978,6 +869,57 @@
             });
         }
 
+        // 🔴 3. HTML VIEWER (ORIGINAL PERFECT 'SRCDOC' SYSTEM RESTORED) 🔴
+        async function openViewer(fileId, listType) {
+            let f = window.currentFilesMap[fileId]; if(!f) return;
+            let title = f.filename; let htmlContent = f.htmlContent || ""; let endTime = f.endTime || "";
+            let url = (f.url && f.url !== "undefined" && f.url !== "null") ? f.url : ""; 
+            currentTestMode = listType; 
+
+            document.getElementById('viewerTitle').innerText = title; 
+            document.getElementById('fullscreenViewer').style.display = 'flex'; 
+            document.getElementById('viewerLoading').style.display = 'flex'; 
+            document.getElementById('pdfNativeContainer').style.display = 'none'; 
+            document.getElementById('htmlViewerFrame').style.display = 'none'; 
+            document.getElementById('testTimerBanner').style.display = 'none'; 
+            document.getElementById('submitTestBtn').style.display = 'none';
+            if(listType === 'saved_mock') { document.getElementById('viewerRefreshBtn').style.display = 'block'; } else { document.getElementById('viewerRefreshBtn').style.display = 'none'; }
+
+            currentFileViewerId = fileId; alarmPlayed20s = false;
+
+            document.getElementById('htmlViewerFrame').style.display = 'block';
+            if(listType === 'mock_results') {
+                let userId = sGet('savedUserId') || "guest";
+                db.collection("exam_results").doc(userId + "_" + fileId).get().then((docSnap) => {
+                    if(docSnap.exists) {
+                        document.getElementById('htmlViewerFrame').srcdoc = docSnap.data().htmlData; 
+                    } else { 
+                        document.getElementById('htmlViewerFrame').srcdoc = "<div style='text-align:center; padding:50px; font-family:sans-serif;'><h2>No Result Found in Cloud!</h2><p>Exam was not submitted properly.</p></div>"; 
+                    }
+                    document.getElementById('viewerLoading').style.display = 'none';
+                }).catch(err => { 
+                    document.getElementById('viewerLoading').style.display = 'none'; document.getElementById('htmlViewerFrame').srcdoc = "<h2>Cloud Error</h2>"; 
+                });
+                return; 
+            }
+
+            setTimeout(() => { document.getElementById('viewerLoading').style.display = 'none'; }, 500);
+            
+            // 🔴 ERROR FIX: Restored original srcdoc method which perfectly loads HTML guides and tests
+            let iframe = document.getElementById('htmlViewerFrame');
+            if(htmlContent) { 
+                iframe.srcdoc = htmlContent; 
+            } else if(url) { 
+                iframe.src = url; 
+            } else {
+                iframe.srcdoc = "<div style='text-align:center; padding:50px; font-family:sans-serif; color:#333;'><h2>Error: No File Content!</h2><p>Please re-upload this file from Admin Panel.</p></div>"; 
+            }
+            
+            if(listType === 'live_mock' && endTime) { document.getElementById('testTimerBanner').style.display = 'block'; startTestTimer(endTime); }
+        }
+
+        function refreshViewer() { if(currentTestMode === 'saved_mock' && currentFileViewerId) { openViewer(currentFileViewerId, currentTestMode); } }
+
         function delFile(id, listType) { 
             let key = prompt("ফাইলটি ডিলিট করতে অ্যাডমিন পিন (Master Key) দিন:"); 
             if(key === MASTER_KEY) { 
@@ -1043,57 +985,77 @@
         }
         function resetAdminBtn() { document.getElementById('adBtn').innerHTML = "Upload Directly"; document.getElementById('adBtn').disabled = false; }
 
-        // 🔴 10. HTML VIEWER RESTORED TO ORIGINAL SAFE METHOD 🔴
-        async function openViewer(fileId, listType) {
-            let f = window.currentFilesMap[fileId]; if(!f) return;
-            let title = f.filename; let htmlContent = f.htmlContent || ""; let endTime = f.endTime || "";
-            let url = (f.url && f.url !== "undefined" && f.url !== "null") ? f.url : ""; 
-            currentTestMode = listType; 
+        // 🔴 4. MISSILE VOICE COUNTDOWN & ALARM SYSTEM 🔴
+        let countdownInt = null;
+        let bgAlarmLoop = null;
 
-            document.getElementById('viewerTitle').innerText = title; 
-            document.getElementById('fullscreenViewer').style.display = 'flex'; 
-            document.getElementById('viewerLoading').style.display = 'flex'; 
-            document.getElementById('pdfNativeContainer').style.display = 'none'; 
-            document.getElementById('htmlViewerFrame').style.display = 'none'; 
-            document.getElementById('testTimerBanner').style.display = 'none'; 
-            document.getElementById('submitTestBtn').style.display = 'none';
-            if(listType === 'saved_mock') { document.getElementById('viewerRefreshBtn').style.display = 'block'; } else { document.getElementById('viewerRefreshBtn').style.display = 'none'; }
-
-            currentFileViewerId = fileId; alarmPlayed20s = false;
-
-            document.getElementById('htmlViewerFrame').style.display = 'block';
-            if(listType === 'mock_results') {
-                let userId = sGet('savedUserId') || "guest";
-                db.collection("exam_results").doc(userId + "_" + fileId).get().then((docSnap) => {
-                    if(docSnap.exists) {
-                        document.getElementById('htmlViewerFrame').srcdoc = docSnap.data().htmlData; 
-                    } else { 
-                        document.getElementById('htmlViewerFrame').srcdoc = "<div style='text-align:center; padding:50px; font-family:sans-serif;'><h2>No Result Found in Cloud!</h2><p>Exam was not submitted properly.</p></div>"; 
+        function checkTimerLogic() {
+            if(globalTests.length === 0) return; let now = new Date().getTime(); let compArr = JSON.parse(sGet('completedTests') || '[]');
+            
+            for(let i=0; i<globalTests.length; i++) {
+                let test = globalTests[i]; if(compArr.includes(test.id)) continue; 
+                let st = new Date(test.startTime).getTime(); let en = new Date(test.endTime).getTime(); let dist = st - now;
+                
+                // T-Minus 20s: Wake Up & Strict 10-Second Ringing
+                if(dist <= 20000 && dist > 10000 && !test.preAlarmPlayed) { 
+                    test.preAlarmPlayed = true; 
+                    
+                    if(window.cordova && cordova.plugins) {
+                        if(cordova.plugins.notification && cordova.plugins.notification.local) {
+                            cordova.plugins.notification.local.schedule({ id: 1, title: 'Live Mock Test Starting!', text: 'Exam starts in 20 seconds.', foreground: true, wakeup: true, priority: 2 });
+                        }
+                        if(cordova.plugins.backgroundMode) { cordova.plugins.backgroundMode.wakeUp(); }
                     }
-                    document.getElementById('viewerLoading').style.display = 'none';
-                }).catch(err => { 
-                    document.getElementById('viewerLoading').style.display = 'none'; document.getElementById('htmlViewerFrame').srcdoc = "<h2>Cloud Error</h2>"; 
-                });
-                return; 
-            }
 
-            setTimeout(() => { document.getElementById('viewerLoading').style.display = 'none'; }, 500);
-            
-            // 🔴 ERROR FIX: Restored original srcdoc method which perfectly loads HTML guides and tests
-            if(htmlContent) { 
-                document.getElementById('htmlViewerFrame').srcdoc = htmlContent; 
-            } else if(url) { 
-                document.getElementById('htmlViewerFrame').src = url; 
-            } else {
-                document.getElementById('htmlViewerFrame').srcdoc = "<div style='text-align:center; padding:50px; font-family:sans-serif; color:#333;'><h2>Error: No File Content!</h2><p>Please re-upload this file from Admin Panel.</p></div>"; 
+                    // 🔴 Ensure Alarm rings only for 10 seconds (max 4 loops)
+                    let ringCount = 0;
+                    bgAlarmLoop = setInterval(() => { 
+                        if(!isExamRunning && ringCount < 4) { 
+                            playSelectedAlarm(2000); ringCount++; 
+                        } else {
+                            clearInterval(bgAlarmLoop); 
+                        }
+                    }, 2500);
+                }
+                
+                // T-Minus 10s: Force Foreground & Voice Countdown
+                if(dist <= 10000 && dist > 0 && !test.lockdownStarted) { 
+                    test.lockdownStarted = true;
+                    clearInterval(bgAlarmLoop); // Force stop ringing
+                    
+                    if(window.cordova && cordova.plugins && cordova.plugins.backgroundMode) {
+                        cordova.plugins.backgroundMode.unlock();
+                        cordova.plugins.backgroundMode.moveToForeground();
+                    }
+
+                    window.currentFilesMap[test.id] = test; 
+                    openViewer(test.id, 'live_mock'); 
+                    
+                    document.getElementById('lockdownModal').style.display = 'flex';
+                    let cdVal = 10; document.getElementById('lockdownTimer').innerText = cdVal;
+                    
+                    // 🔴 Voice Countdown 🔴
+                    speakText("Ten");
+                    countdownInt = setInterval(() => { 
+                        cdVal--; 
+                        document.getElementById('lockdownTimer').innerText = cdVal; 
+                        if(cdVal > 0) speakText(numberWords[cdVal]); 
+                        else if(cdVal === 0) { speakText("Zero"); clearInterval(countdownInt); } 
+                    }, 1000);
+                }
+                
+                if(dist <= 0 && document.getElementById('lockdownModal').style.display === 'flex') { 
+                    clearInterval(countdownInt); 
+                    clearInterval(bgAlarmLoop);
+                    document.getElementById('lockdownModal').style.display = 'none'; 
+                    isExamRunning = true; 
+                    enterFullscreen(); 
+                    showToast("⚠️ Exam Started! Device Locked.");
+                }
             }
-            
-            if(listType === 'live_mock' && endTime) { document.getElementById('testTimerBanner').style.display = 'block'; startTestTimer(endTime); }
         }
 
-        function refreshViewer() { if(currentTestMode === 'saved_mock' && currentFileViewerId) { openViewer(currentFileViewerId, currentTestMode); } }
-
-        // 🔴 11. EXAM TIMER WITH VOICE ALERTS (30s & 15s) 🔴
+        // 🔴 5. MID-EXAM VOICE ALERTS 🔴
         let voice30Played = false;
         let voice15Played = false;
 
@@ -1124,14 +1086,14 @@
             if(!compArr.includes(testId)) { compArr.push(testId); sSet('completedTests', JSON.stringify(compArr)); }
             
             clearInterval(bgAlarmLoop);
-            if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); }
+            if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); } // Force stop any voice
             
             closeViewer(); goTo('view-subfolders');
         }
         
         function closeViewer() { 
             clearInterval(testInterval); 
-            if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); }
+            if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); } // Clean up voices
             document.getElementById('fullscreenViewer').style.display = 'none'; document.getElementById('htmlViewerFrame').src = ""; currentFileViewerId = null; 
             isExamRunning = false; exitFullscreen(); 
         }
