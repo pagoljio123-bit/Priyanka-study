@@ -489,6 +489,9 @@
         let activeSubject = ""; let testInterval = null; let currentFileViewerId = null; let globalTests = []; let alarmPlayed20s = false; 
         let currentTestMode = null; let globalVolume = 1.0; let imageCropper = null; let isExamRunning = false; window.currentFilesMap = {};
 
+        const pdfjsLib = window['pdfjs-dist/build/pdf'];
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
         // 🔴 3. CORDOVA PLUGINS SETUP (BACKGROUND & NOTIFICATIONS) 🔴
         document.addEventListener("deviceready", function() {
             if(navigator.splashscreen) { navigator.splashscreen.hide(); }
@@ -845,22 +848,27 @@
             }
         }
 
-        // 🔴 8. DIRECT CHROME DOWNLOAD FIX (USING IN-APP-BROWSER CALL) 🔴
-        function processDownload(url, filename) {
-            // "undefined" string check
-            if(!url || url === "undefined" || url === "null") { 
-                showToast("❌ Download Link not found or invalid."); 
-                return; 
+        // 🔴 8. WHATSAPP-STYLE DIRECT CHROME DOWNLOAD FIX 🔴
+        function processDownload(fileId) {
+            let f = window.currentFilesMap[fileId];
+            if(!f) return;
+            
+            let finalUrl = (f.url && f.url !== "undefined" && f.url !== "null") ? f.url : "";
+
+            // If no URL exists, we convert HTML content directly into a downloadable URL
+            if(!finalUrl && f.htmlContent) {
+                 finalUrl = "data:text/html;charset=utf-8," + encodeURIComponent(f.htmlContent);
             }
-            if(confirm(`আপনি কি '${filename}' ডাউনলোড করতে চান?`)) {
-                showToast("⏳ Opening Chrome for Download...");
-                
-                // 🔴 THE MAGIC LINE TO OPEN SYSTEM BROWSER 🔴
-                if (window.cordova && cordova.InAppBrowser) {
-                    cordova.InAppBrowser.open(url, '_system', 'location=yes');
-                } else {
-                    window.open(url, '_system'); 
-                }
+
+            if(!finalUrl) {
+                showToast("❌ Download Link not found.");
+                return;
+            }
+
+            if(confirm(`আপনি কি '${f.filename}' ডাউনলোড করতে চান?`)) {
+                showToast("⏳ Opening Browser for Download...");
+                // 🔴 WHATSAPP SHARE LOGIC FOR DOWNLOADS 🔴
+                window.open(finalUrl, '_system'); 
             }
         }
 
@@ -872,7 +880,7 @@
 
         function openSubject(name) { activeSubject = name; document.getElementById('folderTitle').innerText = name; goTo('view-subfolders'); }
 
-        // 🔴 9. SEPARATE LOGIC FOR PDF vs GUIDE 🔴
+        // 🔴 9. SEPARATE LOGIC FOR PDF vs GUIDE vs MOCK TEST 🔴
         function loadFiles(listType) {
             let title = ""; if(listType === 'guide') title = "Study Guide (Q&A)"; else if(listType === 'pdf') title = "PDF Notes"; else if(listType === 'live_mock') title = "Live Mock Tests"; else if(listType === 'mock_results') title = "Live Test Results"; else if(listType === 'saved_mock') title = "Practice Mock Tests";
             document.getElementById('listTitle').innerText = title; goTo('view-files');
@@ -907,15 +915,15 @@
                         let mainClickAction = "";
                         let actionBtn = "";
                         
-                        // 🔴 Strict PDF Rules (Download Only)
+                        // 🔴 Strict PDF Rules (Download Only via WhatsApp logic)
                         if(f.type === 'pdf') {
-                            mainClickAction = `processDownload('${f.url}', '${f.filename}')`;
+                            mainClickAction = `processDownload('${f.id}')`;
                             actionBtn = `<div class="act-btn" style="color:var(--accent-blue);" onclick="${mainClickAction}"><i class="fas fa-download"></i></div>`;
                         } 
                         // 🔴 Strict Guide Rules (Open inside, Download outside)
                         else if(f.type === 'guide') {
                             mainClickAction = `openViewer('${f.id}', '${listType}')`;
-                            let dnAction = `processDownload('${f.url}', '${f.filename}')`;
+                            let dnAction = `processDownload('${f.id}')`;
                             actionBtn = `<div class="act-btn" style="color:var(--accent-blue);" onclick="${dnAction}"><i class="fas fa-download"></i></div>`;
                         } 
                         else {
@@ -946,8 +954,8 @@
                     let icon = type === 'pdf' ? 'fas fa-file-pdf' : 'fas fa-book-reader'; let iconColor = type === 'pdf' ? 'var(--accent-pink)' : '#2ed573';
                     
                     // 🔴 Gallery Click Logic
-                    let mainClickAction = type === 'pdf' ? `processDownload('${f.url}', '${f.filename}')` : `openViewer('${f.id}', '${type}')`;
-                    let dnAction = `processDownload('${f.url}', '${f.filename}')`;
+                    let mainClickAction = type === 'pdf' ? `processDownload('${f.id}')` : `openViewer('${f.id}', '${type}')`;
+                    let dnAction = `processDownload('${f.id}')`;
                     let shAction = `processShare('${f.url}', '${f.filename}')`;
 
                     box.innerHTML += `
@@ -1035,14 +1043,20 @@
         }
         function resetAdminBtn() { document.getElementById('adBtn').innerHTML = "Upload Directly"; document.getElementById('adBtn').disabled = false; }
 
+        // 🔴 10. HTML VIEWER RESTORED TO ORIGINAL SAFE METHOD 🔴
         async function openViewer(fileId, listType) {
             let f = window.currentFilesMap[fileId]; if(!f) return;
             let title = f.filename; let htmlContent = f.htmlContent || ""; let endTime = f.endTime || "";
-            // Ensure URL doesn't become the literal string "undefined"
             let url = (f.url && f.url !== "undefined" && f.url !== "null") ? f.url : ""; 
             currentTestMode = listType; 
 
-            document.getElementById('viewerTitle').innerText = title; document.getElementById('fullscreenViewer').style.display = 'flex'; document.getElementById('viewerLoading').style.display = 'flex'; document.getElementById('pdfNativeContainer').style.display = 'none'; document.getElementById('htmlViewerFrame').style.display = 'none'; document.getElementById('testTimerBanner').style.display = 'none'; document.getElementById('submitTestBtn').style.display = 'none';
+            document.getElementById('viewerTitle').innerText = title; 
+            document.getElementById('fullscreenViewer').style.display = 'flex'; 
+            document.getElementById('viewerLoading').style.display = 'flex'; 
+            document.getElementById('pdfNativeContainer').style.display = 'none'; 
+            document.getElementById('htmlViewerFrame').style.display = 'none'; 
+            document.getElementById('testTimerBanner').style.display = 'none'; 
+            document.getElementById('submitTestBtn').style.display = 'none';
             if(listType === 'saved_mock') { document.getElementById('viewerRefreshBtn').style.display = 'block'; } else { document.getElementById('viewerRefreshBtn').style.display = 'none'; }
 
             currentFileViewerId = fileId; alarmPlayed20s = false;
@@ -1052,20 +1066,22 @@
                 let userId = sGet('savedUserId') || "guest";
                 db.collection("exam_results").doc(userId + "_" + fileId).get().then((docSnap) => {
                     if(docSnap.exists) {
-                        try { let encodedHtml = btoa(unescape(encodeURIComponent(docSnap.data().htmlData))); document.getElementById('htmlViewerFrame').src = "data:text/html;base64," + encodedHtml; } 
-                        catch(e) { document.getElementById('htmlViewerFrame').srcdoc = docSnap.data().htmlData; }
-                    } else { document.getElementById('htmlViewerFrame').srcdoc = "<div style='text-align:center; padding:50px; font-family:sans-serif;'><h2>No Result Found in Cloud!</h2><p>Exam was not submitted properly.</p></div>"; }
+                        document.getElementById('htmlViewerFrame').srcdoc = docSnap.data().htmlData; 
+                    } else { 
+                        document.getElementById('htmlViewerFrame').srcdoc = "<div style='text-align:center; padding:50px; font-family:sans-serif;'><h2>No Result Found in Cloud!</h2><p>Exam was not submitted properly.</p></div>"; 
+                    }
                     document.getElementById('viewerLoading').style.display = 'none';
-                }).catch(err => { document.getElementById('viewerLoading').style.display = 'none'; document.getElementById('htmlViewerFrame').srcdoc = "<h2>Cloud Error</h2>"; });
+                }).catch(err => { 
+                    document.getElementById('viewerLoading').style.display = 'none'; document.getElementById('htmlViewerFrame').srcdoc = "<h2>Cloud Error</h2>"; 
+                });
                 return; 
             }
 
             setTimeout(() => { document.getElementById('viewerLoading').style.display = 'none'; }, 500);
             
-            // 🔴 ERROR FIX: If no content exists, show error message inside app instead of crashing
+            // 🔴 ERROR FIX: Restored original srcdoc method which perfectly loads HTML guides and tests
             if(htmlContent) { 
-                try { let encodedHtml = btoa(unescape(encodeURIComponent(htmlContent))); document.getElementById('htmlViewerFrame').src = "data:text/html;base64," + encodedHtml; } 
-                catch(e) { document.getElementById('htmlViewerFrame').srcdoc = htmlContent; } 
+                document.getElementById('htmlViewerFrame').srcdoc = htmlContent; 
             } else if(url) { 
                 document.getElementById('htmlViewerFrame').src = url; 
             } else {
