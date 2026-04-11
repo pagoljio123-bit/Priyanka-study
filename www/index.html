@@ -17,8 +17,24 @@
 
     <style>
         :root { --bg-dark: #e0c3fc; --bg-mid: #8ec5fc; --card-bg: rgba(255, 255, 255, 0.6); --card-border: rgba(255, 255, 255, 0.6); --text-main: #111111; --text-sub: #555555; --accent-pink: #FF0076; --accent-blue: #00C9FF; --box-shadow: 0 10px 30px rgba(0,0,0,0.1); --neon-bg: #ffffff; --nav-bg: rgba(255, 255, 255, 0.95); }
+        
         body.theme-dark { --bg-dark: #0f0c29; --bg-mid: #302b63; --card-bg: rgba(255, 255, 255, 0.08); --card-border: rgba(255, 255, 255, 0.15); --text-main: #ffffff; --text-sub: rgba(255, 255, 255, 0.6); --box-shadow: 0 10px 30px rgba(0,0,0,0.3); --neon-bg: #1a1a2e; --nav-bg: rgba(15, 12, 41, 0.95); }
-        body.theme-purple { --bg-dark: #2a0845; --bg-mid: #6441A5; --accent-pink: #ff6a00; --accent-blue: #ee0979; --text-main: #fff; --text-sub: rgba(255,255,255,0.6); --card-bg: rgba(255,255,255,0.1); --neon-bg: #1a1a2e; --nav-bg: rgba(20,10,30,0.95);}
+        
+        /* 🌟 Premium Dark Chocolate Theme with Golden Glow 🌟 */
+        body.theme-chocolate { 
+            --bg-dark: #1E0F08; 
+            --bg-mid: #3E2011; 
+            --card-bg: rgba(45, 20, 10, 0.85); 
+            --card-border: rgba(255, 215, 0, 0.4); 
+            --text-main: #FFF8DC; 
+            --text-sub: #D2B48C; 
+            --accent-pink: #FFD700; /* Golden Glow */
+            --accent-blue: #FFA500; /* Orange Gold */
+            --box-shadow: 0 10px 30px rgba(255, 215, 0, 0.15); 
+            --neon-bg: #2B1408; 
+            --nav-bg: rgba(30, 15, 8, 0.98);
+        }
+        
         body.theme-teal { --bg-dark: #000000; --bg-mid: #0f9b0f; --accent-pink: #00C9FF; --accent-blue: #92FE9D; --text-main: #fff; --text-sub: rgba(255,255,255,0.6); --card-bg: rgba(255,255,255,0.1); --neon-bg: #111; --nav-bg: rgba(10,20,10,0.95);}
         body.theme-green { --bg-dark: #134E5E; --bg-mid: #71B280; --accent-pink: #F9D423; --accent-blue: #FF4E50; --text-main: #fff; --text-sub: rgba(255,255,255,0.6); --card-bg: rgba(255,255,255,0.1); --neon-bg: #111; --nav-bg: rgba(10,20,10,0.95);}
 
@@ -38,6 +54,12 @@
         .loading-line { width: 250px; height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-top: 30px; position: relative;}
         .loading-progress { width: 0%; height: 100%; background: linear-gradient(90deg, #FF0076, #00C9FF); box-shadow: 0 0 10px #FF0076; transition: width 0.1s linear;}
         .loading-percentage { margin-top: 10px; font-size: 16px; font-weight: bold; color: #00C9FF; }
+
+        /* Exit Confirmation Modal */
+        #exitConfirmModal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: 10000000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(8px); }
+        .exit-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 20px; padding: 25px; text-align: center; max-width: 320px; box-shadow: var(--box-shadow); width: 100%; }
+        .exit-btn-row { display: flex; gap: 15px; margin-top: 25px; width: 100%; }
+        .exit-btn-row button { flex: 1; padding: 12px; border-radius: 12px; font-weight: bold; border: none; cursor: pointer; color: white; }
 
         .glass-card { background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--card-border); border-radius: 20px; padding: 20px; box-shadow: var(--box-shadow); margin-bottom: 15px;}
         .input-glass { width: 100%; padding: 15px; background: rgba(255, 255, 255, 0.9); border: none; border-radius: 12px; color: #333; font-size: 14px; margin-bottom: 15px; outline: none; font-weight: 600;}
@@ -62,13 +84,14 @@
         .pulse-dot { width: 10px; height: 10px; background: var(--accent-pink); border-radius: 50%; animation: pulse 1s infinite; margin-right: 10px;}
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,0,118,0.7); } 70% { box-shadow: 0 0 0 10px rgba(255,0,118,0); } 100% { box-shadow: 0 0 0 0 rgba(255,0,118,0); } }
         
-        .file-item { background: var(--card-bg); border-radius: 16px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; border: 1px solid var(--card-border); position: relative;}
+        .file-item { background: var(--card-bg); border-radius: 16px; padding: 15px; margin-bottom: 12px; display: flex; align-items: center; gap: 15px; border: 1px solid var(--card-border); position: relative; overflow: hidden;}
         .file-icon-box { width: 45px; height: 45px; border-radius: 12px; background: rgba(150,150,150,0.2); display: flex; justify-content: center; align-items: center; font-size: 22px; cursor: pointer; }
-        .file-info { flex-grow: 1; overflow: hidden; cursor: pointer; }
+        .file-info { flex-grow: 1; overflow: hidden; cursor: pointer; z-index: 1; }
         .file-info h4 { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main); margin-bottom: 2px;}
         .file-info p { font-size: 11px; color: var(--text-sub); }
-        .act-btn { width: 32px; height: 32px; border-radius: 8px; display: flex; justify-content: center; align-items: center; background: rgba(150,150,150,0.2); cursor: pointer; font-size: 14px; color: var(--text-main);}
-        .lock-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; gap: 10px; color: #fff; font-weight: bold; font-size: 13px; z-index: 2; border-radius: 16px;}
+        .act-btn { width: 32px; height: 32px; border-radius: 8px; display: flex; justify-content: center; align-items: center; background: rgba(150,150,150,0.2); cursor: pointer; font-size: 14px; color: var(--text-main); z-index: 5;}
+        
+        .lock-overlay { position: absolute; top:0; left:0; width: calc(100% - 55px); height:100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; gap: 10px; color: #fff; font-weight: bold; font-size: 13px; z-index: 2; border-radius: 16px 0 0 16px;}
         
         .photo-gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .photo-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: var(--box-shadow); transition: transform 0.2s;}
@@ -85,8 +108,8 @@
         .nav-icon { font-size: 22px; color: var(--text-sub); cursor: pointer; transition: 0.3s; }
         .nav-icon.active { color: var(--accent-blue); transform: translateY(-4px); }
         
-        #sidebar { position: fixed; top: 0; left: -280px; width: 260px; height: 100vh; background: var(--nav-bg); backdrop-filter: blur(20px); z-index: 10000; transition: 0.3s ease; padding: 30px 20px; border-right: 1px solid var(--card-border); box-shadow: 10px 0 30px rgba(0,0,0,0.5);}
-        #sidebar.open { left: 0; } 
+        #sidebar { position: fixed; top: -280px; left: -280px; width: 260px; height: 100vh; background: var(--nav-bg); backdrop-filter: blur(20px); z-index: 10000; transition: 0.3s ease; padding: 30px 20px; border-right: 1px solid var(--card-border); box-shadow: 10px 0 30px rgba(0,0,0,0.5);}
+        #sidebar.open { left: 0; top: 0; } 
         .sb-item { padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; cursor: pointer; background: rgba(150,150,150,0.1); color: var(--text-main); }
         .sb-overlay { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.5); z-index: 9999; display: none;}
         
@@ -137,9 +160,21 @@
         <div class="loading-percentage" id="splashPercentage">0%</div>
     </div>
 
+    <div id="exitConfirmModal">
+        <div class="exit-card">
+            <i class="fas fa-sign-out-alt" style="font-size: 40px; color: var(--accent-pink); margin-bottom: 15px;"></i>
+            <h3 style="color: var(--text-main); margin-bottom: 5px;">Exit Application?</h3>
+            <p style="color: var(--text-sub); font-size: 13px;">Are you sure you want to exit Priyanka Study?</p>
+            <div class="exit-btn-row">
+                <button style="background: #555;" onclick="closeExitModal()">No, Stay</button>
+                <button style="background: var(--accent-pink);" onclick="confirmAppExit()">Yes, Exit</button>
+            </div>
+        </div>
+    </div>
+
     <div id="lockdownModal">
-        <h2 style="color: #00C9FF; margin-bottom: 5px; font-size: 24px;">Test Starting In</h2>
-        <p style="color: #aaa; margin-bottom: 30px;">Get Ready! Device is Locked.</p>
+        <h2 style="color: var(--accent-blue); margin-bottom: 5px; font-size: 24px;">Test Starting In</h2>
+        <p style="color: var(--text-sub); margin-bottom: 30px;">Get Ready! Device is Locked.</p>
         <div class="lock-circle" id="lockdownTimer">10</div>
         <p style="color: var(--accent-pink); font-weight: bold;">Do not press back button</p>
     </div>
@@ -355,10 +390,31 @@
                     <select id="themeSelect" class="input-glass" style="padding: 10px; margin:0;" onchange="changeTheme()">
                         <option value="light" style="color:black;">Light Mode (Default)</option>
                         <option value="dark" style="color:black;">Dark Mode</option>
-                        <option value="purple" style="color:black;">Purple Glow</option>
+                        <option value="chocolate" style="color:black;">Dark Chocolate (Premium Gold)</option>
                         <option value="teal" style="color:black;">Teal Ocean</option>
                         <option value="green" style="color:black;">Green Nature</option>
                     </select>
+                </div>
+
+                <div style="margin-bottom: 20px; border-bottom: 1px solid var(--card-border); padding-bottom: 15px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <span style="color:var(--text-main); font-weight:600;"><i class="fas fa-microphone-alt" style="color: #00C9FF; margin-right: 10px;"></i> Exam Voice Announcer</span>
+                        <select id="voiceToggle" class="input-glass" style="padding: 5px 10px; margin:0; width:auto; font-size: 11px; background: rgba(255,255,255,0.8); color:#333; font-weight:bold; border-radius:8px;" onchange="saveSettings()">
+                            <option value="on">🔊 ON</option>
+                            <option value="off">🔇 OFF</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <select id="voiceModeSelect" class="input-glass" style="padding: 8px; margin:0; font-size: 12px; flex-grow: 1; background: rgba(255,255,255,0.8); color: #333;" onchange="saveSettings()">
+                            <option value="female_sweet" style="color:black;">1. Female Sweet</option>
+                            <option value="female_clear" style="color:black;">2. Female Clear</option>
+                            <option value="female_deep" style="color:black;">3. Female Deep</option>
+                            <option value="male_standard" style="color:black;">4. Male Standard</option>
+                            <option value="male_heavy" style="color:black;">5. Male Heavy</option>
+                        </select>
+                        <button style="background:var(--accent-blue); color:#fff; border:none; padding:10px 15px; border-radius:10px; font-weight:bold; cursor:pointer; box-shadow:0 4px 10px rgba(0,201,255,0.3);" onclick="testVoiceSound()"><i class="fas fa-play"></i></button>
+                    </div>
+                    <p style="font-size:10px; color:var(--text-sub); margin-top:5px;">Select voice & test it to hear real pronunciation.</p>
                 </div>
 
                 <div style="margin-bottom: 20px; border-bottom: 1px solid var(--card-border); padding-bottom: 15px;">
@@ -464,11 +520,12 @@
             } catch(e) { console.log("Init Error"); }
         });
 
-        // Firebase Setup
+        // Firebase & Telegram Setup
         const firebaseConfig = { apiKey: "AIzaSyAY97_iFryUusBSTrJsBzSIFRnIovcA4LY", authDomain: "my-photo-301f2.firebaseapp.com", projectId: "my-photo-301f2" };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const db = firebase.firestore();
         const MASTER_KEY = "7602594913";
+        const tgBotToken = '8491153047:AAFuRywcM4w0JkQcl1A5TI1KOAUNptObE5g'; 
 
         let activeSubject = ""; let testInterval = null; let currentFileViewerId = null; let globalTests = []; let alarmPlayed20s = false; 
         let currentTestMode = null; let globalVolume = 1.0; let imageCropper = null; let isExamRunning = false; window.currentFilesMap = {};
@@ -476,7 +533,23 @@
         const pdfjsLib = window['pdfjs-dist/build/pdf'];
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
-        // Background Plugin & Fullscreen
+        // 🌟 SPA HISTORY STATE TRAP FOR EXIT CONFIRMATION 🌟
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            if(isExamRunning) { 
+                history.pushState(null, null, location.href); 
+                showToast("⚠️ পরীক্ষা চলাকালীন ব্যাক করা নিষেধ!"); 
+            } 
+            else if(document.getElementById('view-home').classList.contains('active')) {
+                history.pushState(null, null, location.href); 
+                showExitModal(); 
+            } else { 
+                goTo('view-home'); 
+                history.pushState(null, null, location.href); 
+            }
+        };
+
+        // Cordova Background Plugin & Backbutton Listener
         document.addEventListener("deviceready", function() {
             if(navigator.splashscreen) { navigator.splashscreen.hide(); }
             if(window.cordova && cordova.plugins && cordova.plugins.backgroundMode) {
@@ -484,13 +557,26 @@
                 cordova.plugins.backgroundMode.overrideBackButton();
                 cordova.plugins.backgroundMode.setDefaults({ title: 'Priyanka Study is Active', text: 'Waiting for upcoming live tests...', resume: true, hidden: false });
             }
+            
             document.addEventListener("backbutton", function(e){
-                if(isExamRunning) { e.preventDefault(); showToast("⚠️ পরীক্ষা চলাকালীন ব্যাক করা নিষেধ!"); } 
+                e.preventDefault();
+                if(isExamRunning) { 
+                    showToast("⚠️ পরীক্ষা চলাকালীন ব্যাক করা নিষেধ!"); 
+                } 
                 else if(document.getElementById('view-home').classList.contains('active')) {
-                    e.preventDefault(); if(confirm("আপনি কি অ্যাপ থেকে বের হতে চান?")) { navigator.app.exitApp(); }
-                } else { goTo('view-home'); }
+                    showExitModal(); 
+                } else { 
+                    goTo('view-home'); 
+                }
             }, false);
         }, false);
+
+        function showExitModal() { document.getElementById('exitConfirmModal').style.display = 'flex'; }
+        function closeExitModal() { document.getElementById('exitConfirmModal').style.display = 'none'; }
+        function confirmAppExit() { 
+            if(navigator.app && navigator.app.exitApp) { navigator.app.exitApp(); } 
+            else { window.close(); history.go(-2); } // Fallback
+        }
 
         function enterFullscreen() {
             if(window.AndroidFullScreen) { window.AndroidFullScreen.immersiveMode(); }
@@ -513,7 +599,6 @@
             }
         });
 
-        // 🔴 1. LOGIN SYSTEM 🔴
         function toggleLoginMode(mode) { 
             if(mode === 'admin') {
                 document.getElementById('loginStudentMode').style.display = 'none';
@@ -577,7 +662,7 @@
                                     }, 300);
                                 }, 300);
                             }
-                        }, 100); 
+                        }, 100);
                     } else { btn.innerHTML = originalText; showToast("❌ Wrong User ID or Password!"); }
                 }).catch(()=> { btn.innerHTML = originalText; showToast("Network Error! Try Again."); });
             }
@@ -619,7 +704,7 @@
             if(uId) { db.collection("users").doc(uId).get().then(doc => { if(doc.exists && doc.data().profilePic) { document.getElementById('setProfilePic').src = doc.data().profilePic; } }); }
         }
 
-        // Audio & Speech
+        // 🌟 ADVANCED VOICE & SOUND SYSTEM 🌟
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playTone(freq, type, startTime, duration) {
             if(audioCtx.state === 'suspended') audioCtx.resume();
@@ -643,15 +728,57 @@
         function testAlarmTune() { saveSettings(); showToast("Playing preview..."); playSelectedAlarm(2000); }
 
         const numberWords = ["Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"];
+        
+        let availableVoices = [];
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => { availableVoices = window.speechSynthesis.getVoices(); };
+            availableVoices = window.speechSynthesis.getVoices(); // Cache early
+        }
+
         function speakText(text) {
+            let voiceState = sGet('voiceToggleStatus') || 'on';
+            if (voiceState === 'off') return; // Voice Disabled
+
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 let msg = new SpeechSynthesisUtterance(text);
-                msg.lang = 'en-US';
-                msg.rate = 1.0;
                 msg.volume = globalVolume;
+                
+                let mode = sGet('voiceModeSelect') || 'female_sweet';
+                let voices = window.speechSynthesis.getVoices();
+                if(voices.length === 0 && availableVoices.length > 0) voices = availableVoices;
+
+                let selectedVoice = null;
+                let femaleVoices = voices.filter(v => v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('zira') || v.name.toLowerCase().includes('samantha') || v.name.toLowerCase().includes('google us english'));
+                let maleVoices = voices.filter(v => v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('david') || v.name.toLowerCase().includes('alex') || v.name.toLowerCase().includes('google uk english male'));
+
+                if(mode === 'female_sweet') {
+                    msg.pitch = 1.4; msg.rate = 1.0;
+                    selectedVoice = femaleVoices[0] || voices.find(v => v.lang.startsWith('en-US')) || voices[0];
+                } else if(mode === 'female_clear') {
+                    msg.pitch = 1.0; msg.rate = 1.0;
+                    selectedVoice = femaleVoices.find(v => v.name.includes('Google')) || femaleVoices[0] || voices[0];
+                } else if(mode === 'female_deep') {
+                    msg.pitch = 0.5; msg.rate = 0.9;
+                    selectedVoice = femaleVoices.reverse()[0] || voices[0];
+                } else if(mode === 'male_standard') {
+                    msg.pitch = 1.0; msg.rate = 1.0;
+                    selectedVoice = maleVoices[0] || voices.find(v => v.lang.startsWith('en-GB')) || voices[0];
+                } else if(mode === 'male_heavy') {
+                    msg.pitch = 0.4; msg.rate = 0.85;
+                    selectedVoice = maleVoices[0] || voices[0];
+                }
+
+                if(selectedVoice) msg.voice = selectedVoice;
                 window.speechSynthesis.speak(msg);
             }
+        }
+
+        function testVoiceSound() {
+            let state = document.getElementById('voiceToggle').value;
+            if(state === 'off') { showToast("⚠️ Voice is turned OFF!"); return; }
+            saveSettings(); 
+            speakText("Hello Priyanka, your exam will start in ten seconds.");
         }
 
         // Settings
@@ -663,8 +790,16 @@
             let th = sGet('appTheme') || 'light'; document.getElementById('themeSelect').value = th; changeTheme();
             let br = sGet('appBrightness') || '1'; document.getElementById('brightnessSlider').value = br; changeBrightness(br);
             let vol = sGet('appVolume') || '1'; document.getElementById('volumeSlider').value = vol; changeVolume(vol);
+
+            let vt = sGet('voiceToggleStatus') || 'on'; document.getElementById('voiceToggle').value = vt;
+            let vm = sGet('voiceModeSelect') || 'female_sweet'; document.getElementById('voiceModeSelect').value = vm;
         }
-        function saveSettings() { sSet('alarmTune', document.getElementById('alarmTuneSelect').value); showToast("Settings Saved!"); }
+        function saveSettings() { 
+            sSet('alarmTune', document.getElementById('alarmTuneSelect').value); 
+            sSet('voiceToggleStatus', document.getElementById('voiceToggle').value);
+            sSet('voiceModeSelect', document.getElementById('voiceModeSelect').value);
+            showToast("Settings Saved!"); 
+        }
         function changeTheme() { let th = document.getElementById('themeSelect').value; sSet('appTheme', th); document.body.className = ''; if(th !== 'default') { document.body.classList.add('theme-' + th); } }
         function changeBrightness(val) { sSet('appBrightness', val); let darkness = 1 - parseFloat(val); document.getElementById('brightnessOverlay').style.backgroundColor = `rgba(0,0,0,${darkness})`; }
         function changeVolume(val) { sSet('appVolume', val); globalVolume = parseFloat(val); }
@@ -739,33 +874,37 @@
             });
         }
 
-        // 🔴 2. WHATSAPP-STYLE DIRECT CHROME DOWNLOAD FIX 🔴
-        function processDownload(fileId) {
-            let f = window.currentFilesMap[fileId];
-            if(!f) return;
-            
-            let finalUrl = (f.url && f.url !== "undefined" && f.url !== "null" && f.url.trim() !== "") ? f.url : "";
-
-            // If no URL exists, we convert HTML content directly into a downloadable URL
-            if(!finalUrl && f.htmlContent) {
-                 finalUrl = "data:text/html;charset=utf-8," + encodeURIComponent(f.htmlContent);
+        // TELEGRAM DYNAMIC LINK GENERATOR
+        async function getFreshTelegramUrl(fileIdStr) {
+            let f = window.currentFilesMap[fileIdStr];
+            if(f && f.telegramFileId) {
+                try {
+                    let res = await fetch(`https://api.telegram.org/bot${tgBotToken}/getFile?file_id=${f.telegramFileId}`);
+                    let data = await res.json();
+                    if(data.ok) {
+                        return `https://api.telegram.org/file/bot${tgBotToken}/${data.result.file_path}`;
+                    }
+                } catch(e) { console.log("TG URL Fetch Error"); }
             }
-
-            if(!finalUrl) {
-                showToast("❌ Download Link not found.");
-                return;
-            }
-
-            if(confirm(`আপনি কি '${f.filename}' ডাউনলোড করতে চান?`)) {
-                showToast("⏳ Opening Browser for Download...");
-                // 🔴 WHATSAPP SHARE LOGIC FOR DOWNLOADS 🔴
-                window.open(finalUrl, '_system'); 
-            }
+            return (f && f.url && f.url !== "undefined" && f.url !== "null") ? f.url : "";
         }
 
-        function processShare(url, filename) {
-            if(!url || url === "undefined" || url === "null") { showToast("❌ Link not found."); return; }
-            let shareText = encodeURIComponent(`Study Material: ${filename}\nLink: ${url}`);
+        // DOWNLOAD AND SHARE FIX
+        async function processDownload(fileId) {
+            let f = window.currentFilesMap[fileId];
+            if(!f) return;
+            showToast("⏳ Preparing Download Link...");
+            let finalUrl = await getFreshTelegramUrl(fileId);
+            if(!finalUrl && f.htmlContent) { finalUrl = "data:text/html;charset=utf-8," + encodeURIComponent(f.htmlContent); }
+            if(!finalUrl) { showToast("❌ Download Link not found."); return; }
+            if(confirm(`আপনি কি '${f.filename}' ডাউনলোড করতে চান?`)) { window.open(finalUrl, '_system'); }
+        }
+
+        async function processShare(fileId, filename) {
+            showToast("⏳ Preparing Share Link...");
+            let finalUrl = await getFreshTelegramUrl(fileId);
+            if(!finalUrl || finalUrl === "undefined" || finalUrl === "null") { showToast("❌ Link not found."); return; }
+            let shareText = encodeURIComponent(`Study Material: ${filename}\nLink: ${finalUrl}`);
             window.open('https://api.whatsapp.com/send?text=' + shareText, '_system');
         }
 
@@ -787,7 +926,7 @@
                     let isLocked = false; let isEnded = false; let lockText = "";
                     if(f.type === 'live_mock' && f.startTime && f.endTime) {
                         let st = new Date(f.startTime).getTime(); let en = new Date(f.endTime).getTime();
-                        if(now < st) { isLocked = true; lockText = "Starts: " + new Date(st).toLocaleString(); } else if(now > en) { isEnded = true; }
+                        if(now < st) { isLocked = true; lockText = "Starts: " + new Date(st).toLocaleString(); } else if(now > en) { isEnded =true; }
                     }
                     let compArr = JSON.parse(sGet('completedTests') || '[]'); let manuallyEnded = compArr.includes(f.id); let finalIsEnded = (isEnded || manuallyEnded);
 
@@ -806,12 +945,10 @@
                         let mainClickAction = "";
                         let actionBtn = "";
                         
-                        // 🔴 Strict PDF Rules (Download Only via WhatsApp logic)
                         if(f.type === 'pdf') {
                             mainClickAction = `processDownload('${f.id}')`;
                             actionBtn = `<div class="act-btn" style="color:var(--accent-blue);" onclick="${mainClickAction}"><i class="fas fa-download"></i></div>`;
                         } 
-                        // 🔴 Strict Guide Rules (Open inside, Download outside)
                         else if(f.type === 'guide') {
                             mainClickAction = `openViewer('${f.id}', '${listType}')`;
                             let dnAction = `processDownload('${f.id}')`;
@@ -844,10 +981,9 @@
                     count++; window.currentFilesMap[f.id] = f; 
                     let icon = type === 'pdf' ? 'fas fa-file-pdf' : 'fas fa-book-reader'; let iconColor = type === 'pdf' ? 'var(--accent-pink)' : '#2ed573';
                     
-                    // 🔴 Gallery Click Logic
                     let mainClickAction = type === 'pdf' ? `processDownload('${f.id}')` : `openViewer('${f.id}', '${type}')`;
                     let dnAction = `processDownload('${f.id}')`;
-                    let shAction = `processShare('${f.url}', '${f.filename}')`;
+                    let shAction = `processShare('${f.id}', '${f.filename}')`;
 
                     box.innerHTML += `
                         <div class="photo-card">
@@ -869,13 +1005,11 @@
             });
         }
 
-        // 🔴 3. HTML VIEWER (ORIGINAL PERFECT 'SRCDOC' SYSTEM RESTORED) 🔴
+        // HTML VIEWER
         async function openViewer(fileId, listType) {
             let f = window.currentFilesMap[fileId]; if(!f) return;
             let title = f.filename; let htmlContent = f.htmlContent || ""; let endTime = f.endTime || "";
-            let url = (f.url && f.url !== "undefined" && f.url !== "null") ? f.url : ""; 
-            currentTestMode = listType; 
-
+            
             document.getElementById('viewerTitle').innerText = title; 
             document.getElementById('fullscreenViewer').style.display = 'flex'; 
             document.getElementById('viewerLoading').style.display = 'flex'; 
@@ -903,9 +1037,10 @@
                 return; 
             }
 
+            let url = await getFreshTelegramUrl(fileId);
+
             setTimeout(() => { document.getElementById('viewerLoading').style.display = 'none'; }, 500);
             
-            // 🔴 ERROR FIX: Restored original srcdoc method which perfectly loads HTML guides and tests
             let iframe = document.getElementById('htmlViewerFrame');
             if(htmlContent) { 
                 iframe.srcdoc = htmlContent; 
@@ -932,9 +1067,19 @@
 
         function toggleTimerFields() { let type = document.getElementById('adType').value; document.getElementById('timerFields').style.display = (type === 'live_mock') ? 'block' : 'none'; }
         
+        // ADMIN - Dashboard Edit Functionality
+        document.getElementById('dashPoints').addEventListener('click', function() { if(isAdmin) { let nv = prompt("Edit Total Points:", this.innerText); if(nv !== null) { document.getElementById('adPts').value = nv; updateAdminStats(); } } });
+        document.getElementById('dashPercent').addEventListener('click', function() { if(isAdmin) { let nv = prompt("Edit Percent (%):", this.innerText.replace('%','')); if(nv !== null) { document.getElementById('adPct').value = nv; updateAdminStats(); } } });
+        document.getElementById('dashCorrect').addEventListener('click', function() { if(isAdmin) { let nv = prompt("Edit Correct:", this.innerText); if(nv !== null) { document.getElementById('adCor').value = nv; updateAdminStats(); } } });
+        document.getElementById('dashWrong').addEventListener('click', function() { if(isAdmin) { let nv = prompt("Edit Wrong:", this.innerText); if(nv !== null) { document.getElementById('adWr').value = nv; updateAdminStats(); } } });
+
         function updateAdminStats() {
-            let pts = document.getElementById('adPts').value; let pct = document.getElementById('adPct').value; let cor = document.getElementById('adCor').value; let wr = document.getElementById('adWr').value;
-            db.collection("user_settings").doc("dashboard_stats").set({ points: parseInt(pts), percent: parseInt(pct), correct: parseInt(cor), wrong: parseInt(wr) }, {merge: true}).then(() => { showToast("✅ Stats Force Updated!"); loadDashboardStats(); });
+            let pts = document.getElementById('adPts').value || document.getElementById('dashPoints').innerText; 
+            let pct = document.getElementById('adPct').value || document.getElementById('dashPercent').innerText.replace('%',''); 
+            let cor = document.getElementById('adCor').value || document.getElementById('dashCorrect').innerText; 
+            let wr = document.getElementById('adWr').value || document.getElementById('dashWrong').innerText;
+
+            db.collection("user_settings").doc("dashboard_stats").set({ points: parseInt(pts), percent: parseInt(pct), correct: parseInt(cor), wrong: parseInt(wr) }, {merge: true}).then(() => { showToast("✅ Stats Updated!"); loadDashboardStats(); });
         }
 
         function loadCurrentCredentials() {
@@ -967,25 +1112,29 @@
                         showToast("✅ HTML Uploaded!"); document.getElementById('adName').value = ''; document.getElementById('adFileInput').value = ''; resetAdminBtn();
                     }; reader.readAsText(file);
                 } else {
-                    const botToken = '8491153047:AAFuRywcM4w0JkQcl1A5TI1KOAUNptObE5g'; const chatId = '-1003798466600';     
+                    const chatId = '-1003798466600';     
                     const formData = new FormData(); formData.append('chat_id', chatId); formData.append('document', file);
 
-                    const tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendDocument`, { method: 'POST', body: formData }); const tgData = await tgRes.json();
+                    const tgRes = await fetch(`https://api.telegram.org/bot${tgBotToken}/sendDocument`, { method: 'POST', body: formData }); const tgData = await tgRes.json();
 
                     if(tgData.ok) {
-                        const fileId = tgData.result.document.file_id; const pathRes = await fetch(`https://api.telegram.org/bot${botToken}/getFile?file_id=${fileId}`); const pathData = await pathRes.json();
+                        const fileId = tgData.result.document.file_id; 
+                        
+                        let downloadUrl = "";
+                        const pathRes = await fetch(`https://api.telegram.org/bot${tgBotToken}/getFile?file_id=${fileId}`); const pathData = await pathRes.json();
                         if(pathData.ok) {
-                            const downloadUrl = `https://api.telegram.org/file/bot${botToken}/${pathData.result.file_path}`;
-                            await db.collection("study_materials").add({ subject: document.getElementById('adSubj').value, type: type, filename: title, url: downloadUrl, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); 
-                            showToast("✅ Uploaded via Telegram!"); document.getElementById('adName').value = ''; document.getElementById('adFileInput').value = ''; resetAdminBtn();
-                        } else { showToast("❌ Telegram Path Error"); resetAdminBtn(); }
+                            downloadUrl = `https://api.telegram.org/file/bot${tgBotToken}/${pathData.result.file_path}`;
+                        }
+                        
+                        await db.collection("study_materials").add({ subject: document.getElementById('adSubj').value, type: type, filename: title, url: downloadUrl, telegramFileId: fileId, timestamp: firebase.firestore.FieldValue.serverTimestamp() }); 
+                        showToast("✅ Uploaded via Telegram!"); document.getElementById('adName').value = ''; document.getElementById('adFileInput').value = ''; resetAdminBtn();
                     } else { showToast("❌ Telegram Upload Failed"); resetAdminBtn(); }
                 }
             } catch (e) { showToast("❌ Upload Error."); resetAdminBtn(); }
         }
         function resetAdminBtn() { document.getElementById('adBtn').innerHTML = "Upload Directly"; document.getElementById('adBtn').disabled = false; }
 
-        // 🔴 4. MISSILE VOICE COUNTDOWN & ALARM SYSTEM 🔴
+        // VOICE COUNTDOWN & ALARM SYSTEM
         let countdownInt = null;
         let bgAlarmLoop = null;
 
@@ -996,7 +1145,6 @@
                 let test = globalTests[i]; if(compArr.includes(test.id)) continue; 
                 let st = new Date(test.startTime).getTime(); let en = new Date(test.endTime).getTime(); let dist = st - now;
                 
-                // T-Minus 20s: Wake Up & Strict 10-Second Ringing
                 if(dist <= 20000 && dist > 10000 && !test.preAlarmPlayed) { 
                     test.preAlarmPlayed = true; 
                     
@@ -1007,7 +1155,6 @@
                         if(cordova.plugins.backgroundMode) { cordova.plugins.backgroundMode.wakeUp(); }
                     }
 
-                    // 🔴 Ensure Alarm rings only for 10 seconds (max 4 loops)
                     let ringCount = 0;
                     bgAlarmLoop = setInterval(() => { 
                         if(!isExamRunning && ringCount < 4) { 
@@ -1018,10 +1165,9 @@
                     }, 2500);
                 }
                 
-                // T-Minus 10s: Force Foreground & Voice Countdown
                 if(dist <= 10000 && dist > 0 && !test.lockdownStarted) { 
                     test.lockdownStarted = true;
-                    clearInterval(bgAlarmLoop); // Force stop ringing
+                    clearInterval(bgAlarmLoop); 
                     
                     if(window.cordova && cordova.plugins && cordova.plugins.backgroundMode) {
                         cordova.plugins.backgroundMode.unlock();
@@ -1034,7 +1180,6 @@
                     document.getElementById('lockdownModal').style.display = 'flex';
                     let cdVal = 10; document.getElementById('lockdownTimer').innerText = cdVal;
                     
-                    // 🔴 Voice Countdown 🔴
                     speakText("Ten");
                     countdownInt = setInterval(() => { 
                         cdVal--; 
@@ -1055,7 +1200,6 @@
             }
         }
 
-        // 🔴 5. MID-EXAM VOICE ALERTS 🔴
         let voice30Played = false;
         let voice15Played = false;
 
@@ -1086,14 +1230,14 @@
             if(!compArr.includes(testId)) { compArr.push(testId); sSet('completedTests', JSON.stringify(compArr)); }
             
             clearInterval(bgAlarmLoop);
-            if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); } // Force stop any voice
+            if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); } 
             
             closeViewer(); goTo('view-subfolders');
         }
         
         function closeViewer() { 
             clearInterval(testInterval); 
-            if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); } // Clean up voices
+            if ('speechSynthesis' in window) { window.speechSynthesis.cancel(); } 
             document.getElementById('fullscreenViewer').style.display = 'none'; document.getElementById('htmlViewerFrame').src = ""; currentFileViewerId = null; 
             isExamRunning = false; exitFullscreen(); 
         }
@@ -1128,3 +1272,4 @@
     </script>
 </body>
 </html>
+
